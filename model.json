@@ -1,52 +1,16 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"title": "Model",
-	"description": "RSNA ATLAS model card schema, 2025-10 version",
+	"title": "ATLAS model schema",
+	"description": "RSNA ATLAS schema, 2025-11 version",
 	"$comment": "Copyright (c) 2025, Radiological Society of North America",
 	"type": "object",
 	"properties": {
 		"$schema": {
 			"type": "string",
-			"const": "model.json"
+			"const": "https://atlas.rsna.org/schema/2025-11/model.json"
 		},
 		"Model": {
-			"type": "object",
-			"properties": {
-				"Name": {
-					"description": "Model name",
-					"$comment": "ROADMAP:03597",
-					"type": "string"
-				},
-				"Link": {
-					"description": "URL pointer to source",
-					"type": "string",
-					"format": "uri"
-				},
-				"Indexing": {
-					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords)",
-					"$comment": "ROADMAP:00074",
-					"$ref": "#/$defs/Indexing"
-				},
-				"Descriptors": {
-					"description": "Details of the model",
-					"$comment": "ROADMAP:00004",
-					"$ref": "#/$defs/Descriptors"
-				},
-				"Model properties": {
-					"description": "Model-specific properties",
-					"$comment": "ROADMAP:03355",
-					"$ref": "#/$defs/Model-properties"
-				},
-				"Metrics": {
-					"description": "The metrics used assess the model's performance.",
-					"$ref": "#/$defs/Metrics"
-				}
-			},
-			"required": [
-				"Name",
-				"Link"
-			],
-			"additionalProperties": false
+			"$ref": "#/$defs/Model"
 		}
 	},
 	"required": [
@@ -72,7 +36,8 @@
 			]
 		},
 		"Descriptors": {
-			"description": "Details for Project, Model, and Dataset entities",
+			"description": "Characteristics of a project, model, or dataset.  Whenever possible, values should link to other ontologies or controlled vocabularies.",
+			"$comment": "ROADMAP:00004",
 			"type": "object",
 			"properties": {
 				"Authors": {
@@ -304,47 +269,16 @@
 			},
 			"additionalProperties": false
 		},
-		"Org": {
-			"title": "Organization description",
-			"description": "Details for each organization",
-			"$comment": "ROADMAP:00072",
-			"type": "object",
-			"properties": {
-				"Name": {
-					"description": "Name of organization",
-					"type": "string"
-				},
-				"Contact name": {
-					"description": "Name or role of organizational contact",
-					"type": "string"
-				},
-				"Email": {
-					"type": "string",
-					"format": "email"
-				},
-				"Address": {
-					"description": "Organizations's physical (real-world) address",
-					"type": "string"
-				},
-				"URL": {
-					"type": "string",
-					"format": "uri"
-				}
-			},
-			"required": [
-				"Name"
-			],
-			"additionalProperties": false
-		},
 		"Metrics": {
-			"description": "The metrics used to measure the model's performance.",
+			"description": "Information about the model's performance. Includes a list of the reported metrics and a text field where one can specify values for the metrics.",
 			"$comment": "ROADMAP:03302",
 			"type": "object",
 			"properties": {
-				"Metric names": {
-					"description": "An array of the metrics used to assess the model's performance, including scalar, matrix, and graphical metrics (e.g., sensitivity, confusion matrix, ROC curve). If not one of the enumerated metrics, check the ROADMAP ontology for a possible synonym and/or provide a textual description in the Metrics description field.",
+				"Metrics": {
+					"description": "An array of the metrics used to assess the model's performance, including scalar, matrix, and graphical metrics (e.g., sensitivity, confusion matrix, ROC curve). If not one of the enumerated metrics, check the ROADMAP ontology for a possible synonym or report as \"other\".  Provide a textual description in the Comments field.",
 					"$comment": "ROADMAP:03642",
 					"type": "array",
+					"uniqueItems": true,
 					"items": {
 						"type": "string",
 						"enum": [
@@ -479,7 +413,6 @@
 							"micro-F1",
 							"micro-precision",
 							"micro-recall",
-							"model performance metric",
 							"multi-class confusion matrix",
 							"multi-modal concordance",
 							"multiclass Brier score",
@@ -564,11 +497,50 @@
 						]
 					}
 				},
-				"Metrics description": {
+				"Comments": {
 					"description": "Describes the metric(s) used, the data on which the model was evaluated, and the value(s) of the metrics.",
 					"type": "string"
 				}
 			},
+			"additionalProperties": false
+		},
+		"Model": {
+			"type": "object",
+			"properties": {
+				"Name": {
+					"description": "Model name (required)",
+					"$comment": "ROADMAP:03597",
+					"type": "string"
+				},
+				"Link": {
+					"description": "URL pointer to source (required)",
+					"type": "string",
+					"format": "uri"
+				},
+				"Indexing": {
+					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords)",
+					"$comment": "ROADMAP:00074",
+					"$ref": "#/$defs/Indexing"
+				},
+				"Descriptors": {
+					"description": "Details of the model",
+					"$comment": "ROADMAP:00004",
+					"$ref": "#/$defs/Descriptors"
+				},
+				"Model properties": {
+					"description": "Model-specific properties",
+					"$comment": "ROADMAP:03355",
+					"$ref": "#/$defs/Model-properties"
+				},
+				"Model performance": {
+					"description": "Information about the model's performance and the metrics used to measure performance.",
+					"$ref": "#/$defs/Metrics"
+				}
+			},
+			"required": [
+				"Name",
+				"Link"
+			],
 			"additionalProperties": false
 		},
 		"Model-properties": {
@@ -731,6 +703,53 @@
 					"additionalProperties": false
 				}
 			},
+			"additionalProperties": false
+		},
+		"Org": {
+			"title": "Organization description",
+			"description": "Details for each organization",
+			"$comment": "ROADMAP:00072",
+			"type": "object",
+			"properties": {
+				"Name": {
+					"description": "Name of organization",
+					"type": "string",
+					"examples": [
+						"RSNA"
+					]
+				},
+				"Contact name": {
+					"description": "Name or role of organizational contact",
+					"type": "string",
+					"examples": [
+						"Informatics Department"
+					]
+				},
+				"Email": {
+					"type": "string",
+					"format": "email",
+					"examples": [
+						"informatics@rsna.org"
+					]
+				},
+				"Address": {
+					"description": "Organizations's physical (real-world) address",
+					"type": "string",
+					"examples": [
+						"820 Jorie Blvd, Oak Brook, IL 60523-2251, USA"
+					]
+				},
+				"URL": {
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"https://rsna.org"
+					]
+				}
+			},
+			"required": [
+				"Name"
+			],
 			"additionalProperties": false
 		},
 		"Person": {
