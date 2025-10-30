@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="color-scheme" content="dark light" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" media="(prefers-color-scheme: light)" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
+	<style type="text/css" media="screen">
+ html, body {
+	font-family: sans-serif;
+	font-size: 14px;
+	padding: 0 26px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+body {
+	background-color: #efefef;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #303335;
+		color: #EDEDED;
+	}
+}
+
+#__markdown
+{
+	 margin: 0 auto;
+	 padding: 25px;
+	 width: 1200px;
+	 border-radius: 6px;
+	 border: 1px solid #e0e0e0;
+	 background-color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+	#__markdown {
+		background-color: #1E1F20;
+	}
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-color: #ccc;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	line-height: inherit;
+}
+
+table {
+	border-collapse: collapse;
+	text-align: left;
+	border: 1px solid lightgray;
+	padding: 2px;
+}
+
+th, td {
+    padding: 0 8px 0 4px;
+    border: 1px solid lightgray;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+	border-color: lightblue;
+	background-color: #f0f4f5;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+	color: #A31515;
+}
+
+pre {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+	
+	tab-size: 4;
+	border-radius: 3px;
+	overflow: auto;
+	background-color: #f7f5f2;
+	border: 1px solid #dcdcdc;
+	padding: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+	code {
+		color: #dab53c;
+	}
+
+	pre {
+		background-color: #2D2D2D;
+	}
+
+	button {
+		background-color: #4F4F4F;
+		border-width: 1px;
+		border-style: solid;
+		border-radius: 2px;
+		border-color: #5E5E5E;
+		color: #EDEDED;
+	}
+
+	button:hover {
+		background-color: #686868;
+	}
+	
+	a {
+		color: #3cbef2;
+	}
+
+	blockquote {
+		border-color: #4f6168;
+		background-color: #43474a;
+	}
+}
+
+.token.cr:before,
+.token.lf:before,
+.token.space:before {
+	opacity: 0;
+}
+
+.token.tab:not(:empty):before {
+	opacity: 0.8;
+}
+
+kbd {
+  display: inline-block;
+  padding: 5px 5px;
+  margin: 1px 0px;
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 10px;
+  vertical-align: middle;
+  color: #444d56;
+  background-color: #f3f4f5;
+  border: solid 1px #c6cbd1;
+  border-bottom-color: #959da5;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #959da5;
+}
+
+details {
+    border-radius: 3px;
+    background-color: #fafaff;
+	border: 1px solid #dcdcdc;
+	padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #dcdcdc;
+    margin-bottom: .5em;
+}
+	</style>
+</head>
+<body>
+	<div id="__markdown"></div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+	<!--[if IE]>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.2.0/base64.min.js></script>
+	<![endif]-->
+	<script>
+"use strict";
+function base64_decode(s) {
+	return decodeURIComponent(escape(atob(s)));
+}
+
+const mdText = base64_decode("IyBBVExBUwoKX19Bbm5vdGF0ZWQgTGlicmFyeSBvZiBBSSBTeXN0ZW1zX18KCkFUTEFTIGlzIHRoZSBsaWJyYXJ5IG9mIEFJIG1vZGVscyBhbmQgZGF0YXNldHMgaG9zdGVkIGJ5IHRoZSBSYWRpb2xvZ2ljYWwgU29jaWV0eSBvZiBOb3J0aCBBbWVyaWNhIChSU05BKS4gSW5mb3JtYXRpb24gYWJvdXQgZWFjaCBtb2RlbCBvciBkYXRhc2V0IGlzIHN0b3JlZCBhcyBhIEpTT04tbGFuZ3VhZ2UgImNhcmQiIG9uIHRoZSBBVExBUyBzaXRlLCB3aGVyZSBpdCBpcyBpbmRleGVkIGJ5IHRpdGxlLCBrZXl3b3JkcywgYW5kIHJhZGlvbG9neSBzdWJzcGVjaWFsdHkgY29udGVudCBjb2Rlcy4KCkluZm9ybWF0aW9uIGNvbnRhaW5lZCB3aXRoaW4gZWFjaCBjYXJkIGlzIGJhc2VkIG9uIHRoZSBbUk9BRE1BUF0oLi4vUk9BRE1BUC9SRUFETUUubWQpIG9udG9sb2d5LCBhIGNvbnRyb2xsZWQKdm9jYWJ1bGFyeSB0aGF0IHN0YW5kYXJkaXplcyB0aGUgdGVybXMgdXNlZCB0byBkZXNjcmliZSBBSSBtb2RlbHMgYW5kIGRhdGFzZXRzLiBST0FETUFQIGluY2x1ZGVzIHN5bm9ueW1zLAphYmJyZXZpYXRpb25zLCBhbmQgZGVmaW50aW9ucyBvZiB0aGUgdGVybXMuICAKCiMjIEpTT04gU2NoZW1hCgpUaGUgZm9sbG93aW5nIGRvY3VtZW50cyBkZWZpbmUgdGhlIGNvbnRlbnQgb2YgQVRMQVMgY2FyZHMgZm9yIEFJIG1vZGVscyBhbmQgZGF0YXNldHMgKHZlcnNpb24gMjAyNS0xMSk6CgoqIFtNb2RlbHNdKG1vZGVsLmpzb24pCiogW0RhdGFzZXRzXShkYXRhc2V0Lmpzb24pCgpGb3IgbW9yZSBpbmZvcm1hdGlvbiwgY29udGFjdCBSU05BJ3MgW0luZm9ybWF0aWNzIERlcGFydG1lbnRdKG1haWx0bzppbmZvcm1hdGljc0Byc25hLm9yZykuCgpUaGUgUmFkaW9sb2dpY2FsIFNvY2lldHkgb2YgTm9ydGggQW1lcmljYSAoUlNOQSkgaXMgYSBub24tcHJvZml0IG9yZ2FuaXphdGlvbiBvZiBtb3JlIHRoYW4gNTQsMDAgbWVtYmVycwp0aGF0IHJlcHJlc2VudHMgcHJvZmVzc2lvbmFscwpzcGFubmluZyB0aGUgZnVsbCBicmVhZHRoIG9mIHJhZGlvbG9naWMgc3Vic3BlY2lhbHRpZXMgaW4gbW9yZSB0aGFuIDE2MCBjb3VudHJpZXMgYXJvdW5kIHRoZSB3b3JsZC4KCg==");
+var converter = window.markdownit();
+converter.set({ html: true, xhtmlOut: true  });
+document.getElementById('__markdown').innerHTML = converter.render(mdText);
+	</script>
+</body>
+</html>

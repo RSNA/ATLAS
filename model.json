@@ -1,0 +1,926 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "Model",
+	"description": "RSNA ATLAS model card schema, 2025-10 version",
+	"$comment": "Copyright (c) 2025, Radiological Society of North America",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string",
+			"const": "model.json"
+		},
+		"Model": {
+			"type": "object",
+			"properties": {
+				"Name": {
+					"description": "Model name",
+					"$comment": "ROADMAP:03597",
+					"type": "string"
+				},
+				"Link": {
+					"description": "URL pointer to source",
+					"type": "string",
+					"format": "uri"
+				},
+				"Indexing": {
+					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords)",
+					"$comment": "ROADMAP:00074",
+					"$ref": "#/$defs/Indexing"
+				},
+				"Descriptors": {
+					"description": "Details of the model",
+					"$comment": "ROADMAP:00004",
+					"$ref": "#/$defs/Descriptors"
+				},
+				"Model properties": {
+					"description": "Model-specific properties",
+					"$comment": "ROADMAP:03355",
+					"$ref": "#/$defs/Model-properties"
+				},
+				"Metrics": {
+					"description": "The metrics used assess the model's performance.",
+					"$ref": "#/$defs/Metrics"
+				}
+			},
+			"required": [
+				"Name",
+				"Link"
+			],
+			"additionalProperties": false
+		}
+	},
+	"required": [
+		"$schema",
+		"Model"
+	],
+	"additionalProperties": false,
+	"$defs": {
+		"Date": {
+			"description": "Date (Year or ISO-format date)",
+			"examples": [
+				"2025-01-01",
+				2025
+			],
+			"anyOf": [
+				{
+					"type": "string",
+					"format": "date"
+				},
+				{
+					"type": "integer"
+				}
+			]
+		},
+		"Descriptors": {
+			"description": "Details for Project, Model, and Dataset entities",
+			"type": "object",
+			"properties": {
+				"Authors": {
+					"description": "Authors",
+					"$comment": "ROADMAP:00064",
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/Person"
+					}
+				},
+				"Comments": {
+					"$comment": "ROADMAP:00070",
+					"type": "string"
+				},
+				"Contact": {
+					"$comment": "ROADMAP:00069",
+					"type": "string"
+				},
+				"Date": {
+					"type": "object",
+					"properties": {
+						"Created": {
+							"description": "Creation date (ROADMAP:03419)",
+							"$ref": "#/$defs/Date"
+						},
+						"Published": {
+							"description": "Publication date (ROADMAP:03420)",
+							"$ref": "#/$defs/Date"
+						},
+						"Updated": {
+							"description": "Date of last update (ROADMAP:03421)",
+							"$ref": "#/$defs/Date"
+						}
+					},
+					"additionalProperties": false
+				},
+				"Ethical review": {
+					"$comment": "ROADMAP:03418",
+					"type": "string"
+				},
+				"Funding": {
+					"$comment": "ROADMAP:03385",
+					"type": "string"
+				},
+				"License": {
+					"description": "License or rights to access this resource",
+					"$comment": "ROADMAP:00068",
+					"minProperties": 1,
+					"properties": {
+						"Text": {
+							"type": "string",
+							"examples": [
+								"Non-commercial use"
+							]
+						},
+						"URL": {
+							"type": "string",
+							"format": "uri",
+							"examples": [
+								"https://creativecommons.org/licenses/by-nc-nd/4.0/"
+							]
+						}
+					},
+					"additionalProperties": false
+				},
+				"Organizations": {
+					"description": "Sponsoring or supporting organizations",
+					"$comment": "ROADMAP:00072",
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/Org"
+					}
+				},
+				"References": {
+					"$ref": "#/$defs/Reference"
+				},
+				"Version": {
+					"description": "Version designation of this resource",
+					"$comment": "ROADMAP:00066",
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
+		"Indexing": {
+			"title": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
+			"$comment": "Copyright (c) 2025, Radiological Society of North America",
+			"type": "object",
+			"properties": {
+				"Content": {
+					"description": "Array of RSNA 2-letter content code, e.g., CT",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"enum": [
+							"AI",
+							"BR",
+							"BQ",
+							"CA",
+							"CH",
+							"CT",
+							"DM",
+							"ED",
+							"ER",
+							"GI",
+							"GU",
+							"HN",
+							"HP",
+							"IN",
+							"IR",
+							"LM",
+							"MI",
+							"MK",
+							"MR",
+							"NM",
+							"NR",
+							"OB",
+							"OI",
+							"OT",
+							"PD",
+							"PH",
+							"PR",
+							"SQ",
+							"RO",
+							"RS",
+							"US",
+							"VA"
+						],
+						"examples": [
+							"AI",
+							"CT",
+							"GI"
+						]
+					}
+				},
+				"RadLex": {
+					"description": "Array of RadLex codes (with optional labels)",
+					"$comment": "https://radlex.org/RID/$",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"examples": [
+							"RID58",
+							"RID1169",
+							{
+								"RID58": "liver"
+							}
+						],
+						"anyOf": [
+							{
+								"type": "string",
+								"pattern": "RID[0-9]+",
+								"examples": [
+									"RID58",
+									"RID1169"
+								]
+							},
+							{
+								"type": "object",
+								"patternProperties": {
+									"RID[0-9]+": {
+										"type": "string"
+									}
+								},
+								"additionalProperties": false,
+								"examples": [
+									{
+										"RID58": "liver"
+									}
+								]
+							}
+						]
+					}
+				},
+				"SNOMED": {
+					"description": "Array of SNOMED CT codes",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"examples": [
+							"10200004",
+							{
+								"10200004": "Liver structure (body structure)"
+							},
+							{
+								"441802002": "Imaging of liver (procedure)"
+							}
+						],
+						"anyOf": [
+							{
+								"type": "string",
+								"examples": [
+									"10200004"
+								]
+							},
+							{
+								"type": "object",
+								"patternProperties": {
+									"[A-Z0-9]+": {
+										"type": "string"
+									}
+								},
+								"additionalProperties": false,
+								"examples": [
+									{
+										"10200004": "Liver structure (body structure)"
+									},
+									{
+										"441802002": "Imaging of liver (procedure)"
+									}
+								]
+							}
+						]
+					}
+				},
+				"Keywords": {
+					"description": "Array of keywords to index the resource",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"Org": {
+			"title": "Organization description",
+			"description": "Details for each organization",
+			"$comment": "ROADMAP:00072",
+			"type": "object",
+			"properties": {
+				"Name": {
+					"description": "Name of organization",
+					"type": "string"
+				},
+				"Contact name": {
+					"description": "Name or role of organizational contact",
+					"type": "string"
+				},
+				"Email": {
+					"type": "string",
+					"format": "email"
+				},
+				"Address": {
+					"description": "Organizations's physical (real-world) address",
+					"type": "string"
+				},
+				"URL": {
+					"type": "string",
+					"format": "uri"
+				}
+			},
+			"required": [
+				"Name"
+			],
+			"additionalProperties": false
+		},
+		"Metrics": {
+			"description": "The metrics used to measure the model's performance.",
+			"$comment": "ROADMAP:03302",
+			"type": "object",
+			"properties": {
+				"Metric names": {
+					"description": "An array of the metrics used to assess the model's performance, including scalar, matrix, and graphical metrics (e.g., sensitivity, confusion matrix, ROC curve). If not one of the enumerated metrics, check the ROADMAP ontology for a possible synonym and/or provide a textual description in the Metrics description field.",
+					"$comment": "ROADMAP:03642",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"95th percentile Hausdorff distance",
+							"absolute enhanced detection rate",
+							"accuracy",
+							"alternative free-response receiver operating characteristic analysis",
+							"approximate intersection over union",
+							"area under the alternative free-response operating characteristic curve",
+							"area under the precision-recall curve",
+							"area under the predictive receiver operating characteristic curve",
+							"area under the receiver operating characteristic curve",
+							"AUC of each class vs. each of the other k-1 classes",
+							"AUC of each class vs. the rest combined",
+							"automated readability index",
+							"average Hausdorff distance",
+							"average precision",
+							"average symmetric surface distance",
+							"balanced accuracy",
+							"balanced error rate",
+							"BERTScore",
+							"binary confusion matrix",
+							"Bland-Altman analysis",
+							"BLEU",
+							"boundary intersection over union",
+							"box intersection over union",
+							"Brier score",
+							"Brier skill score",
+							"calibration curve",
+							"calibration intercept",
+							"calibration slope",
+							"calibration-in-the-large",
+							"center distance",
+							"centerline Dice similarity coefficient",
+							"class error",
+							"class-wise calibration error",
+							"coefficient of variation",
+							"Cohen's kappa",
+							"competition performance metric",
+							"concordance correlation coefficient",
+							"concordance index",
+							"conditional entropy",
+							"confusion matrix",
+							"contrast-to-noise ratio",
+							"counterfactual fairness",
+							"cross-entropy",
+							"cumulative hazard",
+							"Damerau–Levenshtein distance",
+							"demographic parity",
+							"diagnostic odds ratio",
+							"diagnostic yield",
+							"Dice similarity coefficient",
+							"discrimination slope",
+							"earth mover's distance",
+							"edit distance",
+							"Efron's C-index",
+							"enhanced detection rate",
+							"enhanced multi-modal concordance",
+							"ensemble mean square error",
+							"entropy",
+							"entropy reduction",
+							"equality of opportunity",
+							"equalized odds",
+							"expected calibration error",
+							"expected calibration error with kernel density estimate",
+							"expected cost",
+							"F(beta) score",
+							"F1 score",
+							"F2 score",
+							"false discovery rate",
+							"false omission rate",
+							"false positive rate",
+							"false positives per image",
+							"false referral rate",
+							"FineRadScore",
+							"Flesch reading ease score",
+							"Flesch-Kincaid grade level",
+							"FORCAST readability estimate",
+							"Fowlkes-Mallows index",
+							"fraction of cases with user adjustment",
+							"free-response receiver operating characteristic analysis",
+							"free-response receiver operating characteristic score",
+							"Fry graph",
+							"global consistency error",
+							"GREEN",
+							"group fairness",
+							"Gunning Fog index",
+							"Hamming distance",
+							"Harrell’s C-index",
+							"Hausdorff distance",
+							"hazard ratio",
+							"individual equivalence index",
+							"individual fairness",
+							"information difference index",
+							"integrated time-dependent area under the ROC curve",
+							"interclass correlation coefficient",
+							"intersection over reference",
+							"intersection over union",
+							"intraclass correlation coefficient",
+							"Jaro distance",
+							"Kaplan-Meier estimator",
+							"Kendall's tau coefficient",
+							"kernel calibration error",
+							"Kullback-Leibler divergence",
+							"lenient accuracy",
+							"Levenshtein distance",
+							"likelihood ratio",
+							"localization receiver operating characteristic analysis",
+							"location recall precision error",
+							"log-risk score",
+							"longest common subsequence",
+							"macro average mean probability rate",
+							"macro-F1",
+							"macro-precision",
+							"macro-recall",
+							"Mahalanobis distance",
+							"markedness",
+							"mask intersection over union",
+							"mask intersection over union > 0",
+							"Matthews correlation coefficient",
+							"MAUVE",
+							"maximum calibration error",
+							"mean absolute error",
+							"mean absolute percentage error",
+							"mean absolute scaled error",
+							"mean average precision",
+							"mean average surface distance",
+							"mean intersection over union",
+							"mean reciprocal rank",
+							"mean squared error",
+							"METEOR",
+							"micro-F1",
+							"micro-precision",
+							"micro-recall",
+							"model performance metric",
+							"multi-class confusion matrix",
+							"multi-modal concordance",
+							"multiclass Brier score",
+							"mutual information",
+							"negative discordance rate",
+							"negative likelihood ratio",
+							"negative log likelihood",
+							"negative percent agreement",
+							"negative predictive value",
+							"net benefit",
+							"normalized compression distance",
+							"normalized information distance",
+							"normalized mutual information",
+							"normalized surface distance",
+							"observed-to-expected ratio",
+							"Obuchowski index",
+							"other",
+							"panoptic quality",
+							"parametric hazard model",
+							"partial area under the ROC curve",
+							"peak signal-to-noise ratio",
+							"Pearson correlation coefficient",
+							"percent agreement",
+							"perplexity",
+							"point inside mask/box/approximation",
+							"positive likelihood ratio",
+							"positive percent agreement",
+							"positive predictive value",
+							"precision",
+							"precision-recall curve",
+							"prediction probability",
+							"R-squared",
+							"RadCliQ",
+							"RadGraph-F1",
+							"Rand index",
+							"RaTEScore",
+							"recall",
+							"receiver operating characteristic analysis",
+							"relative enhanced detection rate",
+							"relative standard error",
+							"repeatability coefficient",
+							"reproducibility coefficient",
+							"root Brier score",
+							"root mean squared error",
+							"ROUGE",
+							"ROUGE-1",
+							"ROUGE-2",
+							"ROUGE-3",
+							"ROUGE-L",
+							"ROUGE-N",
+							"ROUGE-S",
+							"ROUGE-SU",
+							"ROUGE-W",
+							"second-order coefficient of variation",
+							"SembScore",
+							"sensitivity",
+							"sensitivity at false-positive per image",
+							"signal-to-noise ratio",
+							"SMOG index",
+							"Spearman's rho",
+							"specificity",
+							"strict accuracy",
+							"structural similarity index measure",
+							"surprisal",
+							"survival probability",
+							"symmetric mean absolute percentage error",
+							"time for user adjustment",
+							"time-dependent area under the receiver operating characteristic curve",
+							"time-dependent receiver operating characteristic analysis",
+							"top-10 accuracy",
+							"top-5 accuracy",
+							"top-n accuracy",
+							"true negative rate",
+							"true positive rate",
+							"uncertainty associated with user interaction",
+							"Uno's C-index",
+							"variation of information",
+							"volumetric similarity",
+							"Wasserstein loss",
+							"weighted Cohen's kappa",
+							"Youden index"
+						]
+					}
+				},
+				"Metrics description": {
+					"description": "Describes the metric(s) used, the data on which the model was evaluated, and the value(s) of the metrics.",
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
+		"Model-properties": {
+			"type": "object",
+			"properties": {
+				"Architecture": {
+					"description": "Textual description of underlying model technology, e.g., \"Convolutional Neural Network\".",
+					"$comment": "ROADMAP:03598",
+					"type": "string"
+				},
+				"Availability": {
+					"description": "Defines where and/or how the model is available; can include a URL.",
+					"$comment": "ROADMAP:03373",
+					"type": "string"
+				},
+				"Clinical benefit": {
+					"description": "Clinical benefits, such as diagnosis, risk assessment, or treatment selection.",
+					"$comment": "ROADMAP:03612",
+					"type": "string"
+				},
+				"Clinical workflow phase": {
+					"description": "Clinical workflow phase (e.g., patient pre-registration, digitization of forms or clinical  scales, patients’ triage, telehealth & virtual rounds, clinical decision support systems, workflow optimization, evidence-based methods to optimize medical interventions, feedback from users).",
+					"$comment": "ROADMAP:03613",
+					"type": "string"
+				},
+				"Decision threshold": {
+					"$comment": "ROADMAP:03351",
+					"type": "string"
+				},
+				"Degree of automation": {
+					"description": "Degree of automation compared to the current standard of care, including whether the device supports or automates decision making.",
+					"$comment": "ROADMAP:03614",
+					"type": "string"
+				},
+				"Indications for use": {
+					"description": "The indications for use describe: (1) the disease or condition that the AI system will diagnose, treat, prevent, cure, or mitigate; (2) the intended patient population; and (3) the intended use environment (e.g., ICU, step-down unit, home).",
+					"$comment": "ROADMAP:03600",
+					"type": "string"
+				},
+				"Input": {
+					"description": "Describes the type(s) of information used as input into the model; for example, abdomen/pelvis CT images and laboratory data.",
+					"$comment": "ROADMAP:03481",
+					"type": "string"
+				},
+				"Instructions for use": {
+					"description": "Directions and recommendations for optimal use of the model.",
+					"$comment": "ROADMAP:03601",
+					"type": "string"
+				},
+				"Limitations": {
+					"description": "Describes concerns specific to the use of the AI model. Includes: (1) Known biases or failure modes; (2) Known gaps in the data characterization, such as patient populations that are not well represented in development (e.g., training) or testing datasets, and therefore, may be at risk of bias; (3) Limitations in the model development or performance evaluation; and (4) Known circumstances where the device input will not align with the data used in development and validation.",
+					"$comment": "ROADMAP:03621",
+					"type": "string"
+				},
+				"Output": {
+					"description": "Describes the type of output produced by the model, such as classification (diagnosis) results or image segmentation.",
+					"$comment": "ROADMAP:03482",
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Description": {
+							"description": "Textual description of model's output.",
+							"type": "string"
+						},
+						"CDE": {
+							"description": "An array of radiology Common Data Elements (CDEs) and/or CDE Set identifiers from RadElement.org.",
+							"type": "array",
+							"uniqueItems": true,
+							"items": {
+								"type": "string",
+								"pattern": "RDE[S]?[0-9]+",
+								"examples": [
+									"RDES174",
+									"RDE1193"
+								]
+							}
+						}
+					},
+					"additionalProperties": false
+				},
+				"Recommendation": {
+					"$comment": "ROADMAP:03354",
+					"type": "string"
+				},
+				"Regulatory information": {
+					"description": "Information used to support or document regulatory review.",
+					"$comment": "ROADMAP:03602",
+					"type": "object",
+					"properties": {
+						"Predicate device": {
+							"description": "A predicate device is an FDA-cleared medical device used as point of comparison for new medical devices seeking approval through FDA’s 510(k) pre-market clearance pathway. It is useful to provide the URL to the FDA clearance statement regarding the predicate device.",
+							"$comment": "ROADMAP:03639",
+							"type": "string"
+						},
+						"Authorization status": {
+							"description": "Describes the regulatory status of the AI model, such as Cleared, Application submitted, etc.",
+							"$comment": "ROADMAP:03603",
+							"type": "string"
+						},
+						"File number": {
+							"description": "Identifies the AI model's application number related to its regulatory clearance.",
+							"$comment": "ROADMAP:03604",
+							"type": "string"
+						},
+						"Comment": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				"Reproducibility": {
+					"description": "Describes the AI model's reproducibility associated with the provided outputs.",
+					"$comment": "ROADMAP:03620",
+					"type": "string"
+				},
+				"Sustainability": {
+					"description": "Describes parameters associated with use of the AI model related to energy consumption, running time, and other factors.",
+					"$comment": "ROADMAP:03376",
+					"type": "string"
+				},
+				"Use": {
+					"description": "Model use information",
+					"$comment": "ROADMAP:00011",
+					"type": "object",
+					"properties": {
+						"Intended": {
+							"description": "Intended model use",
+							"$comment": "ROADMAP:00012",
+							"$ref": "#/$defs/Use"
+						},
+						"Out-of-scope": {
+							"description": "Out-of-scope model use",
+							"$comment": "ROADMAP:00013",
+							"$ref": "#/$defs/Use"
+						},
+						"Excluded": {
+							"description": "Excluded model use",
+							"$comment": "ROADMAP:00014",
+							"$ref": "#/$defs/Use"
+						}
+					},
+					"additionalProperties": false
+				},
+				"User": {
+					"type": "object",
+					"properties": {
+						"Intended": {
+							"description": "Intended model user",
+							"$ref": "#/$defs/User"
+						},
+						"Out-of-scope": {
+							"description": "Out-of-scope model user",
+							"$ref": "#/$defs/User"
+						},
+						"Excluded": {
+							"description": "Excluded model user",
+							"$ref": "#/$defs/User"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"Person": {
+			"description": "Description for individual Person (ROADMAP:00071)",
+			"$comment": "ROADMAP:00071",
+			"type": "object",
+			"properties": {
+				"Name": {
+					"description": "The person's name",
+					"type": "string"
+				},
+				"Email": {
+					"type": "string",
+					"format": "email"
+				},
+				"Address": {
+					"description": "Person's physical (real-world) address",
+					"type": "string"
+				},
+				"ORCID": {
+					"description": "Unique ORCID (Open Researcher and Contributor ID) identifier",
+					"type": "string",
+					"pattern": "https://orcid.org/.+",
+					"format": "uri",
+					"examples": [
+						"https://orcid.org/0000-0000-0000-0000"
+					]
+				},
+				"URL": {
+					"type": "string",
+					"format": "uri"
+				}
+			},
+			"required": [
+				"Name"
+			],
+			"additionalProperties": false
+		},
+		"Reference": {
+			"description": "A reference about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
+			"$comment": "ROADMAP:00067",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"Authors": {
+						"description": "Author names",
+						"type": "string",
+						"examples": [
+							"Rudie JD, et al."
+						]
+					},
+					"Title": {
+						"description": "Reference title",
+						"type": "string",
+						"examples": [
+							"The RSNA Abdominal Traumatic Injury CT (RATIC) Dataset"
+						]
+					},
+					"Source": {
+						"description": "Name of journal, book, or other source; or full citation (see example)",
+						"type": "string",
+						"examples": [
+							"Radiology: Artificial Intelligence",
+							"Radiol Artif Intell 2024; 6:e240101"
+						]
+					},
+					"Date": {
+						"description": "Year or date of publication",
+						"$ref": "#/$defs/Date"
+					},
+					"DOI": {
+						"description": "Digital Object Identifer (DOI)",
+						"$comment": "https://doi.org/$",
+						"type": "string",
+						"pattern": "[0-9]+\\.[0-9]+/.+",
+						"examples": [
+							"10.1148/ryai.240101"
+						]
+					},
+					"URL": {
+						"description": "Pointer to online reference",
+						"type": "string",
+						"format": "uri",
+						"examples": [
+							"https://doi.org/10.1148/ryai.240101"
+						]
+					},
+					"PMID": {
+						"description": "PubMed ID",
+						"$comment": "https://pubmed.ncbi.nlm.nih.gov/$/",
+						"type": "integer",
+						"examples": [
+							39441109
+						]
+					},
+					"PMCID": {
+						"description": "PubMed Central ID",
+						"$comment": "https://pmc.ncbi.nlm.nih.gov/articles/$/",
+						"type": "string",
+						"pattern": "PMC[0-9]+",
+						"examples": [
+							"PMC8017407"
+						]
+					},
+					"Notes": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Title"
+				],
+				"additionalProperties": false
+			}
+		},
+		"Use": {
+			"description": "Model use(s)",
+			"$comment": "ROADMAP:00015",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"type": "string",
+				"minLength": 4,
+				"maxLength": 64,
+				"examples": [
+					"Artifact reduction",
+					"Cure",
+					"Decision support",
+					"Detection and diagnosis",
+					"Detection",
+					"Diagnosis",
+					"Exam protocol selection",
+					"Image processing",
+					"Image reconstruction",
+					"Image segmentation",
+					"Image style transfer",
+					"Instance segmentation",
+					"Mitigation",
+					"Noise reduction",
+					"Other",
+					"Prevention",
+					"Procedure selection",
+					"Prognosis",
+					"Report data extraction",
+					"Report generation",
+					"Report impression generation",
+					"Report processing",
+					"Report summarization",
+					"Report translation",
+					"Risk assessment",
+					"Semantic segmentation",
+					"Treatment",
+					"Triage"
+				]
+			}
+		},
+		"User": {
+			"title": "User type",
+			"description": "Model user(s)",
+			"$comment": "ROADMAP:00040",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"type": "string",
+				"minLength": 4,
+				"maxLength": 64,
+				"examples": [
+					"Administrator",
+					"Advanced practice provider",
+					"Caregiver",
+					"Diagnostic radiologist",
+					"Family member",
+					"General diagnostic radiologist",
+					"Interventional radiologist",
+					"Layperson",
+					"Non-physician provider",
+					"Nurse practitioner",
+					"Other",
+					"Patient",
+					"Physician assistant",
+					"Physician",
+					"Radiologist",
+					"Radiology nurse",
+					"Radiology technologist",
+					"Referring physician",
+					"Referring provider",
+					"Researcher",
+					"Subspecialist diagnostic radiologist"
+				]
+			}
+		}
+	}
+}
