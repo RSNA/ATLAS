@@ -20,7 +20,6 @@
 	"additionalProperties": false,
 	"$defs": {
 		"Dataset": {
-			"type": "object",
 			"description": "Describes an AI dataset",
 			"$comment": "ROADMAP:00003",
 			"type": "object",
@@ -29,6 +28,8 @@
 					"description": "Dataset name (required)",
 					"$comment": "ROADMAP:03597",
 					"type": "string",
+					"minLength": 4,
+					"maxLength": 128,
 					"examples": [
 						"Radiological Society of North America Abdominal Traumatic Injury CT (RATIC) Dataset"
 					]
@@ -36,6 +37,8 @@
 				"Link": {
 					"description": "URL pointer to source (required)",
 					"type": "string",
+					"minLength": 4,
+					"maxLength": 128,
 					"format": "uri",
 					"examples": [
 						"https://doi.org/10.1148/dataset.ratic.2024"
@@ -43,42 +46,23 @@
 				},
 				"Indexing": {
 					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords)",
-					"$comment": "ROADMAP:00074",
 					"$ref": "#/$defs/Indexing"
 				},
 				"Descriptors": {
 					"description": "Details of the dataset",
-					"$comment": "ROADMAP:00004",
 					"$ref": "#/$defs/Descriptors"
 				},
 				"Dataset properties": {
 					"description": "Properties specific to datasets",
-					"$comment": "ROADMAP:03381",
 					"$ref": "#/$defs/Dataset-properties"
 				},
+				"Imaging": {
+					"description": "Information about the imaging data",
+					"$ref": "#/$defs/Imaging"
+				},
 				"Partitions": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"Partition name": {
-								"description": "The name of the partition, such as Training.",
-								"type": "string",
-								"examples": [
-									"Training",
-									"Optimization",
-									"Validation",
-									"Internal testing",
-									"External testing"
-								]
-							},
-							"Content": {
-								"description": "Attributes of the dataset, including possible subsets",
-								"$ref": "#/$defs/Subset"
-							}
-						},
-						"additionalProperties": false
-					}
+					"description": "Dataset partitions (training, validation, testing, etc.) with aggregate statistics and optional demographic/clinical breakdowns",
+					"$ref": "#/$defs/Partitions"
 				}
 			},
 			"required": [
@@ -89,6 +73,7 @@
 		},
 		"Dataset-properties": {
 			"type": "object",
+			"$comment": "ROADMAP:03381",
 			"properties": {
 				"Confidentiality": {
 					"description": "Describes any data that might be confidential, such as those protected by law or doctor-patient confidentiality.",
@@ -116,7 +101,7 @@
 					"type": "string"
 				},
 				"Partitioning scheme": {
-					"description": "Describes how a dataset was partitioned for training, optimization (\\validation\") and testing.",
+					"description": "Describes how a dataset was partitioned for training, optimization (\"validation\") and testing.",
 					"$comment": "ROADMAP:03410",
 					"type": "string"
 				},
@@ -209,6 +194,7 @@
 				"License": {
 					"description": "License or rights to access this resource",
 					"$comment": "ROADMAP:00068",
+					"type": "object",
 					"minProperties": 1,
 					"properties": {
 						"Text": {
@@ -246,9 +232,178 @@
 			},
 			"additionalProperties": false
 		},
+		"Imaging": {
+			"description": "Imaging modalities, procedures, and other information",
+			"type": "object",
+			"properties": {
+				"Modalities": {
+					"type": "array",
+					"items": {
+						"description": "List of imaging modalities; requires value(s) from RadLex (RID10311)",
+						"$comment": "ROADMAP:00120, RadLex:RID10311",
+						"type": "string",
+						"enum": [
+							"3-Dimensional ultrasound (RID10920)",
+							"4-Dimensional CT (RID38755)",
+							"4-Dimensional ultrasound (RID10926)",
+							"A-mode ultrasound (RID10903)",
+							"B-mode ultrasound (RID10904)",
+							"Bremsstrahlung imaging (RID10336)",
+							"C-mode ultrasound (RID10907)",
+							"Color doppler mode (RID10909)",
+							"Combined modalities (RID49580)",
+							"Computed radiography (RID10349)",
+							"Computed tomography (RID10321)",
+							"Conventional tomography (RID10358)",
+							"Diffusion tensor imaging (RID38778)",
+							"Digital radiography (RID10351)",
+							"Doppler mode (RID10908)",
+							"Dual energy xray absorptiometry (RID10363)",
+							"Dual-energy CT (RID38660)",
+							"Dual-energy subtraction radiography (RID10356)",
+							"Duplex ultrasound (RID10922)",
+							"Dynamic contrast-enhanced magnetic resonance imaging (RID49531)",
+							"Elastography (RID10932)",
+							"Extended field-of-view ultrasound (RID10924)",
+							"Fluoroscopy (RID10361)",
+							"Functional magnetic resonance imaging (RID10317)",
+							"Harmonic ultrasound (RID10913)",
+							"High intensity pulse (RID10919)",
+							"High-energy scan (RID12412)",
+							"Low intensity pulse (RID10918)",
+							"Low-energy scan (RID12411)",
+							"MR fluoroscopy (RID11071)",
+							"Magnetic resonance angiography (RID10319)",
+							"Magnetic resonance imaging (RID10312)",
+							"Magnetic resonance spectroscopy (RID10315)",
+							"Mammography (RID10357)",
+							"Molecular imaging (RID12508)",
+							"Nuclear medicine imaging (RID10330)",
+							"Other modality (dicom) (RID49585)",
+							"PET-CT (RID10341)",
+							"PET-MR (RID10342)",
+							"Panographic radiograph (RID10360)",
+							"Phase-cancellation harmonic ultrasound (RID10914)",
+							"Planar nuclear medicine imaging (RID10333)",
+							"Positron emission tomography (RID10337)",
+							"Power doppler mode (RID10910)",
+							"Projection radiography (RID10345)",
+							"Quantitative computed tomography (RID10323)",
+							"Radiofluoroscopy (RID45709)",
+							"SPECT-CT (RID49583)",
+							"Scintigraphy (RID34428)",
+							"Screen-film radiography (RID10353)",
+							"Single photon emission computed tomography (RID10334)",
+							"Single photon imaging (RID10332)",
+							"Spectral doppler mode (RID10911)",
+							"Spectroscopy (RID10377)",
+							"Stereoscopy (RID50131)",
+							"Stereotactic radiography (RID50260)",
+							"Stimulated acoustic emission (RID10916)",
+							"Strain imaging (RID10933)",
+							"Tomography (RID28840)",
+							"Tomosynthesis (RID10359)",
+							"Triplex ultrasound (RID10923)",
+							"US-RF (RID49581)",
+							"Ultrasound (RID10326)",
+							"Volume imaging (RID10930)",
+							"XR-RF (RID49582)"
+						]
+					}
+				},
+				"Procedures": {
+					"description": "Imaging procedures: each item should include procedure name, RadLex Playbook ID, and/or LOINC code",
+					"$comment": "Imaging procedure (ROADMAP:00121)",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"minProperties": 1,
+						"maxProperties": 3,
+						"properties": {
+							"Name": {
+								"description": "Procedure name",
+								"type": "string",
+								"minLength": 2,
+								"maxLength": 128,
+								"examples": [
+									"CT Abdomen and Pelvis W contrast IV"
+								]
+							},
+							"RadLex": {
+								"description": "RadLex Playbook (RPID) code",
+								"type": "string",
+								"minLength": 5,
+								"maxLength": 10,
+								"pattern": "RPID[0-9]+",
+								"examples": [
+									"RPID145"
+								]
+							},
+							"LOINC": {
+								"description": "LOINC/RSNA Radiology Playbook code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 12,
+								"examples": [
+									"36813-4"
+								]
+							}
+						},
+						"additionalProperties": false,
+						"examples": [
+							{
+								"Name": "CT Chest without IV contrast"
+							},
+							{
+								"Name": "XR Hand - left PA",
+								"LOINC": "36623-7"
+							},
+							{
+								"Name": "CT Abdomen and Pelvis W contrast IV",
+								"LOINC": "36813-4",
+								"RadLex": "RPID145"
+							}
+						]
+					}
+				},
+				"File format": {
+					"description": "Image file format",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"DICOM",
+							"JPEG",
+							"NiFTI",
+							"PNG",
+							"Other"
+						]
+					}
+				},
+				"Resolution": {
+					"type": "string"
+				},
+				"Pre-processing": {
+					"type": "string"
+				},
+				"Burned-in PHI": {
+					"type": "string",
+					"enum": [
+						"Yes",
+						"No",
+						"Unknown"
+					]
+				},
+				"Comments": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
 		"Indexing": {
-			"title": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
-			"$comment": "Copyright (c) 2025, Radiological Society of North America",
+			"description": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
+			"$comment": "ROADMAP:00074",
 			"type": "object",
 			"properties": {
 				"Content": {
@@ -259,13 +414,11 @@
 					"items": {
 						"type": "string",
 						"enum": [
-							"AI",
 							"BR",
 							"BQ",
 							"CA",
 							"CH",
 							"CT",
-							"DM",
 							"ED",
 							"ER",
 							"GI",
@@ -293,91 +446,37 @@
 							"VA"
 						],
 						"examples": [
-							"AI",
 							"CT",
 							"GI"
 						]
 					}
 				},
 				"RadLex": {
-					"description": "Array of RadLex codes (with optional labels)",
+					"description": "Array of RadLex codes (e.g., RID58)",
 					"$comment": "https://radlex.org/RID/$",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
+						"type": "string",
+						"pattern": "RID[0-9]+",
 						"examples": [
 							"RID58",
-							"RID1169",
-							{
-								"RID58": "liver"
-							}
-						],
-						"anyOf": [
-							{
-								"type": "string",
-								"pattern": "RID[0-9]+",
-								"examples": [
-									"RID58",
-									"RID1169"
-								]
-							},
-							{
-								"type": "object",
-								"patternProperties": {
-									"RID[0-9]+": {
-										"type": "string"
-									}
-								},
-								"additionalProperties": false,
-								"examples": [
-									{
-										"RID58": "liver"
-									}
-								]
-							}
+							"RID1169"
 						]
 					}
 				},
 				"SNOMED": {
 					"description": "Array of SNOMED CT codes",
+					"$comment": "https://lookup.snomedtools.org/$",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
+						"type": "integer",
 						"examples": [
-							"10200004",
-							{
-								"10200004": "Liver structure (body structure)"
-							},
-							{
-								"441802002": "Imaging of liver (procedure)"
-							}
-						],
-						"anyOf": [
-							{
-								"type": "string",
-								"examples": [
-									"10200004"
-								]
-							},
-							{
-								"type": "object",
-								"patternProperties": {
-									"[A-Z0-9]+": {
-										"type": "string"
-									}
-								},
-								"additionalProperties": false,
-								"examples": [
-									{
-										"10200004": "Liver structure (body structure)"
-									},
-									{
-										"441802002": "Imaging of liver (procedure)"
-									}
-								]
-							}
+							10200004,
+							441802002
 						]
 					}
 				},
@@ -387,243 +486,10 @@
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
-						"type": "string"
-					}
-				}
-			},
-			"additionalProperties": false
-		},
-		"Metrics": {
-			"description": "Information about the model's performance. Includes a list of the reported metrics and a text field where one can specify values for the metrics.",
-			"$comment": "ROADMAP:03302",
-			"type": "object",
-			"properties": {
-				"Metrics": {
-					"description": "An array of the metrics used to assess the model's performance, including scalar, matrix, and graphical metrics (e.g., sensitivity, confusion matrix, ROC curve). If not one of the enumerated metrics, check the ROADMAP ontology for a possible synonym or report as \"other\".  Provide a textual description in the Comments field.",
-					"$comment": "ROADMAP:03642",
-					"type": "array",
-					"uniqueItems": true,
-					"items": {
 						"type": "string",
-						"enum": [
-							"95th percentile Hausdorff distance",
-							"absolute enhanced detection rate",
-							"accuracy",
-							"alternative free-response receiver operating characteristic analysis",
-							"approximate intersection over union",
-							"area under the alternative free-response operating characteristic curve",
-							"area under the precision-recall curve",
-							"area under the predictive receiver operating characteristic curve",
-							"area under the receiver operating characteristic curve",
-							"AUC of each class vs. each of the other k-1 classes",
-							"AUC of each class vs. the rest combined",
-							"automated readability index",
-							"average Hausdorff distance",
-							"average precision",
-							"average symmetric surface distance",
-							"balanced accuracy",
-							"balanced error rate",
-							"BERTScore",
-							"binary confusion matrix",
-							"Bland-Altman analysis",
-							"BLEU",
-							"boundary intersection over union",
-							"box intersection over union",
-							"Brier score",
-							"Brier skill score",
-							"calibration curve",
-							"calibration intercept",
-							"calibration slope",
-							"calibration-in-the-large",
-							"center distance",
-							"centerline Dice similarity coefficient",
-							"class error",
-							"class-wise calibration error",
-							"coefficient of variation",
-							"Cohen's kappa",
-							"competition performance metric",
-							"concordance correlation coefficient",
-							"concordance index",
-							"conditional entropy",
-							"confusion matrix",
-							"contrast-to-noise ratio",
-							"counterfactual fairness",
-							"cross-entropy",
-							"cumulative hazard",
-							"Damerau–Levenshtein distance",
-							"demographic parity",
-							"diagnostic odds ratio",
-							"diagnostic yield",
-							"Dice similarity coefficient",
-							"discrimination slope",
-							"earth mover's distance",
-							"edit distance",
-							"Efron's C-index",
-							"enhanced detection rate",
-							"enhanced multi-modal concordance",
-							"ensemble mean square error",
-							"entropy",
-							"entropy reduction",
-							"equality of opportunity",
-							"equalized odds",
-							"expected calibration error",
-							"expected calibration error with kernel density estimate",
-							"expected cost",
-							"F(beta) score",
-							"F1 score",
-							"F2 score",
-							"false discovery rate",
-							"false omission rate",
-							"false positive rate",
-							"false positives per image",
-							"false referral rate",
-							"FineRadScore",
-							"Flesch reading ease score",
-							"Flesch-Kincaid grade level",
-							"FORCAST readability estimate",
-							"Fowlkes-Mallows index",
-							"fraction of cases with user adjustment",
-							"free-response receiver operating characteristic analysis",
-							"free-response receiver operating characteristic score",
-							"Fry graph",
-							"global consistency error",
-							"GREEN",
-							"group fairness",
-							"Gunning Fog index",
-							"Hamming distance",
-							"Harrell’s C-index",
-							"Hausdorff distance",
-							"hazard ratio",
-							"individual equivalence index",
-							"individual fairness",
-							"information difference index",
-							"integrated time-dependent area under the ROC curve",
-							"interclass correlation coefficient",
-							"intersection over reference",
-							"intersection over union",
-							"intraclass correlation coefficient",
-							"Jaro distance",
-							"Kaplan-Meier estimator",
-							"Kendall's tau coefficient",
-							"kernel calibration error",
-							"Kullback-Leibler divergence",
-							"lenient accuracy",
-							"Levenshtein distance",
-							"likelihood ratio",
-							"localization receiver operating characteristic analysis",
-							"location recall precision error",
-							"log-risk score",
-							"longest common subsequence",
-							"macro average mean probability rate",
-							"macro-F1",
-							"macro-precision",
-							"macro-recall",
-							"Mahalanobis distance",
-							"markedness",
-							"mask intersection over union",
-							"mask intersection over union > 0",
-							"Matthews correlation coefficient",
-							"MAUVE",
-							"maximum calibration error",
-							"mean absolute error",
-							"mean absolute percentage error",
-							"mean absolute scaled error",
-							"mean average precision",
-							"mean average surface distance",
-							"mean intersection over union",
-							"mean reciprocal rank",
-							"mean squared error",
-							"METEOR",
-							"micro-F1",
-							"micro-precision",
-							"micro-recall",
-							"multi-class confusion matrix",
-							"multi-modal concordance",
-							"multiclass Brier score",
-							"mutual information",
-							"negative discordance rate",
-							"negative likelihood ratio",
-							"negative log likelihood",
-							"negative percent agreement",
-							"negative predictive value",
-							"net benefit",
-							"normalized compression distance",
-							"normalized information distance",
-							"normalized mutual information",
-							"normalized surface distance",
-							"observed-to-expected ratio",
-							"Obuchowski index",
-							"other",
-							"panoptic quality",
-							"parametric hazard model",
-							"partial area under the ROC curve",
-							"peak signal-to-noise ratio",
-							"Pearson correlation coefficient",
-							"percent agreement",
-							"perplexity",
-							"point inside mask/box/approximation",
-							"positive likelihood ratio",
-							"positive percent agreement",
-							"positive predictive value",
-							"precision",
-							"precision-recall curve",
-							"prediction probability",
-							"R-squared",
-							"RadCliQ",
-							"RadGraph-F1",
-							"Rand index",
-							"RaTEScore",
-							"recall",
-							"receiver operating characteristic analysis",
-							"relative enhanced detection rate",
-							"relative standard error",
-							"repeatability coefficient",
-							"reproducibility coefficient",
-							"root Brier score",
-							"root mean squared error",
-							"ROUGE",
-							"ROUGE-1",
-							"ROUGE-2",
-							"ROUGE-3",
-							"ROUGE-L",
-							"ROUGE-N",
-							"ROUGE-S",
-							"ROUGE-SU",
-							"ROUGE-W",
-							"second-order coefficient of variation",
-							"SembScore",
-							"sensitivity",
-							"sensitivity at false-positive per image",
-							"signal-to-noise ratio",
-							"SMOG index",
-							"Spearman's rho",
-							"specificity",
-							"strict accuracy",
-							"structural similarity index measure",
-							"surprisal",
-							"survival probability",
-							"symmetric mean absolute percentage error",
-							"time for user adjustment",
-							"time-dependent area under the receiver operating characteristic curve",
-							"time-dependent receiver operating characteristic analysis",
-							"top-10 accuracy",
-							"top-5 accuracy",
-							"top-n accuracy",
-							"true negative rate",
-							"true positive rate",
-							"uncertainty associated with user interaction",
-							"Uno's C-index",
-							"variation of information",
-							"volumetric similarity",
-							"Wasserstein loss",
-							"weighted Cohen's kappa",
-							"Youden index"
-						]
+						"minLength": 2,
+						"maxLength": 64
 					}
-				},
-				"Comments": {
-					"description": "Describes the metric(s) used, the data on which the model was evaluated, and the value(s) of the metrics.",
-					"type": "string"
 				}
 			},
 			"additionalProperties": false
@@ -674,6 +540,124 @@
 				"Name"
 			],
 			"additionalProperties": false
+		},
+		"Partitions": {
+			"description": "Dataset partitions (training, validation, testing, etc.) with aggregate statistics and optional demographic/clinical breakdowns",
+			"$comment": "Flat structure for extraction-friendly representation while maintaining clear relationships",
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"properties": {
+					"Partition": {
+						"description": "Partition name or type",
+						"type": "string",
+						"enum": [
+							"Training",
+							"Optimization",
+							"Validation",
+							"Internal testing",
+							"External testing",
+							"Tuning",
+							"Hold-out",
+							"Development",
+							"Test",
+							"Other"
+						]
+					},
+					"Total": {
+						"description": "Aggregate statistics for the entire partition. Subset counts should sum to these totals where applicable.",
+						"$ref": "#/$defs/Subset"
+					},
+					"Subsets": {
+						"description": "Specific breakdowns by demographic factors (sex, age, race), clinical criteria (diagnosis, findings), or technical factors (contrast phase, imaging protocol). Counts within subsets should sum to the Total where they represent non-overlapping groups.",
+						"type": "array",
+						"items": {
+							"$ref": "#/$defs/Subset"
+						}
+					},
+					"Comments": {
+						"description": "Additional notes about this partition, such as sampling methodology, special characteristics, or clarifications",
+						"$comment": "ROADMAP:00070",
+						"type": "string",
+						"examples": [
+							"Stratified by sex and view position",
+							"No overlapping patient identifiers with other partitions",
+							"Randomly sampled from 2015-2020 data"
+						]
+					}
+				},
+				"required": [
+					"Partition"
+				],
+				"additionalProperties": false
+			},
+			"examples": [
+				[
+					{
+						"Partition": "Training",
+						"Total": {
+							"Patient count": 12611,
+							"Image count": 12611,
+							"Age range": [
+								[
+									1,
+									"months"
+								],
+								[
+									240,
+									"months"
+								]
+							],
+							"Comments": "Mean age 127 months"
+						},
+						"Subsets": [
+							{
+								"Sex": "Female",
+								"Patient count": 5801
+							},
+							{
+								"Sex": "Male",
+								"Patient count": 6810
+							}
+						]
+					},
+					{
+						"Partition": "Validation",
+						"Total": {
+							"Patient count": 1425,
+							"Image count": 1425
+						},
+						"Subsets": [
+							{
+								"Sex": "Female",
+								"Patient count": 655
+							},
+							{
+								"Sex": "Male",
+								"Patient count": 770
+							}
+						]
+					},
+					{
+						"Partition": "Testing",
+						"Total": {
+							"Patient count": 200,
+							"Image count": 200
+						},
+						"Subsets": [
+							{
+								"Sex": "Female",
+								"Patient count": 100
+							},
+							{
+								"Sex": "Male",
+								"Patient count": 100
+							}
+						]
+					}
+				]
+			]
 		},
 		"Person": {
 			"description": "Description for individual Person (ROADMAP:00071)",
@@ -789,34 +773,39 @@
 			}
 		},
 		"Subset": {
-			"description": "A Subset may describe all or part of a Dataset, Partition, or Subset by age, sex, race, and/or other criterion.",
+			"description": "A Subset describes aggregate statistics: it can represent either partition-level totals or specific subset breakdowns by age, sex, race, clinical criteria, and/or other factors. All properties are optional to accommodate varying levels of detail in reported data. If more than one criterion is listed (e.g., age and sex), the information describes the presence of both criteria.",
 			"$comment": "ROADMAP:03422",
 			"type": "object",
 			"properties": {
 				"Site count": {
 					"description": "Number of sites",
-					"$comment": "Site count (ROADMAP:03358)",
-					"type": "integer"
+					"$comment": "ROADMAP:03358",
+					"type": "integer",
+					"minimum": 0
 				},
 				"Patient count": {
 					"description": "Number of distinct patients",
-					"$comment": "Patient count (ROADMAP:00056)",
-					"type": "integer"
+					"$comment": "ROADMAP:00056",
+					"type": "integer",
+					"minimum": 0
 				},
 				"Exam count": {
 					"description": "Number of exams",
-					"$comment": "Study count (ROADMAP:00057)",
-					"type": "integer"
+					"$comment": "ROADMAP:00057",
+					"type": "integer",
+					"minimum": 0
 				},
 				"Series count": {
 					"description": "Number of imaging series",
-					"$comment": "Series count (ROADMAP:00632)",
-					"type": "integer"
+					"$comment": "ROADMAP:00632",
+					"type": "integer",
+					"minimum": 0
 				},
 				"Image count": {
 					"description": "Number of images",
-					"$comment": "Image count (ROADMAP:00058)",
-					"type": "integer"
+					"$comment": "ROADMAP:00058",
+					"type": "integer",
+					"minimum": 0
 				},
 				"Age range": {
 					"title": "Age range",
@@ -885,6 +874,7 @@
 					]
 				},
 				"Sex": {
+					"description": "Biological sex",
 					"type": "string",
 					"enum": [
 						"Female",
@@ -895,7 +885,7 @@
 				},
 				"Demographic": {
 					"description": "Race / ethnicity (U.S. reporting categories)",
-					"$comment": "Race / ethnicity (ROADMAP:03441)",
+					"$comment": "ROADMAP:03441",
 					"type": "string",
 					"enum": [
 						"American Indian or Alaska Native",
@@ -908,30 +898,51 @@
 					]
 				},
 				"Criterion": {
-					"description": "Other subset criterion, such as reference-standard value, imaging finding, or other factor",
+					"description": "Other subset criterion, such as reference-standard value, imaging finding, diagnosis, or other clinical/technical factor",
 					"$comment": "ROADMAP:03477",
-					"type": "string"
+					"type": "string",
+					"examples": [
+						"Malpositioned tube",
+						"No hemorrhage",
+						"Positive for pneumonia",
+						"Native contrast phase",
+						"Portal venous phase"
+					]
 				},
 				"Comments": {
-					"type": "string"
-				},
-				"Subsets": {
-					"description": "A Subset may describe all or part of a Dataset, Partition, or Subset",
-					"$comment": "ROADMAP:03472",
-					"type": "array",
-					"items": {
-						"description": "Subset data by age, sex, race, and/or other criteria.",
-						"$ref": "#/$defs/Subset"
-					}
+					"description": "Additional notes or clarifications about this data subset",
+					"type": "string",
+					"examples": [
+						"Median age 127 months",
+						"Mean age (± SD): 66.3 ± 14.9 years",
+						"Includes only cases with confirmed diagnosis"
+					]
 				}
 			},
 			"additionalProperties": false,
 			"examples": [
 				{
-					"Sex": "Female",
-					"Patient count": 501
+					"Patient count": 12611,
+					"Image count": 12611,
+					"Age range": [
+						[
+							1,
+							"months"
+						],
+						[
+							240,
+							"months"
+						]
+					],
+					"Comments": "Mean age 127 months"
 				},
 				{
+					"Sex": "Female",
+					"Patient count": 5801
+				},
+				{
+					"Sex": "Male",
+					"Demographic": "Asian",
 					"Age range": [
 						[
 							50,
@@ -942,11 +953,14 @@
 							"years"
 						]
 					],
-					"Sex": "Male",
-					"Demographics": "Asian",
 					"Patient count": 42,
-					"Exam  count": 50,
+					"Exam count": 50,
 					"Image count": 572
+				},
+				{
+					"Criterion": "Malpositioned tube",
+					"Patient count": 150,
+					"Comments": "Based on radiologist consensus"
 				}
 			]
 		}

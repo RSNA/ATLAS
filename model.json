@@ -123,8 +123,8 @@
 			"additionalProperties": false
 		},
 		"Indexing": {
-			"title": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
-			"$comment": "Copyright (c) 2025, Radiological Society of North America",
+			"description": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
+			"$comment": "ROADMAP:00074",
 			"type": "object",
 			"properties": {
 				"Content": {
@@ -135,13 +135,11 @@
 					"items": {
 						"type": "string",
 						"enum": [
-							"AI",
 							"BR",
 							"BQ",
 							"CA",
 							"CH",
 							"CT",
-							"DM",
 							"ED",
 							"ER",
 							"GI",
@@ -169,91 +167,37 @@
 							"VA"
 						],
 						"examples": [
-							"AI",
 							"CT",
 							"GI"
 						]
 					}
 				},
 				"RadLex": {
-					"description": "Array of RadLex codes (with optional labels)",
+					"description": "Array of RadLex codes (e.g., RID58)",
 					"$comment": "https://radlex.org/RID/$",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
+						"type": "string",
+						"pattern": "RID[0-9]+",
 						"examples": [
 							"RID58",
-							"RID1169",
-							{
-								"RID58": "liver"
-							}
-						],
-						"anyOf": [
-							{
-								"type": "string",
-								"pattern": "RID[0-9]+",
-								"examples": [
-									"RID58",
-									"RID1169"
-								]
-							},
-							{
-								"type": "object",
-								"patternProperties": {
-									"RID[0-9]+": {
-										"type": "string"
-									}
-								},
-								"additionalProperties": false,
-								"examples": [
-									{
-										"RID58": "liver"
-									}
-								]
-							}
+							"RID1169"
 						]
 					}
 				},
 				"SNOMED": {
 					"description": "Array of SNOMED CT codes",
+					"$comment": "https://lookup.snomedtools.org/$",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
+						"type": "integer",
 						"examples": [
-							"10200004",
-							{
-								"10200004": "Liver structure (body structure)"
-							},
-							{
-								"441802002": "Imaging of liver (procedure)"
-							}
-						],
-						"anyOf": [
-							{
-								"type": "string",
-								"examples": [
-									"10200004"
-								]
-							},
-							{
-								"type": "object",
-								"patternProperties": {
-									"[A-Z0-9]+": {
-										"type": "string"
-									}
-								},
-								"additionalProperties": false,
-								"examples": [
-									{
-										"10200004": "Liver structure (body structure)"
-									},
-									{
-										"441802002": "Imaging of liver (procedure)"
-									}
-								]
-							}
+							10200004,
+							441802002
 						]
 					}
 				},
@@ -263,7 +207,9 @@
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
-						"type": "string"
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 64
 					}
 				}
 			},
@@ -510,26 +456,33 @@
 				"Name": {
 					"description": "Model name (required)",
 					"$comment": "ROADMAP:03597",
-					"type": "string"
+					"type": "string",
+					"minLength": 4,
+					"maxLength": 128,
+					"examples": [
+						"My AI model"
+					]
 				},
 				"Link": {
 					"description": "URL pointer to source (required)",
 					"type": "string",
-					"format": "uri"
+					"minLength": 4,
+					"maxLength": 128,
+					"format": "uri",
+					"examples": [
+						"https://rsna.org"
+					]
 				},
 				"Indexing": {
 					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords)",
-					"$comment": "ROADMAP:00074",
 					"$ref": "#/$defs/Indexing"
 				},
 				"Descriptors": {
 					"description": "Details of the model",
-					"$comment": "ROADMAP:00004",
 					"$ref": "#/$defs/Descriptors"
 				},
 				"Model properties": {
 					"description": "Model-specific properties",
-					"$comment": "ROADMAP:03355",
 					"$ref": "#/$defs/Model-properties"
 				},
 				"Model performance": {
@@ -544,6 +497,7 @@
 			"additionalProperties": false
 		},
 		"Model-properties": {
+			"$comment": "ROADMAP:03355",
 			"type": "object",
 			"properties": {
 				"Architecture": {
@@ -585,7 +539,7 @@
 					"$comment": "ROADMAP:03481",
 					"type": "string"
 				},
-				"Instructions for use": {
+				"Instructions": {
 					"description": "Directions and recommendations for optimal use of the model.",
 					"$comment": "ROADMAP:03601",
 					"type": "string"
@@ -605,7 +559,7 @@
 							"description": "Textual description of model's output.",
 							"type": "string"
 						},
-						"CDE": {
+						"CDEs": {
 							"description": "An array of radiology Common Data Elements (CDEs) and/or CDE Set identifiers from RadElement.org.",
 							"type": "array",
 							"uniqueItems": true,
@@ -613,8 +567,8 @@
 								"type": "string",
 								"pattern": "RDE[S]?[0-9]+",
 								"examples": [
-									"RDES174",
-									"RDE1193"
+									"RDE1203",
+									"RDES174"
 								]
 							}
 						}
@@ -869,6 +823,7 @@
 			"description": "Model use(s)",
 			"$comment": "ROADMAP:00015",
 			"type": "array",
+			"minItems": 1,
 			"uniqueItems": true,
 			"items": {
 				"type": "string",
@@ -911,6 +866,7 @@
 			"description": "Model user(s)",
 			"$comment": "ROADMAP:00040",
 			"type": "array",
+			"minItems": 1,
 			"uniqueItems": true,
 			"items": {
 				"type": "string",
