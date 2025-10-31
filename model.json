@@ -7,7 +7,7 @@
 	"properties": {
 		"$schema": {
 			"type": "string",
-			"const": "https://atlas.rsna.org/schema/2025-11/model.json"
+			"const": "https://atlas.rsna.org/schemas/2025-11/model.json"
 		},
 		"Model": {
 			"$ref": "#/$defs/Model"
