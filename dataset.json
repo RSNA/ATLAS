@@ -72,8 +72,8 @@
 			"additionalProperties": false
 		},
 		"Dataset-properties": {
-			"type": "object",
 			"$comment": "ROADMAP:03381",
+			"type": "object",
 			"properties": {
 				"Confidentiality": {
 					"description": "Describes any data that might be confidential, such as those protected by law or doctor-patient confidentiality.",
@@ -238,6 +238,7 @@
 			"properties": {
 				"Modalities": {
 					"type": "array",
+					"minItems": 1,
 					"items": {
 						"description": "List of imaging modalities; requires value(s) from RadLex (RID10311)",
 						"$comment": "ROADMAP:00120, RadLex:RID10311",
@@ -370,6 +371,7 @@
 				"File format": {
 					"description": "Image file format",
 					"type": "array",
+					"minItems": 1,
 					"items": {
 						"type": "string",
 						"enum": [
