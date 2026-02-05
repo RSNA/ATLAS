@@ -749,18 +749,12 @@
 					"type": "object",
 					"properties": {
 						"FDA cleared": {
-							"description": "Indicates that the model has received FDA 510(K) pre-market approval. Optional free-text information may include clearance date, FDA submission number, and/or URL pointer to the notice on the FDA site.",
-							"type": [
-								"string",
-								"null"
-							]
+							"description": "Indicates that the model has received FDA 510(K) pre-market approval. ",
+							"type": "boolean"
 						},
 						"CE marked": {
-							"description": "Indicates that the model has been given the CE mark. Optional free-text information.",
-							"type": [
-								"string",
-								"null"
-							]
+							"description": "Indicates that the model has been given the CE mark.",
+							"type": "boolean"
 						},
 						"Predicate device": {
 							"description": "A predicate device is an FDA-cleared medical device used as point of comparison for new medical devices seeking approval through FDA’s 510(k) pre-market clearance pathway. It is useful to provide the URL to the FDA clearance statement regarding the predicate device.",
