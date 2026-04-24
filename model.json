@@ -624,6 +624,10 @@
 						"My AI model"
 					]
 				},
+				"Summary": {
+					"description": "Textual summary of the modell (limit 250 characters)",
+					"type": "string"
+				},
 				"Link": {
 					"description": "URL pointer to source (required)",
 					"type": "string",
@@ -824,6 +828,46 @@
 						"Excluded": {
 							"description": "Excluded model user",
 							"$ref": "#/$defs/User"
+						}
+					},
+					"additionalProperties": false
+				},
+				"EHR compatibility": {
+					"description": "Compatible electronic health record systems",
+					"type": "object",
+					"properties": {
+						"List": {
+							"type": "array",
+							"uniqueItems": true,
+							"items": {
+								"type": "string",
+								"enum": [
+									"AdvancedMD",
+									"Altera Digital Health (Sunrise)",
+									"athenahealth",
+									"Cerner (Oracle Health)",
+									"CGM (CompuGroup Medical)",
+									"Credible",
+									"Dedalus",
+									"DrChrono",
+									"eClinicalWorks",
+									"EMIS",
+									"Epic",
+									"InterSystems TrakCare",
+									"MEDITECH",
+									"Netsmart",
+									"NextGen Healthcare",
+									"OpenEMR",
+									"OpenMRS",
+									"Practice Fusion",
+									"Valant",
+									"Veradigm (Allscripts)",
+									"VistA"
+								]
+							}
+						},
+						"Other": {
+							"type": "string"
 						}
 					},
 					"additionalProperties": false
