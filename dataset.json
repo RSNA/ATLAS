@@ -35,6 +35,11 @@
 						"Radiological Society of North America Abdominal Traumatic Injury CT (RATIC) Dataset"
 					]
 				},
+				"Summary": {
+					"description": "Textual summary of the model",
+					"type": "string",
+					"maxLength": 2500
+				},
 				"Link": {
 					"description": "URL pointer to source (required)",
 					"type": "string",
