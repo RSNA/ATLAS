@@ -36,7 +36,7 @@
 					]
 				},
 				"Summary": {
-					"description": "Textual summary of the model",
+					"description": "Textual summary of the dataset",
 					"type": "string",
 					"maxLength": 2500
 				},
