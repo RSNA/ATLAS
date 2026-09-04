@@ -23,3 +23,6 @@ The Radiological Society of North America (RSNA) is a non-profit organization of
 that represents professionals
 spanning the full breadth of radiologic subspecialties in more than 160 countries around the world.
 
+## Under development
+
+The [2026-12](schema-2026-12) version of the schema documents.
