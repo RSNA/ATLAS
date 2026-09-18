@@ -1054,6 +1054,34 @@
 							},
 							"additionalProperties": false
 						},
+						"Change control": {
+							"description": "Predetermined change control, e.g. an FDA or MHRA Predetermined Change Control Plan (PCCP), or the technical solutions for continuous compliance described at EU AI Act Annex IV point 2(f). A plan may cover more than one jurisdiction.",
+							"type": "object",
+							"properties": {
+								"PCCP in place": {
+									"description": "Indicates whether a predetermined change control plan is in place for this model.",
+									"type": "boolean"
+								},
+								"Description": {
+									"description": "Description of the predetermined change control plan, such as the anticipated changes and the methods used to develop and validate them.",
+									"type": "string",
+									"maxLength": 2048
+								},
+								"Jurisdictions": {
+									"description": "Jurisdictions in which this change control plan has been reviewed or accepted.",
+									"type": "array",
+									"items": {
+										"type": "string",
+										"examples": [
+											"US",
+											"EU",
+											"GB"
+										]
+									}
+								}
+							},
+							"additionalProperties": false
+						},
 						"Comment": {
 							"$comment": "ROADMAP:00070",
 							"type": "string"
