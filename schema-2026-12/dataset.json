@@ -7,6 +7,7 @@
 	"type": "object",
 	"properties": {
 		"$schema": {
+			"description": "The JSON Schema version identifier for this document.",
 			"type": "string",
 			"const": "https://atlas.rsna.org/schemas/2025-11/dataset.json"
 		},
@@ -136,6 +137,7 @@
 		},
 		"Date": {
 			"description": "Date (Year or ISO-format date)",
+			"$comment": "ROADMAP:00065",
 			"examples": [
 				"2025-01-01",
 				2025
@@ -172,6 +174,8 @@
 					"type": "string"
 				},
 				"Date": {
+					"description": "Dates associated with this resource, such as creation, publication, or update dates.",
+					"$comment": "ROADMAP:00065",
 					"type": "object",
 					"properties": {
 						"Created": {
@@ -204,12 +208,14 @@
 					"minProperties": 1,
 					"properties": {
 						"Text": {
+							"description": "Textual name or description of the license.",
 							"type": "string",
 							"examples": [
 								"Non-commercial use"
 							]
 						},
 						"URL": {
+							"description": "URL pointing to the full text of the license.",
 							"type": "string",
 							"format": "uri",
 							"examples": [
@@ -228,6 +234,8 @@
 					}
 				},
 				"References": {
+					"description": "References about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
+					"$comment": "ROADMAP:00067",
 					"$ref": "#/$defs/Reference"
 				},
 				"Version": {
@@ -376,6 +384,7 @@
 				},
 				"File format": {
 					"description": "Image file format",
+					"$comment": "ROADMAP:00059",
 					"type": "array",
 					"minItems": 1,
 					"items": {
@@ -390,12 +399,18 @@
 					}
 				},
 				"Resolution": {
+					"description": "Describes whether the dataset used original or down-sampled images.",
+					"$comment": "ROADMAP:00123",
 					"type": "string"
 				},
 				"Pre-processing": {
+					"description": "Describes the type(s) of pre-processing applied to the dataset's images.",
+					"$comment": "ROADMAP:00126",
 					"type": "string"
 				},
 				"Burned-in PHI": {
+					"description": "Indicates whether the images contain burned-in Protected Health Information (PHI).",
+					"$comment": "ROADMAP:00129",
 					"type": "string",
 					"enum": [
 						"Yes",
@@ -404,6 +419,7 @@
 					]
 				},
 				"Comments": {
+					"$comment": "ROADMAP:00070",
 					"type": "string"
 				}
 			},
@@ -523,6 +539,7 @@
 					]
 				},
 				"Email": {
+					"description": "Organization's email address",
 					"type": "string",
 					"format": "email",
 					"examples": [
@@ -537,6 +554,7 @@
 					]
 				},
 				"URL": {
+					"description": "Organization's website URL",
 					"type": "string",
 					"format": "uri",
 					"examples": [
@@ -677,6 +695,7 @@
 					"type": "string"
 				},
 				"Email": {
+					"description": "Person's email address",
 					"type": "string",
 					"format": "email"
 				},
@@ -694,6 +713,7 @@
 					]
 				},
 				"URL": {
+					"description": "Person's website or profile URL",
 					"type": "string",
 					"format": "uri"
 				}
@@ -771,6 +791,7 @@
 						]
 					},
 					"Notes": {
+						"description": "Additional notes about the reference.",
 						"type": "string"
 					}
 				},
