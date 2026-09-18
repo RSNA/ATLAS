@@ -784,32 +784,275 @@
 					"type": "string"
 				},
 				"Regulatory information": {
-					"description": "Information used to support or document regulatory review.",
+					"description": "Information used to support or document regulatory review, covering one or more jurisdiction-specific authorization pathways (e.g. FDA, CE marking under EU MDR, UKCA).",
 					"$comment": "ROADMAP:03602",
 					"type": "object",
 					"properties": {
-						"FDA cleared": {
-							"description": "Indicates that the model has received FDA 510(K) pre-market approval. ",
-							"type": "boolean"
+						"Authorizations": {
+							"description": "One record per jurisdiction/pathway. Absence of a record does not imply absence of authorization; use Status \"Not submitted\" to state this explicitly. A model may hold more than one record, e.g. an original 510(k) plus supplements, or authorizations in multiple jurisdictions.",
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"Jurisdiction": {
+										"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
+										"type": "string",
+										"examples": [
+											"US",
+											"EU",
+											"GB",
+											"UK-NI",
+											"CH",
+											"CA",
+											"AU",
+											"JP",
+											"CN",
+											"KR",
+											"BR",
+											"IN",
+											"IL",
+											"SG",
+											"Other"
+										]
+									},
+									"Authority": {
+										"description": "Regulatory authority or conformity-assessment body responsible for the authorization.",
+										"type": "string",
+										"examples": [
+											"FDA",
+											"Notified Body",
+											"MHRA",
+											"Approved Body",
+											"Swissmedic",
+											"Health Canada",
+											"TGA",
+											"PMDA",
+											"NMPA",
+											"MFDS",
+											"ANVISA",
+											"CDSCO",
+											"Other"
+										]
+									},
+									"Authority identifier": {
+										"description": "Notified Body or Approved Body number, where applicable.",
+										"type": "string",
+										"maxLength": 64,
+										"examples": [
+											"0123"
+										]
+									},
+									"Pathway": {
+										"description": "Regulatory pathway or authorization route.",
+										"type": "string",
+										"examples": [
+											"510(k)",
+											"De Novo",
+											"PMA",
+											"CE / MDR",
+											"CE / IVDR",
+											"CE / MDD (legacy)",
+											"UKCA",
+											"International Reliance",
+											"Medical Device Licence",
+											"ARTG inclusion",
+											"Shonin",
+											"Other",
+											"Not applicable"
+										]
+									},
+									"Status": {
+										"description": "Status of this authorization. \"Not submitted\" and \"Research use only\" are positive assertions and should be used in preference to omitting the record. \"Not available\" mirrors the ONC convention at 45 CFR 170.315(b)(11)(v)(A)(2).",
+										"$comment": "ROADMAP:03603",
+										"type": "string",
+										"examples": [
+											"Authorized",
+											"Submitted / under review",
+											"Not submitted",
+											"Research use only",
+											"Withdrawn",
+											"Suspended",
+											"Expired",
+											"Not available"
+										]
+									},
+									"Identifier": {
+										"description": "Submission or certificate number. FDA identifiers follow a fixed format (see examples); CE and UKCA certificate numbers are assigned in Notified/Approved Body house formats and vary.",
+										"$comment": "ROADMAP:03604",
+										"type": "string",
+										"maxLength": 128,
+										"examples": [
+											"K123456",
+											"DEN123456",
+											"P123456",
+											"G1 012345 0020"
+										]
+									},
+									"Risk class": {
+										"description": "Jurisdiction-specific risk classification; not comparable across jurisdictions and should be interpreted only together with Jurisdiction.",
+										"type": "string",
+										"maxLength": 32,
+										"examples": [
+											"II",
+											"IIb",
+											"III"
+										]
+									},
+									"Product code": {
+										"description": "FDA three-letter product code.",
+										"type": "string",
+										"pattern": "^[A-Z]{3}$",
+										"examples": [
+											"QIH"
+										]
+									},
+									"Regulation number": {
+										"description": "FDA classification regulation.",
+										"type": "string",
+										"pattern": "^21 CFR [0-9]{3}\\.[0-9]{4}$",
+										"examples": [
+											"21 CFR 892.2050"
+										]
+									},
+									"Predicate device": {
+										"description": "510(k) only. Predicate device identifier or name.",
+										"$comment": "ROADMAP:03639",
+										"type": "string",
+										"maxLength": 256
+									},
+									"Date": {
+										"description": "Dates associated with this authorization.",
+										"type": "object",
+										"properties": {
+											"Submitted": {
+												"description": "Submission date",
+												"$ref": "#/$defs/Date"
+											},
+											"Decision": {
+												"description": "Decision date",
+												"$ref": "#/$defs/Date"
+											},
+											"Expiry": {
+												"description": "Expiry date",
+												"$ref": "#/$defs/Date"
+											}
+										},
+										"additionalProperties": false
+									},
+									"Registry URL": {
+										"description": "Deep link to the public registry entry, where one exists.",
+										"type": "string",
+										"format": "uri"
+									},
+									"Comment": {
+										"$comment": "ROADMAP:00070",
+										"type": "string",
+										"maxLength": 1024
+									}
+								},
+								"required": [
+									"Jurisdiction",
+									"Status"
+								],
+								"additionalProperties": false,
+								"allOf": [
+									{
+										"if": {
+											"properties": {
+												"Pathway": {
+													"const": "510(k)"
+												}
+											},
+											"required": [
+												"Pathway"
+											]
+										},
+										"then": {
+											"properties": {
+												"Identifier": {
+													"pattern": "^K[0-9]{6}$"
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"Pathway": {
+													"const": "De Novo"
+												}
+											},
+											"required": [
+												"Pathway"
+											]
+										},
+										"then": {
+											"properties": {
+												"Identifier": {
+													"pattern": "^DEN[0-9]{6}$"
+												}
+											}
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"Pathway": {
+													"const": "PMA"
+												}
+											},
+											"required": [
+												"Pathway"
+											]
+										},
+										"then": {
+											"properties": {
+												"Identifier": {
+													"pattern": "^P[0-9]{6}$"
+												}
+											}
+										}
+									}
+								]
+							}
 						},
-						"CE marked": {
-							"description": "Indicates that the model has been given the CE mark.",
-							"type": "boolean"
-						},
-						"Predicate device": {
-							"description": "A predicate device is an FDA-cleared medical device used as point of comparison for new medical devices seeking approval through FDA’s 510(k) pre-market clearance pathway. It is useful to provide the URL to the FDA clearance statement regarding the predicate device.",
-							"$comment": "ROADMAP:03639",
-							"type": "string"
-						},
-						"Authorization status": {
-							"description": "Free-text description of the regulatory status of the AI model, such as Cleared, Application submitted, etc. Use the 'FDA cleared' and/or 'CE marked' tags, if appropriate.",
-							"$comment": "ROADMAP:03603",
-							"type": "string"
-						},
-						"File number": {
-							"description": "Identifies the AI model's application number related to its regulatory clearance.",
-							"$comment": "ROADMAP:03604",
-							"type": "string"
+						"EU AI Act": {
+							"description": "Co-classification under Regulation (EU) 2024/1689. Independent of CE marking under MDR: a device may hold both.",
+							"type": "object",
+							"properties": {
+								"Risk classification": {
+									"description": "AI Act risk classification.",
+									"type": "string",
+									"examples": [
+										"High-risk (Article 6)",
+										"Limited risk",
+										"Minimal risk",
+										"General-purpose AI model",
+										"Not in scope",
+										"Not assessed"
+									]
+								},
+								"EU database registration": {
+									"description": "EUDAMED registration number, where available.",
+									"type": "string",
+									"maxLength": 128
+								},
+								"Technical documentation": {
+									"description": "Status of the Annex IV technical documentation.",
+									"type": "string",
+									"examples": [
+										"Annex IV complete",
+										"Annex IV in preparation",
+										"Not applicable"
+									]
+								},
+								"Comment": {
+									"$comment": "ROADMAP:00070",
+									"type": "string",
+									"maxLength": 1024
+								}
+							},
+							"additionalProperties": false
 						},
 						"Comment": {
 							"$comment": "ROADMAP:00070",
