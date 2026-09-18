@@ -165,6 +165,8 @@
 							"URI": {
 								"description": "The unique identifire (IRI) of the code system and code.",
 								"type": "string",
+								"minLength": 1,
+								"maxLength": 256,
 								"format": "uri",
 								"examples": [
 									"https://radlex.org/RID/RID50685"
@@ -217,6 +219,8 @@
 			"oneOf": [
 				{
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 10,
 					"format": "date"
 				},
 				{
@@ -565,6 +569,7 @@
 					"items": {
 						"$comment": "https://radlex.org/RID/$",
 						"type": "string",
+						"minLength": 4,
 						"maxLength": 12,
 						"pattern": "RID[0-9]+",
 						"examples": [
@@ -622,6 +627,7 @@
 				"Summary": {
 					"description": "Textual summary of the model",
 					"type": "string",
+					"minLength": 1,
 					"maxLength": 2500
 				},
 				"Link": {
@@ -1007,6 +1013,8 @@
 									"Product code": {
 										"description": "FDA three-letter product code.",
 										"type": "string",
+										"minLength": 3,
+										"maxLength": 3,
 										"pattern": "^[A-Z]{3}$",
 										"examples": [
 											"QIH"
@@ -1015,6 +1023,8 @@
 									"Regulation number": {
 										"description": "FDA classification regulation.",
 										"type": "string",
+										"minLength": 15,
+										"maxLength": 15,
 										"pattern": "^21 CFR [0-9]{3}\\.[0-9]{4}$",
 										"examples": [
 											"21 CFR 892.2050"
@@ -1528,7 +1538,7 @@
 					},
 					"DOI": {
 						"description": "Digital Object Identifer (DOI)",
-						"$comment": "ROADMAP:04003",
+						"$comment": "ROADMAP:04003, https://doi.org/$",
 						"type": "string",
 						"minLength": 2,
 						"maxLength": 128,
@@ -1550,7 +1560,7 @@
 					},
 					"PMID": {
 						"description": "PubMed ID",
-						"$comment": "https://pubmed.ncbi.nlm.nih.gov/$/",
+						"$comment": "ROADMAP:04004, https://pubmed.ncbi.nlm.nih.gov/$/",
 						"type": "integer",
 						"maxLength": 16,
 						"examples": [
@@ -1559,7 +1569,7 @@
 					},
 					"PMCID": {
 						"description": "PubMed Central ID",
-						"$comment": "https://pmc.ncbi.nlm.nih.gov/articles/$/",
+						"$comment": "ROADMAP:04013, https://pmc.ncbi.nlm.nih.gov/articles/$/",
 						"oneOf": [
 							{
 								"type": "string",

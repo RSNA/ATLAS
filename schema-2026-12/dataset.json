@@ -167,11 +167,11 @@
 				},
 				"Comments": {
 					"$comment": "ROADMAP:00070",
-					"type": "string", "minLength": 1
+					"type": "string", "minLength": 1, "maxLength": 512
 				},
 				"Contact": {
 					"$comment": "ROADMAP:00069",
-					"type": "string", "minLength": 1
+					"type": "string", "minLength": 1, "maxLength": 512
 				},
 				"Date": {
 					"description": "Dates associated with this resource, such as creation, publication, or update dates.",
@@ -198,11 +198,11 @@
 				},
 				"Ethical review": {
 					"$comment": "ROADMAP:03418",
-					"type": "string", "minLength": 1
+					"type": "string", "minLength": 1, "maxLength": 512
 				},
 				"Funding": {
 					"$comment": "ROADMAP:03385",
-					"type": "string", "minLength": 1
+					"type": "string", "minLength": 1, "maxLength": 512
 				},
 				"License": {
 					"description": "License or rights to access this resource",
@@ -211,7 +211,7 @@
 					"minProperties": 1,
 					"properties": {
 						"Text": {
-							"type": "string", "minLength": 1,
+							"type": "string", "minLength": 1, "maxLength": 512,
 							"description": "Textual name or description of the license.",
 							"examples": [
 								"Non-commercial use"
@@ -219,7 +219,7 @@
 						},
 						"URL": {
 							"description": "URL pointing to the full text of the license.",
-							"type": "string","minLength": 1,
+							"type": "string","minLength": 1, "maxLength": 512,
 							"format": "uri",
 							"examples": [
 								"https://creativecommons.org/licenses/by-nc-nd/4.0/"
@@ -244,7 +244,9 @@
 				"Version": {
 					"description": "Version designation of this resource",
 					"$comment": "ROADMAP:00066",
-					"type": "string"
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 128
 				}
 			},
 			"additionalProperties": false
@@ -404,12 +406,16 @@
 				"Resolution": {
 					"description": "Describes whether the dataset used original or down-sampled images.",
 					"$comment": "ROADMAP:00123",
-					"type": "string"
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				},
 				"Pre-processing": {
 					"description": "Describes the type(s) of pre-processing applied to the dataset's images.",
 					"$comment": "ROADMAP:00126",
-					"type": "string"
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				},
 				"Burned-in PHI": {
 					"description": "Indicates whether the images contain burned-in Protected Health Information (PHI).",
@@ -423,7 +429,9 @@
 				},
 				"Comments": {
 					"$comment": "ROADMAP:00070",
-					"type": "string"
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				}
 			},
 			"additionalProperties": false
@@ -487,6 +495,7 @@
 					"uniqueItems": true,
 					"items": {
 						"type": "string",
+						"minLength": 4,
 						"maxLength": 12,
 						"pattern": "RID[0-9]+",
 						"$comment": "https://radlex.org/RID/$",
@@ -536,6 +545,8 @@
 				"Name": {
 					"description": "Name of organization",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 128,
 					"examples": [
 						"RSNA"
 					]
@@ -543,6 +554,8 @@
 				"Contact name": {
 					"description": "Name or role of organizational contact",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 512,
 					"examples": [
 						"Informatics Department"
 					]
@@ -550,6 +563,8 @@
 				"Email": {
 					"description": "Organization's email address",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 128,
 					"format": "email",
 					"examples": [
 						"informatics@rsna.org"
@@ -558,6 +573,8 @@
 				"Address": {
 					"description": "Organizations's physical (real-world) address",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 512,
 					"examples": [
 						"820 Jorie Blvd, Oak Brook, IL 60523-2251, USA"
 					]
@@ -565,6 +582,8 @@
 				"URL": {
 					"description": "Organization's website URL",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 128,
 					"format": "uri",
 					"examples": [
 						"https://rsna.org"
@@ -615,6 +634,8 @@
 						"description": "Additional notes about this partition, such as sampling methodology, special characteristics, or clarifications",
 						"$comment": "ROADMAP:00070",
 						"type": "string",
+						"minLength": 1,
+						"maxLength": 512,
 						"examples": [
 							"Stratified by sex and view position",
 							"No overlapping patient identifiers with other partitions",
@@ -701,20 +722,28 @@
 			"properties": {
 				"Name": {
 					"description": "The person's name",
-					"type": "string"
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 128
 				},
 				"Email": {
 					"description": "Person's email address",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 128,
 					"format": "email"
 				},
 				"Address": {
 					"description": "Person's physical (real-world) address",
-					"type": "string"
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				},
 				"ORCID": {
 					"description": "Unique ORCID (Open Researcher and Contributor ID) identifier",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 40,
 					"pattern": "https://orcid.org/.+",
 					"format": "uri",
 					"examples": [
@@ -724,6 +753,8 @@
 				"URL": {
 					"description": "Person's website or profile URL",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 128,
 					"format": "uri"
 				}
 			},
@@ -742,6 +773,8 @@
 					"Authors": {
 						"description": "Author names",
 						"type": "string",
+						"minLength": 1,
+						"maxLength": 512,
 						"examples": [
 							"Rudie JD, et al."
 						]
@@ -749,6 +782,8 @@
 					"Title": {
 						"description": "Reference title",
 						"type": "string",
+						"minLength": 1,
+						"maxLength": 512,
 						"examples": [
 							"The RSNA Abdominal Traumatic Injury CT (RATIC) Dataset"
 						]
@@ -756,6 +791,8 @@
 					"Source": {
 						"description": "Name of journal, book, or other source; or full citation (see example)",
 						"type": "string",
+						"minLength": 1,
+						"maxLength": 512,
 						"examples": [
 							"Radiology: Artificial Intelligence",
 							"Radiol Artif Intell 2024; 6:e240101"
@@ -769,6 +806,8 @@
 						"description": "Digital Object Identifer (DOI)",
 						"$comment": "ROADMAP:04003, https://doi.org/$",
 						"type": "string",
+						"minLength": 1,
+						"maxLength": 128,
 						"pattern": "[0-9]+\\.[0-9]+/.+",
 						"examples": [
 							"10.1148/ryai.240101"
@@ -777,6 +816,8 @@
 					"URL": {
 						"description": "Pointer to online reference",
 						"type": "string",
+						"minLength": 1,
+						"maxLength": 128,
 						"format": "uri",
 						"examples": [
 							"https://doi.org/10.1148/ryai.240101"
@@ -794,6 +835,8 @@
 						"description": "PubMed Central ID",
 						"$comment": "ROADMAP:04013, https://pmc.ncbi.nlm.nih.gov/articles/$/",
 						"type": "string",
+						"minLength": 1,
+						"maxLength": 32,
 						"pattern": "PMC[0-9]+",
 						"examples": [
 							"PMC8017407"
@@ -801,7 +844,9 @@
 					},
 					"Notes": {
 						"description": "Additional notes about the reference.",
-						"type": "string"
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 512
 					}
 				},
 				"required": [
@@ -940,6 +985,8 @@
 					"description": "Other subset criterion, such as reference-standard value, imaging finding, diagnosis, or other clinical/technical factor",
 					"$comment": "ROADMAP:03477",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 512,
 					"examples": [
 						"Malpositioned tube",
 						"No hemorrhage",
@@ -951,6 +998,8 @@
 				"Comments": {
 					"description": "Additional notes or clarifications about this data subset",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 512,
 					"examples": [
 						"Median age 127 months",
 						"Mean age (± SD): 66.3 ± 14.9 years",
