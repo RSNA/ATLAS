@@ -432,6 +432,61 @@
 					"type": "string",
 					"minLength": 1,
 					"maxLength": 512
+				},
+				"Acquisition": {
+					"description": "Describes the imaging acquisition equipment and parameters used to obtain the dataset's images, such as scanner manufacturer, model, field strength, detector configuration, slice thickness, or reconstruction kernel.",
+					"$comment": "ROADMAP:04128",
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Manufacturer": {
+							"description": "The manufacturer of the imaging equipment used to acquire the images, e.g. GE HealthCare, Siemens Healthineers, Philips, or Canon Medical.",
+							"$comment": "ROADMAP:04129",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						},
+						"Model": {
+							"description": "The specific model of the imaging equipment used to acquire the images.",
+							"$comment": "ROADMAP:04130",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						},
+						"Field strength": {
+							"description": "The static magnetic field strength of the MRI scanner used to acquire the images, typically expressed in tesla (T).",
+							"$comment": "ROADMAP:04131",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 32,
+							"examples": [
+								"1.5T",
+								"3T"
+							]
+						},
+						"Detector configuration": {
+							"description": "The detector configuration of the imaging equipment used to acquire the images, such as the number of detector rows for CT.",
+							"$comment": "ROADMAP:04132",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						},
+						"Slice thickness": {
+							"description": "The thickness of the reconstructed image slices.",
+							"$comment": "ROADMAP:04133",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 32
+						},
+						"Reconstruction kernel": {
+							"description": "The reconstruction kernel or algorithm applied to raw acquisition data to produce the reconstructed images.",
+							"$comment": "ROADMAP:04134",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						}
+					},
+					"additionalProperties": false
 				}
 			},
 			"additionalProperties": false

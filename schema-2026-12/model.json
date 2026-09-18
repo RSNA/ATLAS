@@ -505,6 +505,61 @@
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 256
+				},
+				"Acquisition": {
+					"description": "Describes the imaging acquisition equipment and parameters used to obtain the images, such as scanner manufacturer, model, field strength, detector configuration, slice thickness, or reconstruction kernel.",
+					"$comment": "ROADMAP:04128",
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Manufacturer": {
+							"description": "The manufacturer of the imaging equipment used to acquire the images, e.g. GE HealthCare, Siemens Healthineers, Philips, or Canon Medical.",
+							"$comment": "ROADMAP:04129",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						},
+						"Model": {
+							"description": "The specific model of the imaging equipment used to acquire the images.",
+							"$comment": "ROADMAP:04130",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						},
+						"Field strength": {
+							"description": "The static magnetic field strength of the MRI scanner used to acquire the images, typically expressed in tesla (T).",
+							"$comment": "ROADMAP:04131",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 32,
+							"examples": [
+								"1.5T",
+								"3T"
+							]
+						},
+						"Detector configuration": {
+							"description": "The detector configuration of the imaging equipment used to acquire the images, such as the number of detector rows for CT.",
+							"$comment": "ROADMAP:04132",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						},
+						"Slice thickness": {
+							"description": "The thickness of the reconstructed image slices.",
+							"$comment": "ROADMAP:04133",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 32
+						},
+						"Reconstruction kernel": {
+							"description": "The reconstruction kernel or algorithm applied to raw acquisition data to produce the reconstructed images.",
+							"$comment": "ROADMAP:04134",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						}
+					},
+					"additionalProperties": false
 				}
 			},
 			"additionalProperties": false
@@ -698,6 +753,24 @@
 					},
 					"Results": {
 						"$ref": "#/$defs/Model-performance-results"
+					},
+					"Provenance": {
+						"description": "Indicates whether this performance record is claimed (self-reported by the developer, e.g. from internal or external testing) or observed (derived from real-world, deployed use, e.g. registry-reported concordance).",
+						"$comment": "ROADMAP:04123",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 32,
+						"examples": [
+							"Claimed",
+							"Observed"
+						]
+					},
+					"Metric justification": {
+						"description": "Explains why the metric(s) reported are appropriate measures of performance for this specific model and its intended use.",
+						"$comment": "ROADMAP:04124",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 512
 					}
 				},
 				"required": [
@@ -866,6 +939,21 @@
 							"type": "string",
 							"minLength": 2,
 							"maxLength": 512
+						},
+						"Type": {
+							"description": "The general category of the value produced by the model as output.",
+							"$comment": "ROADMAP:04125",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64,
+							"examples": [
+								"Prediction",
+								"Classification",
+								"Recommendation",
+								"Evaluation",
+								"Analysis",
+								"Other"
+							]
 						},
 						"Coded data": {
 							"description": "An array of coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
@@ -1224,6 +1312,13 @@
 							},
 							"additionalProperties": false
 						},
+						"Harmonised standards applied": {
+							"description": "Lists the harmonised standards, common specifications, or other technical standards applied in developing and evaluating the model, or the solutions adopted to meet the applicable requirements in their absence.",
+							"$comment": "ROADMAP:04116",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 512
+						},
 						"Comment": {
 							"$comment": "ROADMAP:00070",
 							"type": "string",
@@ -1246,6 +1341,75 @@
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 512
+				},
+				"Computational resources": {
+					"description": "Describes the computational resources (e.g., processor type and count, memory, accelerators) used to develop, train, test, and validate the model, as distinct from the resources needed to apply it.",
+					"$comment": "ROADMAP:04119",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Cybersecurity measures": {
+					"description": "Describes cybersecurity measures put in place for the AI model, such as access controls, vulnerability management, or secure update mechanisms.",
+					"$comment": "ROADMAP:04115",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Distribution form": {
+					"description": "The form(s) in which the model is placed on the market or put into service.",
+					"$comment": "ROADMAP:04117",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 128,
+					"examples": [
+						"Software embedded in hardware",
+						"Software download",
+						"API",
+						"Cloud service"
+					]
+				},
+				"User interface": {
+					"description": "A basic description of the user interface provided to the deployer for interacting with the model's outputs.",
+					"$comment": "ROADMAP:04118",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Acceptance test procedure": {
+					"description": "A recommended procedure by which a receiving site can verify the model's performance on local data before deployment.",
+					"$comment": "ROADMAP:04120",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Operating range": {
+					"description": "A declared expected performance range or minimum performance floor, used to detect when the model's real-world performance has fallen outside acceptable bounds.",
+					"$comment": "ROADMAP:04121",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Suspend-use conditions": {
+					"description": "Conditions, such as a specific performance decline or an operational change, under which use of the model should be suspended.",
+					"$comment": "ROADMAP:04122",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Bias mitigation approach": {
+					"description": "Describes the approach taken during model development to identify, manage, reduce, or eliminate bias, and to help ensure the model's output is fair across relevant subgroups.",
+					"$comment": "ROADMAP:04126",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Clinical risk level": {
+					"description": "A declared level of clinical risk associated with use of the model, such as a risk classification scheme used by the developer or a relevant regulatory framework.",
+					"$comment": "ROADMAP:04127",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 64
 				},
 				"Use": {
 					"description": "Model use",
