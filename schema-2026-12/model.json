@@ -1043,6 +1043,7 @@
 									},
 									"Date": {
 										"description": "Dates associated with this authorization.",
+										"$comment": "ROADMAP:00065",
 										"type": "object",
 										"properties": {
 											"Submitted": {
