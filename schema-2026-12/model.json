@@ -920,6 +920,16 @@
 										"type": "string",
 										"maxLength": 256
 									},
+									"UDI-DI": {
+										"description": "Unique Device Identifier - Device Identifier, the model/version-level identifier assigned under a UDI system such as EUDAMED or the FDA GUDID.",
+										"type": "string",
+										"maxLength": 128
+									},
+									"Basic UDI-DI": {
+										"description": "Basic Unique Device Identifier - Device Identifier, the primary identifier of a device model grouping, used in EUDAMED and other UDI systems independent of packaging/version-level UDI-DIs.",
+										"type": "string",
+										"maxLength": 128
+									},
 									"Date": {
 										"description": "Dates associated with this authorization.",
 										"type": "object",
