@@ -1,14 +1,14 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://atlas.rsna.org/schemas/2025-11/dataset.json",
+	"$id": "https://atlas.rsna.org/schemas/2026-12/dataset.json",
 	"title": "ATLAS dataset schema",
-	"description": "RSNA ATLAS dataset schema, 2025-11 version",
-	"$comment": "Copyright (c) 2025, Radiological Society of North America",
+	"description": "RSNA ATLAS dataset schema, 2026-12 version",
+	"$comment": "Copyright (c) 2026, Radiological Society of North America",
 	"type": "object",
 	"properties": {
 		"$schema": {
 			"type": "string",
-			"const": "https://atlas.rsna.org/schemas/2025-11/dataset.json"
+			"const": "https://atlas.rsna.org/schemas/2026-12/dataset.json"
 		},
 		"Dataset": {
 			"$ref": "#/$defs/Dataset"
@@ -37,7 +37,7 @@
 				},
 				"Summary": {
 					"description": "Textual summary of the dataset",
-					"type": "string",
+					"type": "string", "minLength": 1, 
 					"maxLength": 2500
 				},
 				"Link": {
@@ -51,7 +51,7 @@
 					]
 				},
 				"Indexing": {
-					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords)",
+					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords.",
 					"$ref": "#/$defs/Indexing"
 				},
 				"Descriptors": {
@@ -84,52 +84,52 @@
 				"Confidentiality": {
 					"description": "Describes any data that might be confidential, such as those protected by law or doctor-patient confidentiality.",
 					"$comment": "ROADMAP:03413",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"External data": {
 					"description": "External resources such as web sites, social-media posts or other datasets. Include information about their permanence, archival versions, and any restrictions on their use (e.g., data-use agreements, licenses, fees),",
 					"$comment": "ROADMAP:03412",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength":1000
 				},
 				"Missing information": {
 					"description": "Describes what information, if any, is missing from the dataset and why.",
 					"$comment": "ROADMAP:03408",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"Motivation": {
 					"description": "Describes the specific purpose for which the dataset was created. May include information about funding sources.",
 					"$comment": "ROADMAP:03383",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"Noise": {
 					"description": "Describes any errors, sources of noise, or redundancies in the dataset.",
 					"$comment": "ROADMAP:03411",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"Partitioning scheme": {
 					"description": "Describes how a dataset was partitioned for training, optimization (\"validation\") and testing.",
 					"$comment": "ROADMAP:03410",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"Re-identification": {
 					"description": "Describes if and how it is possible to identify individual persons, either directly or indirectly, from the dataset.",
 					"$comment": "ROADMAP:03415",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"Relationships between instances": {
 					"description": "Describes if and how any relationships between individual data items are made explicit.",
 					"$comment": "ROADMAP:03409",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"Sampling": {
 					"description": "Describes how the data that form the dataset were selected.",
 					"$comment": "ROADMAP:03396",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				},
 				"Sensitive data": {
 					"description": "Describes any data that might be considered sensitive.",
 					"$comment": "ROADMAP:03416",
-					"type": "string"
+					"type": "string", "minLength": 1, "maxLength": 1000
 				}
 			},
 			"additionalProperties": false
@@ -142,11 +142,11 @@
 			],
 			"anyOf": [
 				{
-					"type": "string",
+					"type": "string", "minLength": 1, "maxLength": 10,
 					"format": "date"
 				},
 				{
-					"type": "integer"
+					"type": "integer", "minimum": 1900, "maximum": 2200
 				}
 			]
 		},
@@ -165,11 +165,11 @@
 				},
 				"Comments": {
 					"$comment": "ROADMAP:00070",
-					"type": "string"
+					"type": "string", "minLength": 1
 				},
 				"Contact": {
 					"$comment": "ROADMAP:00069",
-					"type": "string"
+					"type": "string", "minLength": 1
 				},
 				"Date": {
 					"type": "object",
@@ -191,11 +191,11 @@
 				},
 				"Ethical review": {
 					"$comment": "ROADMAP:03418",
-					"type": "string"
+					"type": "string", "minLength": 1
 				},
 				"Funding": {
 					"$comment": "ROADMAP:03385",
-					"type": "string"
+					"type": "string", "minLength": 1
 				},
 				"License": {
 					"description": "License or rights to access this resource",
@@ -204,13 +204,13 @@
 					"minProperties": 1,
 					"properties": {
 						"Text": {
-							"type": "string",
+							"type": "string", "minLength": 1,
 							"examples": [
 								"Non-commercial use"
 							]
 						},
 						"URL": {
-							"type": "string",
+							"type": "string", "minLength": 1,
 							"format": "uri",
 							"examples": [
 								"https://creativecommons.org/licenses/by-nc-nd/4.0/"
@@ -415,7 +415,8 @@
 			"type": "object",
 			"properties": {
 				"Content": {
-					"description": "Array of RSNA 2-letter content code, e.g., CT",
+					"description": "RSNA 2-letter content codes, e.g., CT",
+					"$comment": "ROADMAP:00073",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -461,13 +462,15 @@
 				},
 				"RadLex": {
 					"description": "Array of RadLex codes (e.g., RID58)",
-					"$comment": "https://radlex.org/RID/$",
+					"$comment": "ROADMAP:00117",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
 						"type": "string",
+						"maxLength": 12,
 						"pattern": "RID[0-9]+",
+						"$comment": "https://radlex.org/RID/$",
 						"examples": [
 							"RID58",
 							"RID1169"
@@ -476,12 +479,14 @@
 				},
 				"SNOMED": {
 					"description": "Array of SNOMED CT codes",
-					"$comment": "https://lookup.snomedtools.org/$",
+					"$comment": "ROADMAP:03625",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
 						"type": "integer",
+						"$comment": "https://lookup.snomedtools.org/$",
+						"maxLength": 12,
 						"examples": [
 							10200004,
 							441802002
@@ -490,6 +495,7 @@
 				},
 				"Keywords": {
 					"description": "Array of keywords to index the resource",
+					"$comment": "ROADMAP:03721",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
