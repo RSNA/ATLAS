@@ -1,0 +1,53 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://atlas.rsna.org/schemas/2026-12/profiles/regulatory-ready.json",
+	"title": "ATLAS model card — regulatory-ready conformance profile",
+	"description": "Cumulative on procurement-ready: adds predetermined change control (FDA/MHRA PCCP or EU AI Act Annex IV point 2(f) technical solutions for continuous compliance) as a currently-expressible increment toward the HTI-1 / EU AI Act Annex IV convergent gap set.",
+	"$comment": "Conformance profile per atlas-chai-crosswalk.md Priority 4 / atlas-conformance-profiles.md. Cumulative: allOf-references procurement-ready.json so every procurement-ready constraint still applies, then adds its own increment (each nested `required` is restated down to the leaf per the note's \"required does not cascade\" trap; this branch defines no new properties). DEFERRED pending fields that do not yet exist in the base schema (per the note's \"profiles cannot ship first\" and the HTI-1/Annex IV convergent-gap list): structured training-data characterization; a declared bias-mitigation approach; at least one subgroup-disaggregated performance record; at least one performance record with Test type \"External\"; a Maintenance object (validity/fairness monitoring, update process); a Factors declaration; a foundation-model flag; human-oversight measures; security posture; third-party/pre-trained-component disclosure. These will be added to this profile once the corresponding base-schema fields exist.",
+	"allOf": [
+		{
+			"$ref": "https://atlas.rsna.org/schemas/2026-12/profiles/procurement-ready.json"
+		},
+		{
+			"$ref": "#/$defs/profileConstraints"
+		}
+	],
+	"$defs": {
+		"profileConstraints": {
+			"type": "object",
+			"required": [
+				"Model"
+			],
+			"properties": {
+				"Model": {
+					"type": "object",
+					"required": [
+						"Model properties"
+					],
+					"properties": {
+						"Model properties": {
+							"type": "object",
+							"required": [
+								"Regulatory information"
+							],
+							"properties": {
+								"Regulatory information": {
+									"type": "object",
+									"required": [
+										"Change control"
+									],
+									"properties": {
+										"Change control": {
+											"type": "object",
+											"minProperties": 1
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -180,14 +180,17 @@
 					"properties": {
 						"Created": {
 							"description": "Creation date (ROADMAP:03419)",
+							"$comment": "ROADMAP:03419",
 							"$ref": "#/$defs/Date"
 						},
 						"Published": {
 							"description": "Publication date (ROADMAP:03420)",
+							"$comment": "ROADMAP:03420",
 							"$ref": "#/$defs/Date"
 						},
 						"Updated": {
 							"description": "Date of last update (ROADMAP:03421)",
+							"$comment": "ROADMAP:03421",
 							"$ref": "#/$defs/Date"
 						}
 					},
@@ -764,7 +767,7 @@
 					},
 					"DOI": {
 						"description": "Digital Object Identifer (DOI)",
-						"$comment": "https://doi.org/$",
+						"$comment": "ROADMAP:04003, https://doi.org/$",
 						"type": "string",
 						"pattern": "[0-9]+\\.[0-9]+/.+",
 						"examples": [
@@ -781,7 +784,7 @@
 					},
 					"PMID": {
 						"description": "PubMed ID",
-						"$comment": "https://pubmed.ncbi.nlm.nih.gov/$/",
+						"$comment": "ROADMAP:04004, https://pubmed.ncbi.nlm.nih.gov/$/",
 						"type": "integer",
 						"examples": [
 							39441109
@@ -789,7 +792,7 @@
 					},
 					"PMCID": {
 						"description": "PubMed Central ID",
-						"$comment": "https://pmc.ncbi.nlm.nih.gov/articles/$/",
+						"$comment": "ROADMAP:04013, https://pmc.ncbi.nlm.nih.gov/articles/$/",
 						"type": "string",
 						"pattern": "PMC[0-9]+",
 						"examples": [
@@ -844,6 +847,7 @@
 				},
 				"Age range": {
 					"title": "Age range",
+					"$comment": "ROADMAP:03462",
 					"description": "Age range, specified as a 2-element array: [Lower bound, Upper bound]",
 					"type": "array",
 					"minItems": 2,

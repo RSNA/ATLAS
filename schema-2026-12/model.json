@@ -691,8 +691,6 @@
 						"additionalProperties": false
 					},
 					"Results": {
-						"type": "array",
-						"items": false,
 						"$ref": "#/$defs/Model-performance-results"
 					}
 				},
