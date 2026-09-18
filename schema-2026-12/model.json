@@ -1,15 +1,14 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://atlas.rsna.org/schemas/2025-11/model.json",
+	"$id": "https://atlas.rsna.org/schemas/2026-12/model.json",
 	"title": "ATLAS model schema",
-	"description": "RSNA ATLAS schema, 2025-11 version",
-	"$comment": "Copyright (c) 2025, Radiological Society of North America",
+	"description": "RSNA ATLAS schema, 2026-12 version",
+	"$comment": "Copyright (c) 2026, Radiological Society of North America",
 	"type": "object",
 	"properties": {
 		"$schema": {
-			"description": "The JSON Schema version identifier for this document.",
 			"type": "string",
-			"const": "https://atlas.rsna.org/schemas/2025-11/model.json"
+			"const": "https://atlas.rsna.org/schemas/2026-12/model.json"
 		},
 		"Model": {
 			"$ref": "#/$defs/Model"
@@ -21,6 +20,193 @@
 	],
 	"additionalProperties": false,
 	"$defs": {
+		"Coded-data": {
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"oneOf": [
+					{
+						"type": "object",
+						"properties": {
+							"System": {
+								"description": "The code system, e.g., SNOMED CT.",
+								"type": "string",
+								"enum": [
+									"DO",
+									"Gamuts",
+									"HPO",
+									"ICD-10",
+									"ICD-11",
+									"LOINC",
+									"NDC",
+									"NLM CDE",
+									"RadElement",
+									"RadLex",
+									"RxNorm",
+									"SNOMED CT"
+								]
+							},
+							"Code": {
+								"description": "The code ID.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 16,
+								"examples": [
+									"RID123",
+									"RDE1063",
+									"12345-6"
+								]
+							},
+							"Label": {
+								"description": "The text label that describes the code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128,
+								"examples": [
+									"diameter (cm)"
+								]
+							},
+							"Value": {
+								"description": "The value of the coded entity",
+								"type": [
+									"string",
+									"number"
+								],
+								"minLength": 1,
+								"maxLength": 128,
+								"examples": [
+									3.4
+								]
+							}
+						},
+						"required": [
+							"System",
+							"Code"
+						],
+						"additionalProperties": false,
+						"examples": [
+							{
+								"System": "RadLex",
+								"Code": "RID50685",
+								"Label": "adrenal nodule",
+								"Value": 1.2
+							},
+							{
+								"System": "NLM CDE",
+								"Code": "yMHA1Nh14p9",
+								"Label": "Echocardiogram degree of aortic regurgitation status",
+								"Value": "Mild"
+							}
+						]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"Other system": {
+								"description": "A coding system not enumerated",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 64,
+								"examples": [
+									"MyCodes"
+								]
+							},
+							"Code": {
+								"description": "The code ID.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 16,
+								"examples": [
+									"ABC123"
+								]
+							},
+							"Label": {
+								"description": "The text label that describes the code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128,
+								"examples": [
+									"diameter (cm)"
+								]
+							},
+							"Value": {
+								"description": "The value of the coded entity (string or number)",
+								"type": [
+									"string",
+									"number"
+								],
+								"minLength": 1,
+								"maxLength": 128,
+								"examples": [
+									3.4
+								]
+							}
+						},
+						"required": [
+							"Other system",
+							"Code"
+						],
+						"additionalProperties": false,
+						"examples": [
+							{
+								"System": "MyCodes",
+								"Code": "ABC123",
+								"Label": "An ID from an unenumerated coding scheme",
+								"Value": 1.2
+							}
+						]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"URI": {
+								"description": "The unique identifire (IRI) of the code system and code.",
+								"type": "string",
+								"format": "uri",
+								"examples": [
+									"https://radlex.org/RID/RID50685"
+								]
+							},
+							"Label": {
+								"description": "The text label that describes the code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128,
+								"examples": [
+									"diameter (cm)"
+								]
+							},
+							"Value": {
+								"description": "The value of the coded entity",
+								"type": [
+									"string",
+									"number"
+								],
+								"minLength": 1,
+								"maxLength": 128,
+								"examples": [
+									3.4
+								]
+							}
+						},
+						"required": [
+							"URI"
+						],
+						"additionalProperties": false,
+						"examples": [
+							{
+								"IRI": "https://radelement.org/home/elements/element/RDE43",
+								"Label": "Adrenal nodule / Unenhanced attenuation",
+								"Value": "14 HU"
+							}
+						]
+					}
+				]
+			}
+		},
 		"Date": {
 			"description": "Date (Year or ISO-format date)",
 			"$comment": "ROADMAP:00065",
@@ -28,17 +214,19 @@
 				"2025-01-01",
 				2025
 			],
-			"anyOf": [
+			"oneOf": [
 				{
 					"type": "string",
 					"format": "date"
 				},
 				{
-					"type": "integer"
+					"type": "integer",
+					"minimum": 1900,
+					"maximum": 2100
 				}
 			]
 		},
-		"Descriptors": {
+		"General-metadata": {
 			"description": "Characteristics of a project, model, or dataset.  Whenever possible, values should link to other ontologies or controlled vocabularies.",
 			"$comment": "ROADMAP:00004",
 			"type": "object",
@@ -52,28 +240,35 @@
 					}
 				},
 				"Comments": {
+					"description": "Textual comments about the model, dataset, or project.",
 					"$comment": "ROADMAP:00070",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Contact": {
+					"description": "Physical address or email address of a contact.",
 					"$comment": "ROADMAP:00069",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Date": {
-					"description": "Dates associated with this resource, such as creation, publication, or update dates.",
-					"$comment": "ROADMAP:00065",
 					"type": "object",
 					"properties": {
 						"Created": {
-							"description": "Creation date (ROADMAP:03419)",
+							"description": "Creation date",
+							"$comment": "ROADMAP:03419",
 							"$ref": "#/$defs/Date"
 						},
 						"Published": {
-							"description": "Publication date (ROADMAP:03420)",
+							"description": "Publication date",
+							"$comment": "ROADMAP:03420",
 							"$ref": "#/$defs/Date"
 						},
 						"Updated": {
-							"description": "Date of last update (ROADMAP:03421)",
+							"description": "Date of last update",
+							"$comment": "ROADMAP:03421",
 							"$ref": "#/$defs/Date"
 						}
 					},
@@ -81,11 +276,15 @@
 				},
 				"Ethical review": {
 					"$comment": "ROADMAP:03418",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Funding": {
 					"$comment": "ROADMAP:03385",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"License": {
 					"description": "License or rights to access this resource",
@@ -93,15 +292,17 @@
 					"minProperties": 1,
 					"properties": {
 						"Text": {
-							"description": "Textual name or description of the license.",
 							"type": "string",
+							"minLength": 2,
+							"maxLength": 512,
 							"examples": [
 								"Non-commercial use"
 							]
 						},
 						"URL": {
-							"description": "URL pointing to the full text of the license.",
 							"type": "string",
+							"minLength": 2,
+							"maxLength": 512,
 							"format": "uri",
 							"examples": [
 								"https://creativecommons.org/licenses/by-nc-nd/4.0/"
@@ -119,14 +320,14 @@
 					}
 				},
 				"References": {
-					"description": "References about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
-					"$comment": "ROADMAP:00067",
 					"$ref": "#/$defs/Reference"
 				},
 				"Version": {
 					"description": "Version designation of this resource",
 					"$comment": "ROADMAP:00066",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128
 				}
 			},
 			"additionalProperties": false
@@ -139,7 +340,7 @@
 					"type": "array",
 					"minItems": 1,
 					"items": {
-						"description": "List of imaging modalities; requires value(s) from RadLex (RID10311)",
+						"description": "List of imaging modalities; requires value(s) from RadLex:RID10311",
 						"$comment": "ROADMAP:00120, RadLex:RID10311",
 						"type": "string",
 						"enum": [
@@ -275,22 +476,31 @@
 					"items": {
 						"type": "string",
 						"enum": [
+							"BIDS",
 							"DICOM",
 							"JPEG",
+							"MINC",
+							"MPEG",
+							"NDPI",
 							"NiFTI",
+							"NRRD",
 							"PNG",
+							"SVS",
+							"WSI",
 							"Other"
 						]
 					}
 				},
 				"Resolution": {
-					"description": "Describes whether the imaging data used original or down-sampled images.",
-					"$comment": "ROADMAP:00123",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 256
 				},
 				"Comments": {
-					"$comment": "ROADMAP:00070",
-					"type": "string"
+					"description": "Use this field to specify a file format of type 'Other'.",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 256
 				}
 			},
 			"additionalProperties": false
@@ -301,7 +511,8 @@
 			"type": "object",
 			"properties": {
 				"Content": {
-					"description": "Array of RSNA 2-letter content code, e.g., CT",
+					"description": "RSNA 2-letter content codes, e.g., CT",
+					"$comment": "ROADMAP:00073",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -347,12 +558,14 @@
 				},
 				"RadLex": {
 					"description": "Array of RadLex codes (e.g., RID58)",
-					"$comment": "https://radlex.org/RID/$",
+					"$comment": "ROADMAP:00117",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
+						"$comment": "https://radlex.org/RID/$",
 						"type": "string",
+						"maxLength": 12,
 						"pattern": "RID[0-9]+",
 						"examples": [
 							"RID58",
@@ -362,12 +575,14 @@
 				},
 				"SNOMED": {
 					"description": "Array of SNOMED CT codes",
-					"$comment": "https://lookup.snomedtools.org/$",
+					"$comment": "ROADMAP:03625",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
+						"$comment": "https://lookup.snomedtools.org/$",
 						"type": "integer",
+						"maxLength": 12,
 						"examples": [
 							10200004,
 							441802002
@@ -376,6 +591,7 @@
 				},
 				"Keywords": {
 					"description": "Array of keywords to index the resource",
+					"$comment": "ROADMAP:03721",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -388,263 +604,8 @@
 			},
 			"additionalProperties": false
 		},
-		"Metrics": {
-			"description": "Information about the model's performance. Includes a list of the reported metrics and a text field where one can specify values for the metrics.",
-			"$comment": "ROADMAP:03302",
-			"type": "object",
-			"properties": {
-				"Metrics": {
-					"description": "An array of the metrics used to assess the model's performance, including scalar, matrix, and graphical metrics (e.g., sensitivity, confusion matrix, ROC curve). If not one of the enumerated metrics, check the ROADMAP ontology for a possible synonym or report as \"other\".  Provide a textual description in the Comments field.",
-					"$comment": "ROADMAP:03642",
-					"type": "array",
-					"uniqueItems": true,
-					"items": {
-						"type": "string",
-						"enum": [
-							"95th percentile Hausdorff distance",
-							"absolute enhanced detection rate",
-							"accuracy",
-							"adjusted Rand index",
-							"alternative free-response receiver operating characteristic analysis",
-							"approximate intersection over union",
-							"area under the alternative free-response operating characteristic curve",
-							"area under the precision-recall curve",
-							"area under the predictive receiver operating characteristic curve",
-							"area under the receiver operating characteristic curve",
-							"AUC of each class vs. each of the other k-1 classes",
-							"AUC of each class vs. the rest combined",
-							"automated readability index",
-							"average Hausdorff distance",
-							"average precision",
-							"average symmetric surface distance",
-							"balanced accuracy",
-							"balanced error rate",
-							"BARTScore",
-							"BERTScore",
-							"binary confusion matrix",
-							"Bland-Altman analysis",
-							"BLEU",
-							"boundary intersection over union",
-							"box intersection over union",
-							"Brier score",
-							"Brier skill score",
-							"calibration curve",
-							"calibration intercept",
-							"calibration slope",
-							"calibration-in-the-large",
-							"center distance",
-							"centerline Dice similarity coefficient",
-							"class error",
-							"class-wise calibration error",
-							"coefficient of variation",
-							"Cohen's kappa",
-							"competition performance metric",
-							"concordance correlation coefficient",
-							"concordance index",
-							"conditional entropy",
-							"confusion matrix",
-							"contrast-to-noise ratio",
-							"counterfactual fairness",
-							"cross-entropy",
-							"cumulative gain",
-							"cumulative hazard",
-							"Damerau–Levenshtein distance",
-							"Davies-Bouldin index",
-							"demographic parity",
-							"density-based clustering validation",
-							"diagnostic odds ratio",
-							"diagnostic yield",
-							"Dice similarity coefficient",
-							"discounted cumulative gain",
-							"discrimination slope",
-							"Dunn index",
-							"earth mover's distance",
-							"edit distance",
-							"Efron's C-index",
-							"enhanced detection rate",
-							"enhanced multi-modal concordance",
-							"ensemble mean square error",
-							"entropy",
-							"entropy reduction",
-							"equality of opportunity",
-							"equalized odds",
-							"expected calibration error",
-							"expected calibration error with kernel density estimate",
-							"expected cost",
-							"F(beta) score",
-							"F1 score",
-							"F2 score",
-							"false discovery rate",
-							"false omission rate",
-							"false positive rate",
-							"false positives per image",
-							"false referral rate",
-							"FineRadScore",
-							"Flesch reading ease score",
-							"Flesch-Kincaid grade level",
-							"FORCAST readability estimate",
-							"Fowlkes-Mallows index",
-							"fraction of cases with user adjustment",
-							"free-response receiver operating characteristic analysis",
-							"free-response receiver operating characteristic score",
-							"Fry graph",
-							"Fréchet inception distance",
-							"gain-to-pain ratio",
-							"global consistency error",
-							"GREEN",
-							"group fairness",
-							"Gunning Fog index",
-							"Hamming distance",
-							"Harrell’s C-index",
-							"Hausdorff distance",
-							"hazard ratio",
-							"Hopkins statistic",
-							"inception score",
-							"individual equivalence index",
-							"individual fairness",
-							"information difference index",
-							"integrated time-dependent area under the ROC curve",
-							"interclass correlation coefficient",
-							"intersection over reference",
-							"intersection over union",
-							"intraclass correlation coefficient",
-							"Jaro distance",
-							"Kaplan-Meier estimator",
-							"Kendall's tau coefficient",
-							"kernel calibration error",
-							"Kullback-Leibler divergence",
-							"lenient accuracy",
-							"Levenshtein distance",
-							"likelihood ratio",
-							"localization receiver operating characteristic analysis",
-							"location recall precision error",
-							"log-risk score",
-							"longest common subsequence",
-							"macro average mean probability rate",
-							"macro-F1",
-							"macro-precision",
-							"macro-recall",
-							"Mahalanobis distance",
-							"markedness",
-							"mask intersection over union",
-							"mask intersection over union > 0",
-							"Matthews correlation coefficient",
-							"MAUVE",
-							"maximum calibration error",
-							"mean absolute error",
-							"mean absolute percentage error",
-							"mean absolute scaled error",
-							"mean average precision",
-							"mean average surface distance",
-							"mean intersection over union",
-							"mean reciprocal rank",
-							"mean squared error",
-							"METEOR",
-							"micro-F1",
-							"micro-precision",
-							"micro-recall",
-							"multi-class confusion matrix",
-							"multi-modal concordance",
-							"multiclass Brier score",
-							"mutual information",
-							"NDGC@k",
-							"negative discordance rate",
-							"negative likelihood ratio",
-							"negative log likelihood",
-							"negative percent agreement",
-							"negative predictive value",
-							"net benefit",
-							"normalized compression distance",
-							"normalized discounted cumulative gain",
-							"normalized information distance",
-							"normalized mutual information",
-							"normalized surface distance",
-							"number needed to benefit",
-							"number of positive cases needed to benefit",
-							"observed-to-expected ratio",
-							"Obuchowski index",
-							"other",
-							"P4 metric",
-							"panoptic quality",
-							"parametric hazard model",
-							"partial area under the ROC curve",
-							"peak signal-to-noise ratio",
-							"Pearson correlation coefficient",
-							"percent agreement",
-							"perceptual path length",
-							"perplexity",
-							"point inside mask/box/approximation",
-							"positive likelihood ratio",
-							"positive percent agreement",
-							"positive predictive value",
-							"precision",
-							"precision-recall curve",
-							"prediction probability",
-							"R-squared",
-							"RadCliQ",
-							"RadGraph-F1",
-							"Rand index",
-							"RaTEScore",
-							"reading difficulty level",
-							"recall",
-							"receiver operating characteristic analysis",
-							"relative enhanced detection rate",
-							"relative standard error",
-							"repeatability coefficient",
-							"reproducibility coefficient",
-							"root Brier score",
-							"root mean squared error",
-							"ROUGE",
-							"ROUGE-1",
-							"ROUGE-2",
-							"ROUGE-3",
-							"ROUGE-L",
-							"ROUGE-N",
-							"ROUGE-S",
-							"ROUGE-SU",
-							"ROUGE-W",
-							"second-order coefficient of variation",
-							"SembScore",
-							"sensitivity",
-							"sensitivity at false-positive per image",
-							"signal-to-noise ratio",
-							"silhouette coefficient",
-							"SMOG index",
-							"Spearman's rho",
-							"specificity",
-							"strict accuracy",
-							"structural similarity index measure",
-							"surprisal",
-							"survival probability",
-							"symmetric mean absolute percentage error",
-							"time for user adjustment",
-							"time-dependent area under the receiver operating characteristic curve",
-							"time-dependent receiver operating characteristic analysis",
-							"top-10 accuracy",
-							"top-5 accuracy",
-							"top-n accuracy",
-							"true negative rate",
-							"true positive rate",
-							"uncertainty associated with user interaction",
-							"Uno's C-index",
-							"variance ratio criterion",
-							"variation of information",
-							"volumetric similarity",
-							"Wasserstein loss",
-							"weighted Cohen's kappa",
-							"Youden index"
-						]
-					}
-				},
-				"Comments": {
-					"description": "Describes the metric(s) used, the data on which the model was evaluated, and the value(s) of the metrics.",
-					"type": "string"
-				}
-			},
-			"additionalProperties": false
-		},
 		"Model": {
-			"description": "An AI model, described by descriptors and model properties.",
+			"description": "An AI model, described by general metadata and model properties.",
 			"$comment": "ROADMAP:00002",
 			"type": "object",
 			"properties": {
@@ -674,24 +635,23 @@
 					]
 				},
 				"Indexing": {
-					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords)",
+					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords.",
 					"$ref": "#/$defs/Indexing"
 				},
-				"Descriptors": {
+				"General metadata": {
 					"description": "Details of the model",
-					"$ref": "#/$defs/Descriptors"
+					"$ref": "#/$defs/General-metadata"
 				},
 				"Model properties": {
 					"description": "Model-specific properties",
 					"$ref": "#/$defs/Model-properties"
 				},
 				"Imaging": {
-					"description": "Imaging modalities, procedures, and other imaging-related information relevant to the model.",
 					"$ref": "#/$defs/Imaging"
 				},
 				"Model performance": {
-					"description": "Information about the model's performance and the metrics used to measure performance.",
-					"$ref": "#/$defs/Metrics"
+					"description": "An array of tuples that specify the performance of an AI model on a particular set of data.",
+					"$ref": "#/$defs/Model-performance"
 				}
 			},
 			"required": [
@@ -700,6 +660,108 @@
 			],
 			"additionalProperties": false
 		},
+		"Model-performance": {
+			"description": "An array of tuples that specify the performance of an AI model on a particular set of data.",
+			"$comment": "ROADMAP:03808",
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"properties": {
+					"Evaluation dataset": {
+						"description": "Data on which the model has been evaluated. One of more results (index text, value, confidence interval) for each dataset",
+						"type": "object",
+						"minProperties": 1,
+						"maxProperties": 2,
+						"properties": {
+							"URI": {
+								"description": "Pointer to evaluation dataset (preferred)",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128,
+								"format": "uri"
+							},
+							"Description": {
+								"description": "Textual description of the evaluation dataset",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 512
+							}
+						},
+						"additionalProperties": false
+					},
+					"Results": {
+						"type": "array",
+						"items": false,
+						"$ref": "#/$defs/Model-performance-results"
+					}
+				},
+				"required": [
+					"Evaluation dataset",
+					"Results"
+				],
+				"additionalProperties": false
+			}
+		},
+		"Model-performance-results": {
+			"description": "Array of tuples: (index test, metric, value)",
+			"$comment": "ROADMAP:_____",
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"description": "Tuple of index test, metric, value",
+				"type": "object",
+				"properties": {
+					"Index test": {
+						"description": "Describes what is being measured. For example, not simply large vessel occlusion (LVO), but M2/M3 LVO.",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 128
+					},
+					"Scalar metric": {
+						"$ref": "#/$defs/Scalar-metric"
+					},
+					"Value": {
+						"type": "number"
+					},
+					"Confidence interval": {
+						"description": "Confidence interval",
+						"type": "object",
+						"properties": {
+							"Level": {
+								"description": "Confidence level, expressed as a decimal value",
+								"$comment": "ROADMAP:___",
+								"type": "number",
+								"minimum": 0.5,
+								"exclusiveMaximum": 1,
+								"examples": [
+									0.5,
+									0.9,
+									0.95,
+									0.99
+								],
+								"default": 0.95
+							},
+							"Lower limit": {
+								"$comment": "ROADMAP:___",
+								"type": "number"
+							},
+							"Upper limit": {
+								"$comment": "ROADMAP:___",
+								"type": "number"
+							}
+						},
+						"additionalProperties": false
+					}
+				},
+				"required": [
+					"Index test",
+					"Scalar metric",
+					"Value"
+				],
+				"additionalProperties": false
+			}
+		},
 		"Model-properties": {
 			"$comment": "ROADMAP:03355",
 			"type": "object",
@@ -707,51 +769,87 @@
 				"Architecture": {
 					"description": "Textual description of underlying model technology, e.g., \"Convolutional Neural Network\".",
 					"$comment": "ROADMAP:03598",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Availability": {
 					"description": "Defines where and/or how the model is available; can include a URL.",
 					"$comment": "ROADMAP:03373",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Clinical benefit": {
 					"description": "Clinical benefits, such as diagnosis, risk assessment, or treatment selection.",
 					"$comment": "ROADMAP:03612",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Clinical workflow phase": {
 					"description": "Clinical workflow phase (e.g., patient pre-registration, digitization of forms or clinical  scales, patients’ triage, telehealth & virtual rounds, clinical decision support systems, workflow optimization, evidence-based methods to optimize medical interventions, feedback from users).",
 					"$comment": "ROADMAP:03613",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Decision threshold": {
 					"$comment": "ROADMAP:03351",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Degree of automation": {
 					"description": "Degree of automation compared to the current standard of care, including whether the device supports or automates decision making.",
 					"$comment": "ROADMAP:03614",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Indications for use": {
 					"description": "The indications for use describe: (1) the disease or condition that the AI system will diagnose, treat, prevent, cure, or mitigate; (2) the intended patient population; and (3) the intended use environment (e.g., ICU, step-down unit, home).",
 					"$comment": "ROADMAP:03600",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Input": {
 					"description": "Describes the type(s) of information used as input into the model; for example, abdomen/pelvis CT images and laboratory data.",
 					"$comment": "ROADMAP:03481",
-					"type": "string"
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Description": {
+							"description": "Textual description of model's input",
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512
+						},
+						"Coded data": {
+							"description": "An array of coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
+							"type": "array",
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/$defs/Coded-data"
+							}
+						}
+					},
+					"additionalProperties": false
 				},
 				"Instructions": {
 					"description": "Directions and recommendations for optimal use of the model.",
 					"$comment": "ROADMAP:03601",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Limitations": {
 					"description": "Describes concerns specific to the use of the AI model. Includes: (1) Known biases or failure modes; (2) Known gaps in the data characterization, such as patient populations that are not well represented in development (e.g., training) or testing datasets, and therefore, may be at risk of bias; (3) Limitations in the model development or performance evaluation; and (4) Known circumstances where the device input will not align with the data used in development and validation.",
 					"$comment": "ROADMAP:03621",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Output": {
 					"description": "Describes the type of output produced by the model, such as classification (diagnosis) results or image segmentation.",
@@ -761,19 +859,16 @@
 					"properties": {
 						"Description": {
 							"description": "Textual description of model's output.",
-							"type": "string"
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512
 						},
-						"CDEs": {
-							"description": "An array of radiology Common Data Elements (CDEs) and/or CDE Set identifiers from RadElement.org.",
+						"Coded data": {
+							"description": "An array of coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
 							"type": "array",
 							"uniqueItems": true,
 							"items": {
-								"type": "string",
-								"pattern": "RDE[S]?[0-9]+",
-								"examples": [
-									"RDE1203",
-									"RDES174"
-								]
+								"$ref": "#/$defs/Coded-data"
 							}
 						}
 					},
@@ -781,7 +876,9 @@
 				},
 				"Recommendation": {
 					"$comment": "ROADMAP:03354",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Regulatory information": {
 					"description": "Information used to support or document regulatory review, covering one or more jurisdiction-specific authorization pathways (e.g. FDA, CE marking under EU MDR, UKCA).",
@@ -797,6 +894,8 @@
 									"Jurisdiction": {
 										"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
 										"type": "string",
+										"minLength": 2,
+										"maxLength": 32,
 										"examples": [
 											"US",
 											"EU",
@@ -818,6 +917,8 @@
 									"Authority": {
 										"description": "Regulatory authority or conformity-assessment body responsible for the authorization.",
 										"type": "string",
+										"minLength": 2,
+										"maxLength": 128,
 										"examples": [
 											"FDA",
 											"Notified Body",
@@ -837,6 +938,7 @@
 									"Authority identifier": {
 										"description": "Notified Body or Approved Body number, where applicable.",
 										"type": "string",
+										"minLength": 1,
 										"maxLength": 64,
 										"examples": [
 											"0123"
@@ -845,6 +947,8 @@
 									"Pathway": {
 										"description": "Regulatory pathway or authorization route.",
 										"type": "string",
+										"minLength": 2,
+										"maxLength": 128,
 										"examples": [
 											"510(k)",
 											"De Novo",
@@ -865,6 +969,8 @@
 										"description": "Status of this authorization. \"Not submitted\" and \"Research use only\" are positive assertions and should be used in preference to omitting the record. \"Not available\" mirrors the ONC convention at 45 CFR 170.315(b)(11)(v)(A)(2).",
 										"$comment": "ROADMAP:03603",
 										"type": "string",
+										"minLength": 2,
+										"maxLength": 64,
 										"examples": [
 											"Authorized",
 											"Submitted / under review",
@@ -880,6 +986,7 @@
 										"description": "Submission or certificate number. FDA identifiers follow a fixed format (see examples); CE and UKCA certificate numbers are assigned in Notified/Approved Body house formats and vary.",
 										"$comment": "ROADMAP:03604",
 										"type": "string",
+										"minLength": 2,
 										"maxLength": 128,
 										"examples": [
 											"K123456",
@@ -891,6 +998,7 @@
 									"Risk class": {
 										"description": "Jurisdiction-specific risk classification; not comparable across jurisdictions and should be interpreted only together with Jurisdiction.",
 										"type": "string",
+										"minLength": 1,
 										"maxLength": 32,
 										"examples": [
 											"II",
@@ -918,16 +1026,19 @@
 										"description": "510(k) only. Predicate device identifier or name.",
 										"$comment": "ROADMAP:03639",
 										"type": "string",
+										"minLength": 2,
 										"maxLength": 256
 									},
 									"UDI-DI": {
 										"description": "Unique Device Identifier - Device Identifier, the model/version-level identifier assigned under a UDI system such as EUDAMED or the FDA GUDID.",
 										"type": "string",
+										"minLength": 1,
 										"maxLength": 128
 									},
 									"Basic UDI-DI": {
 										"description": "Basic Unique Device Identifier - Device Identifier, the primary identifier of a device model grouping, used in EUDAMED and other UDI systems independent of packaging/version-level UDI-DIs.",
 										"type": "string",
+										"minLength": 1,
 										"maxLength": 128
 									},
 									"Date": {
@@ -952,12 +1063,15 @@
 									"Registry URL": {
 										"description": "Deep link to the public registry entry, where one exists.",
 										"type": "string",
-										"format": "uri"
+										"format": "uri",
+										"minLength": 4,
+										"maxLength": 256
 									},
 									"Comment": {
 										"$comment": "ROADMAP:00070",
 										"type": "string",
-										"maxLength": 1024
+										"minLength": 2,
+										"maxLength": 512
 									}
 								},
 								"required": [
@@ -1033,6 +1147,8 @@
 								"Risk classification": {
 									"description": "AI Act risk classification.",
 									"type": "string",
+									"minLength": 2,
+									"maxLength": 64,
 									"examples": [
 										"High-risk (Article 6)",
 										"Limited risk",
@@ -1045,11 +1161,14 @@
 								"EU database registration": {
 									"description": "EUDAMED registration number, where available.",
 									"type": "string",
+									"minLength": 1,
 									"maxLength": 128
 								},
 								"Technical documentation": {
 									"description": "Status of the Annex IV technical documentation.",
 									"type": "string",
+									"minLength": 2,
+									"maxLength": 64,
 									"examples": [
 										"Annex IV complete",
 										"Annex IV in preparation",
@@ -1059,7 +1178,8 @@
 								"Comment": {
 									"$comment": "ROADMAP:00070",
 									"type": "string",
-									"maxLength": 1024
+									"minLength": 2,
+									"maxLength": 512
 								}
 							},
 							"additionalProperties": false
@@ -1075,13 +1195,16 @@
 								"Description": {
 									"description": "Description of the predetermined change control plan, such as the anticipated changes and the methods used to develop and validate them.",
 									"type": "string",
-									"maxLength": 2048
+									"minLength": 2,
+									"maxLength": 512
 								},
 								"Jurisdictions": {
 									"description": "Jurisdictions in which this change control plan has been reviewed or accepted.",
 									"type": "array",
 									"items": {
 										"type": "string",
+										"minLength": 2,
+										"maxLength": 32,
 										"examples": [
 											"US",
 											"EU",
@@ -1094,7 +1217,9 @@
 						},
 						"Comment": {
 							"$comment": "ROADMAP:00070",
-							"type": "string"
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512
 						}
 					},
 					"additionalProperties": false
@@ -1102,55 +1227,105 @@
 				"Reproducibility": {
 					"description": "Describes the AI model's reproducibility associated with the provided outputs.",
 					"$comment": "ROADMAP:03620",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Sustainability": {
 					"description": "Describes parameters associated with use of the AI model related to energy consumption, running time, and other factors.",
 					"$comment": "ROADMAP:03376",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"Use": {
-					"description": "Model use information",
+					"description": "Model use",
 					"$comment": "ROADMAP:00011",
 					"type": "object",
+					"minProperties": 1,
 					"properties": {
 						"Intended": {
 							"description": "Intended model use",
 							"$comment": "ROADMAP:00012",
-							"$ref": "#/$defs/Use"
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/$defs/Use"
+							}
 						},
 						"Out-of-scope": {
 							"description": "Out-of-scope model use",
 							"$comment": "ROADMAP:00013",
-							"$ref": "#/$defs/Use"
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/$defs/Use"
+							}
 						},
 						"Excluded": {
 							"description": "Excluded model use",
 							"$comment": "ROADMAP:00014",
-							"$ref": "#/$defs/Use"
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/$defs/Use"
+							}
+						},
+						"Other": {
+							"description": "Use(s) other than the enumerated values, specified as text.",
+							"$comment": "ROADMAP:03631",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 256
 						}
 					},
 					"additionalProperties": false
 				},
 				"User": {
-					"description": "Model user information",
+					"description": "Model user",
 					"$comment": "ROADMAP:00036",
 					"type": "object",
+					"minProperties": 1,
 					"properties": {
 						"Intended": {
 							"description": "Intended model user",
 							"$comment": "ROADMAP:00037",
-							"$ref": "#/$defs/User"
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/$defs/User"
+							}
 						},
 						"Out-of-scope": {
 							"description": "Out-of-scope model user",
 							"$comment": "ROADMAP:00038",
-							"$ref": "#/$defs/User"
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/$defs/User"
+							}
 						},
 						"Excluded": {
 							"description": "Excluded model user",
 							"$comment": "ROADMAP:00039",
-							"$ref": "#/$defs/User"
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/$defs/User"
+							}
+						},
+						"Other user": {
+							"description": "User(s) other than the enumerated values, specified as text. Should specify intended, etc.",
+							"$comment": "ROADMAP:03609",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 256
 						}
 					},
 					"additionalProperties": false
@@ -1160,7 +1335,6 @@
 					"type": "object",
 					"properties": {
 						"List": {
-							"description": "List of compatible electronic health record (EHR) systems",
 							"type": "array",
 							"uniqueItems": true,
 							"items": {
@@ -1191,11 +1365,15 @@
 							}
 						},
 						"Other": {
-							"description": "Other compatible electronic health record (EHR) system not listed above",
-							"type": "string"
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 128
 						}
 					},
 					"additionalProperties": false
+				},
+				"Model performance": {
+					"$ref": "#/$defs/Model-performance"
 				}
 			},
 			"additionalProperties": false
@@ -1209,6 +1387,8 @@
 				"Name": {
 					"description": "Name of organization",
 					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
 					"examples": [
 						"RSNA"
 					]
@@ -1216,13 +1396,16 @@
 				"Contact name": {
 					"description": "Name or role of organizational contact",
 					"type": "string",
+					"minLength": 2,
+					"maxLength": 512,
 					"examples": [
 						"Informatics Department"
 					]
 				},
 				"Email": {
-					"description": "Organization's email address",
 					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
 					"format": "email",
 					"examples": [
 						"informatics@rsna.org"
@@ -1231,13 +1414,16 @@
 				"Address": {
 					"description": "Organizations's physical (real-world) address",
 					"type": "string",
+					"minLength": 2,
+					"maxLength": 512,
 					"examples": [
 						"820 Jorie Blvd, Oak Brook, IL 60523-2251, USA"
 					]
 				},
 				"URL": {
-					"description": "Organization's website URL",
 					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
 					"format": "uri",
 					"examples": [
 						"https://rsna.org"
@@ -1250,26 +1436,33 @@
 			"additionalProperties": false
 		},
 		"Person": {
-			"description": "Description for individual Person (ROADMAP:00071)",
+			"description": "Description for individual Person",
 			"$comment": "ROADMAP:00071",
 			"type": "object",
 			"properties": {
 				"Name": {
 					"description": "The person's name",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128
 				},
 				"Email": {
-					"description": "Person's email address",
 					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
 					"format": "email"
 				},
 				"Address": {
 					"description": "Person's physical (real-world) address",
-					"type": "string"
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
 				},
 				"ORCID": {
 					"description": "Unique ORCID (Open Researcher and Contributor ID) identifier",
 					"type": "string",
+					"minLength": 1,
+					"maxLength": 40,
 					"pattern": "https://orcid.org/.+",
 					"format": "uri",
 					"examples": [
@@ -1277,8 +1470,9 @@
 					]
 				},
 				"URL": {
-					"description": "Person's website or profile URL",
 					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
 					"format": "uri"
 				}
 			},
@@ -1288,7 +1482,7 @@
 			"additionalProperties": false
 		},
 		"Reference": {
-			"description": "A reference about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
+			"description": "A reference about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings",
 			"$comment": "ROADMAP:00067",
 			"type": "array",
 			"items": {
@@ -1297,6 +1491,8 @@
 					"Authors": {
 						"description": "Author names",
 						"type": "string",
+						"minLength": 2,
+						"maxLength": 512,
 						"examples": [
 							"Rudie JD, et al."
 						]
@@ -1304,6 +1500,8 @@
 					"Title": {
 						"description": "Reference title",
 						"type": "string",
+						"minLength": 2,
+						"maxLength": 512,
 						"examples": [
 							"The RSNA Abdominal Traumatic Injury CT (RATIC) Dataset"
 						]
@@ -1311,6 +1509,8 @@
 					"Source": {
 						"description": "Name of journal, book, or other source; or full citation (see example)",
 						"type": "string",
+						"minLength": 2,
+						"maxLength": 512,
 						"examples": [
 							"Radiology: Artificial Intelligence",
 							"Radiol Artif Intell 2024; 6:e240101"
@@ -1320,10 +1520,19 @@
 						"description": "Year or date of publication",
 						"$ref": "#/$defs/Date"
 					},
+					"Clinical trial": {
+						"description": "A clinical trial identifier or URI, such as issued by ClinicalTrials.gov",
+						"$comment": "ROADMAP:03623",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 128
+					},
 					"DOI": {
 						"description": "Digital Object Identifer (DOI)",
-						"$comment": "https://doi.org/$",
+						"$comment": "ROADMAP:04003",
 						"type": "string",
+						"minLength": 2,
+						"maxLength": 128,
 						"pattern": "[0-9]+\\.[0-9]+/.+",
 						"examples": [
 							"10.1148/ryai.240101"
@@ -1331,7 +1540,10 @@
 					},
 					"URL": {
 						"description": "Pointer to online reference",
+						"$comment": "ROADMAP:04014",
 						"type": "string",
+						"minLength": 2,
+						"maxLength": 128,
 						"format": "uri",
 						"examples": [
 							"https://doi.org/10.1148/ryai.240101"
@@ -1341,6 +1553,7 @@
 						"description": "PubMed ID",
 						"$comment": "https://pubmed.ncbi.nlm.nih.gov/$/",
 						"type": "integer",
+						"maxLength": 16,
 						"examples": [
 							39441109
 						]
@@ -1348,15 +1561,32 @@
 					"PMCID": {
 						"description": "PubMed Central ID",
 						"$comment": "https://pmc.ncbi.nlm.nih.gov/articles/$/",
-						"type": "string",
-						"pattern": "PMC[0-9]+",
-						"examples": [
-							"PMC8017407"
+						"oneOf": [
+							{
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 32,
+								"pattern": "PMC[0-9]+",
+								"examples": [
+									"PMC8017407"
+								]
+							},
+							{
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128,
+								"pattern": "PMC[0-9]+",
+								"format": "uri",
+								"examples": [
+									"PMC8017407"
+								]
+							}
 						]
 					},
 					"Notes": {
-						"description": "Additional notes about the reference.",
-						"type": "string"
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 512
 					}
 				},
 				"required": [
@@ -1365,83 +1595,334 @@
 				"additionalProperties": false
 			}
 		},
+		"Nonscalar-metric": {
+			"description": "Enumerated list of graphical and matrix metrics.",
+			"$comment": "ROADMAP:03778",
+			"type": "string",
+			"enum": [
+				"AFROC curve",
+				"binary confusion matrix",
+				"Bland-Altman analysis",
+				"calibration curve",
+				"confusion matrix",
+				"FROC curve",
+				"Fry graph",
+				"localization ROC curve",
+				"multi-class confusion matrix",
+				"parametric hazard model",
+				"precision-recall curve",
+				"ROC curve",
+				"time-dependent ROC curve"
+			]
+		},
+		"Scalar-metric": {
+			"description": "Enumerated list of scalar metrics. The list includes sensitivity, specificity, precision, and recall as frequently-used terms; they all are alternate terms (e.g., for true positive rate).",
+			"$comment": "ROADMAP:03302",
+			"type": "string",
+			"enum": [
+				"95th percentile Hausdorff distance",
+				"absolute enhanced detection rate",
+				"accuracy",
+				"adjusted Rand index",
+				"approximate intersection over union",
+				"area under the alternative free-response operating characteristic curve",
+				"area under the precision-recall curve",
+				"area under the predictive receiver operating characteristic curve",
+				"area under the receiver operating characteristic curve",
+				"AUC of each class vs. each of the other k-1 classes",
+				"AUC of each class vs. the rest combined",
+				"automated readability index",
+				"average Hausdorff distance",
+				"average precision",
+				"average symmetric surface distance",
+				"balanced accuracy",
+				"balanced error rate",
+				"BARTScore",
+				"BERTScore",
+				"BLEU",
+				"boundary intersection over union",
+				"box intersection over union",
+				"Brier score",
+				"Brier skill score",
+				"calibration intercept",
+				"calibration slope",
+				"calibration-in-the-large",
+				"center distance",
+				"centerline Dice similarity coefficient",
+				"class error",
+				"class-wise calibration error",
+				"coefficient of variation",
+				"Cohen's kappa",
+				"competition performance metric",
+				"concordance correlation coefficient",
+				"concordance index",
+				"condition negative count",
+				"condition positive count",
+				"conditional entropy",
+				"contrast-to-noise ratio",
+				"counterfactual fairness",
+				"CRIMSON",
+				"cross-entropy",
+				"cumulative gain",
+				"cumulative hazard",
+				"Damerau–Levenshtein distance",
+				"Davies-Bouldin index",
+				"demographic parity",
+				"density-based clustering validation",
+				"diagnostic odds ratio",
+				"diagnostic yield",
+				"Dice similarity coefficient",
+				"discounted cumulative gain",
+				"discrimination slope",
+				"Dunn index",
+				"earth mover's distance",
+				"edit distance",
+				"Efron's C-index",
+				"enhanced detection rate",
+				"enhanced multi-modal concordance",
+				"ensemble mean square error",
+				"entropy reduction",
+				"entropy",
+				"equality of opportunity",
+				"equalized odds",
+				"expected calibration error with kernel density estimate",
+				"expected calibration error",
+				"expected cost",
+				"F(beta) score",
+				"F1 score",
+				"F2 score",
+				"false discovery rate",
+				"false negative count",
+				"false negative rate",
+				"false omission rate",
+				"false positive count",
+				"false positive rate",
+				"false positives per image",
+				"false referral rate",
+				"FineRadScore",
+				"Flesch reading ease score",
+				"Flesch-Kincaid grade level",
+				"FORCAST readability estimate",
+				"Fowlkes-Mallows index",
+				"fraction of cases with user adjustment",
+				"free-response receiver operating characteristic score",
+				"Fréchet inception distance",
+				"gain-to-pain ratio",
+				"global consistency error",
+				"GREEN",
+				"group fairness",
+				"Gunning Fog index",
+				"Hamming distance",
+				"Harrell’s C-index",
+				"Hausdorff distance",
+				"hazard ratio",
+				"Hopkins statistic",
+				"inception score",
+				"individual equivalence index",
+				"individual fairness",
+				"information difference index",
+				"integrated time-dependent area under the ROC curve",
+				"interclass correlation coefficient",
+				"intersection over reference",
+				"intersection over union",
+				"intraclass correlation coefficient",
+				"Jaro distance",
+				"Kendall's tau coefficient",
+				"kernel calibration error",
+				"Kullback-Leibler divergence",
+				"lenient accuracy",
+				"Levenshtein distance",
+				"likelihood ratio",
+				"location recall precision error",
+				"log-risk score",
+				"longest common subsequence",
+				"macro average mean probability rate",
+				"macro-F1",
+				"macro-precision",
+				"macro-recall",
+				"Mahalanobis distance",
+				"markedness",
+				"mask intersection over union > 0",
+				"mask intersection over union",
+				"Matthews correlation coefficient",
+				"MAUVE",
+				"maximum calibration error",
+				"mean absolute error",
+				"mean absolute percentage error",
+				"mean absolute scaled error",
+				"mean average precision",
+				"mean average surface distance",
+				"mean calibration",
+				"mean intersection over union",
+				"mean reciprocal rank",
+				"mean squared error",
+				"METEOR",
+				"micro-F1",
+				"micro-precision",
+				"micro-recall",
+				"multi-modal concordance",
+				"multiclass Brier score",
+				"mutual information",
+				"NDGC@k",
+				"negative discordance rate",
+				"negative likelihood ratio",
+				"negative log likelihood",
+				"negative percent agreement",
+				"negative predictive value",
+				"net benefit",
+				"normalized compression distance",
+				"normalized discounted cumulative gain",
+				"normalized information distance",
+				"normalized mutual information",
+				"normalized surface distance",
+				"number needed to benefit",
+				"number of positive cases needed to benefit",
+				"observed-to-expected ratio",
+				"Obuchowski index",
+				"P4 metric",
+				"panoptic quality",
+				"partial area under the receiver operating characteristic curve",
+				"peak signal-to-noise ratio",
+				"Pearson correlation coefficient",
+				"percent agreement",
+				"perceptual path length",
+				"perplexity",
+				"point inside mask/box/approximation",
+				"positive likelihood ratio",
+				"positive percent agreement",
+				"positive predictive value",
+				"precision",
+				"prediction negative count",
+				"prediction positive count",
+				"prediction probability",
+				"R-squared",
+				"RadCliQ",
+				"RadGraph-F1",
+				"Rand index",
+				"RaTEScore",
+				"reading difficulty level",
+				"recall",
+				"relative enhanced detection rate",
+				"relative standard error",
+				"repeatability coefficient",
+				"reproducibility coefficient",
+				"root Brier score",
+				"root mean squared error",
+				"ROUGE",
+				"ROUGE-1",
+				"ROUGE-2",
+				"ROUGE-3",
+				"ROUGE-L",
+				"ROUGE-N",
+				"ROUGE-S",
+				"ROUGE-SU",
+				"ROUGE-W",
+				"second-order coefficient of variation",
+				"SembScore",
+				"sensitivity at false-positive per image",
+				"sensitivity",
+				"signal-to-noise ratio",
+				"silhouette coefficient",
+				"SMOG index",
+				"Spearman's rho",
+				"specificity",
+				"strict accuracy",
+				"structural similarity index measure",
+				"surprisal",
+				"survival probability",
+				"symmetric mean absolute percentage error",
+				"time for user adjustment",
+				"time-dependent area under the receiver operating characteristic curve",
+				"top-10 accuracy",
+				"top-5 accuracy",
+				"top-n accuracy",
+				"total outcome count",
+				"true negative count",
+				"true negative rate",
+				"true positive count",
+				"true positive rate",
+				"uncertainty associated with user interaction",
+				"Uno's C-index",
+				"variance ratio criterion",
+				"variation of information",
+				"volumetric similarity",
+				"Wasserstein loss",
+				"weighted Cohen's kappa",
+				"Youden index"
+			]
+		},
 		"Use": {
 			"description": "Model use(s)",
-			"$comment": "ROADMAP:00015",
-			"type": "array",
-			"minItems": 1,
-			"uniqueItems": true,
-			"items": {
-				"type": "string",
-				"minLength": 4,
-				"maxLength": 64,
-				"examples": [
-					"Artifact reduction",
-					"Cure",
-					"Decision support",
-					"Detection and diagnosis",
-					"Detection",
-					"Diagnosis",
-					"Exam protocol selection",
-					"Image processing",
-					"Image reconstruction",
-					"Image segmentation",
-					"Image style transfer",
-					"Instance segmentation",
-					"Mitigation",
-					"Noise reduction",
-					"Other",
-					"Prevention",
-					"Procedure selection",
-					"Prognosis",
-					"Report data extraction",
-					"Report generation",
-					"Report impression generation",
-					"Report processing",
-					"Report summarization",
-					"Report translation",
-					"Risk assessment",
-					"Semantic segmentation",
-					"Treatment",
-					"Triage"
-				]
-			}
+			"$comment": "ROADMAP:03800",
+			"type": "string",
+			"enum": [
+				"Artifact reduction",
+				"Autonomous diagnosis",
+				"Cure",
+				"Decision support",
+				"Detection",
+				"Detection and diagnosis",
+				"Diagnosis",
+				"Exam protocol selection",
+				"Image processing",
+				"Image reconstruction",
+				"Image segmentation",
+				"Image style transfer",
+				"Instance segmentation",
+				"Mitigation",
+				"Noise reduction",
+				"Panoptic segmentation",
+				"Prevention",
+				"Procedure selection",
+				"Prognosis",
+				"Report data extraction",
+				"Report generation",
+				"Report impression generation",
+				"Report translation",
+				"Risk assessment",
+				"Semantic segmentation",
+				"Text processing",
+				"Text summarization",
+				"Treatment",
+				"Triage"
+			]
 		},
 		"User": {
-			"title": "User type",
 			"description": "Model user(s)",
 			"$comment": "ROADMAP:00040",
-			"type": "array",
-			"minItems": 1,
-			"uniqueItems": true,
-			"items": {
-				"type": "string",
-				"minLength": 4,
-				"maxLength": 64,
-				"examples": [
-					"Administrator",
-					"Advanced practice provider",
-					"Caregiver",
-					"Diagnostic radiologist",
-					"Family member",
-					"General diagnostic radiologist",
-					"Interventional radiologist",
-					"Layperson",
-					"Non-physician provider",
-					"Nurse practitioner",
-					"Other",
-					"Patient",
-					"Physician assistant",
-					"Physician",
-					"Radiologist",
-					"Radiology nurse",
-					"Radiology technologist",
-					"Referring physician",
-					"Referring provider",
-					"Researcher",
-					"Subspecialist diagnostic radiologist"
-				]
-			}
+			"type": "string",
+			"enum": [
+				"Administrator",
+				"Advanced practice provider",
+				"Diagnostic radiologist",
+				"Diagnostic radiology physicist",
+				"Dosimetrist",
+				"Family member",
+				"General diagnostic radiologist",
+				"Healthcare professional",
+				"Interventional radiologist",
+				"Layperson",
+				"Medical physicist",
+				"Non-physician provider",
+				"Nuclear medicine physician",
+				"Nurse",
+				"Nurse practitioner",
+				"Patient",
+				"Physician",
+				"Physician assistant",
+				"Radiation oncologist",
+				"Radiation therapy physicist",
+				"Radiologist",
+				"Radiology assistant",
+				"Radiology nurse",
+				"Radiology physician assistant",
+				"Radiology staff member",
+				"Radiology technologist",
+				"Referring physician",
+				"Referring provider",
+				"Researcher",
+				"Subspecialist diagnostic radiologist"
+			]
 		}
 	}
 }
