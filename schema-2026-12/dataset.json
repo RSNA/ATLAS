@@ -38,7 +38,8 @@
 				},
 				"Summary": {
 					"description": "Textual summary of the dataset",
-					"type": "string", "minLength": 1, 
+					"type": "string",
+					"minLength": 1,
 					"maxLength": 2500
 				},
 				"Link": {
@@ -55,9 +56,9 @@
 					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords.",
 					"$ref": "#/$defs/Indexing"
 				},
-				"Descriptors": {
+				"General metadata": {
 					"description": "Details of the dataset",
-					"$ref": "#/$defs/Descriptors"
+					"$ref": "#/$defs/General-metadata"
 				},
 				"Dataset properties": {
 					"description": "Properties specific to datasets",
@@ -79,58 +80,79 @@
 			"additionalProperties": false
 		},
 		"Dataset-properties": {
+			"description": "Attributes of the dataset",
 			"$comment": "ROADMAP:03381",
 			"type": "object",
 			"properties": {
 				"Confidentiality": {
 					"description": "Describes any data that might be confidential, such as those protected by law or doctor-patient confidentiality.",
 					"$comment": "ROADMAP:03413",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"External data": {
 					"description": "External resources such as web sites, social-media posts or other datasets. Include information about their permanence, archival versions, and any restrictions on their use (e.g., data-use agreements, licenses, fees),",
 					"$comment": "ROADMAP:03412",
-					"type": "string", "minLength": 1, "maxLength":1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Missing information": {
 					"description": "Describes what information, if any, is missing from the dataset and why.",
 					"$comment": "ROADMAP:03408",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Motivation": {
 					"description": "Describes the specific purpose for which the dataset was created. May include information about funding sources.",
 					"$comment": "ROADMAP:03383",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Noise": {
 					"description": "Describes any errors, sources of noise, or redundancies in the dataset.",
 					"$comment": "ROADMAP:03411",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Partitioning scheme": {
 					"description": "Describes how a dataset was partitioned for training, optimization (\"validation\") and testing.",
 					"$comment": "ROADMAP:03410",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Re-identification": {
 					"description": "Describes if and how it is possible to identify individual persons, either directly or indirectly, from the dataset.",
 					"$comment": "ROADMAP:03415",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Relationships between instances": {
 					"description": "Describes if and how any relationships between individual data items are made explicit.",
 					"$comment": "ROADMAP:03409",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Sampling": {
 					"description": "Describes how the data that form the dataset were selected.",
 					"$comment": "ROADMAP:03396",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				},
 				"Sensitive data": {
 					"description": "Describes any data that might be considered sensitive.",
 					"$comment": "ROADMAP:03416",
-					"type": "string", "minLength": 1, "maxLength": 1000
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
 				}
 			},
 			"additionalProperties": false
@@ -144,15 +166,19 @@
 			],
 			"anyOf": [
 				{
-					"type": "string", "minLength": 1, "maxLength": 10,
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 10,
 					"format": "date"
 				},
 				{
-					"type": "integer", "minimum": 1900, "maximum": 2200
+					"type": "integer",
+					"minimum": 1900,
+					"maximum": 2200
 				}
 			]
 		},
-		"Descriptors": {
+		"General-metadata": {
 			"description": "Characteristics of a project, model, or dataset.  Whenever possible, values should link to other ontologies or controlled vocabularies.",
 			"$comment": "ROADMAP:00004",
 			"type": "object",
@@ -167,11 +193,15 @@
 				},
 				"Comments": {
 					"$comment": "ROADMAP:00070",
-					"type": "string", "minLength": 1, "maxLength": 512
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				},
 				"Contact": {
 					"$comment": "ROADMAP:00069",
-					"type": "string", "minLength": 1, "maxLength": 512
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				},
 				"Date": {
 					"description": "Dates associated with this resource, such as creation, publication, or update dates.",
@@ -198,11 +228,15 @@
 				},
 				"Ethical review": {
 					"$comment": "ROADMAP:03418",
-					"type": "string", "minLength": 1, "maxLength": 512
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				},
 				"Funding": {
 					"$comment": "ROADMAP:03385",
-					"type": "string", "minLength": 1, "maxLength": 512
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
 				},
 				"License": {
 					"description": "License or rights to access this resource",
@@ -211,15 +245,19 @@
 					"minProperties": 1,
 					"properties": {
 						"Text": {
-							"type": "string", "minLength": 1, "maxLength": 512,
 							"description": "Textual name or description of the license.",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 512,
 							"examples": [
 								"Non-commercial use"
 							]
 						},
 						"URL": {
 							"description": "URL pointing to the full text of the license.",
-							"type": "string","minLength": 1, "maxLength": 512,
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 512,
 							"format": "uri",
 							"examples": [
 								"https://creativecommons.org/licenses/by-nc-nd/4.0/"
@@ -440,11 +478,17 @@
 					"minProperties": 1,
 					"properties": {
 						"Manufacturer": {
-							"description": "The manufacturer of the imaging equipment used to acquire the images, e.g. GE HealthCare, Siemens Healthineers, Philips, or Canon Medical.",
+							"description": "The manufacturer of the imaging equipment used to acquire the images.",
 							"$comment": "ROADMAP:04129",
 							"type": "string",
 							"minLength": 1,
-							"maxLength": 128
+							"maxLength": 128,
+							"examples": [
+								"GE HealthCare",
+								"Siemens Healthineers",
+								"Philips",
+								"Canon Medical"
+							]
 						},
 						"Model": {
 							"description": "The specific model of the imaging equipment used to acquire the images.",
@@ -476,7 +520,10 @@
 							"$comment": "ROADMAP:04133",
 							"type": "string",
 							"minLength": 1,
-							"maxLength": 32
+							"maxLength": 32,
+							"examples": [
+								"0.25 cm"
+							]
 						},
 						"Reconstruction kernel": {
 							"description": "The reconstruction kernel or algorithm applied to raw acquisition data to produce the reconstructed images.",
@@ -495,6 +542,7 @@
 			"description": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
 			"$comment": "ROADMAP:00074",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Content": {
 					"description": "RSNA 2-letter content codes, e.g., CT",
@@ -549,11 +597,11 @@
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
+						"$comment": "https://radlex.org/RID/$",
 						"type": "string",
 						"minLength": 4,
 						"maxLength": 12,
 						"pattern": "RID[0-9]+",
-						"$comment": "https://radlex.org/RID/$",
 						"examples": [
 							"RID58",
 							"RID1169"
@@ -567,8 +615,8 @@
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
-						"type": "integer",
 						"$comment": "https://lookup.snomedtools.org/$",
+						"type": "integer",
 						"maxLength": 12,
 						"examples": [
 							10200004,
@@ -947,8 +995,8 @@
 				},
 				"Age range": {
 					"title": "Age range",
-					"$comment": "ROADMAP:03462",
 					"description": "Age range, specified as a 2-element array: [Lower bound, Upper bound]",
+					"$comment": "ROADMAP:03462",
 					"type": "array",
 					"minItems": 2,
 					"maxItems": 2,

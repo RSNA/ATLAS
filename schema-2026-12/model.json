@@ -568,6 +568,7 @@
 			"description": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
 			"$comment": "ROADMAP:00074",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Content": {
 					"description": "RSNA 2-letter content codes, e.g., CT",
@@ -1160,9 +1161,9 @@
 									"Registry URL": {
 										"description": "Deep link to the public registry entry, where one exists.",
 										"type": "string",
-										"format": "uri",
 										"minLength": 4,
-										"maxLength": 256
+										"maxLength": 256,
+										"format": "uri"
 									},
 									"Comment": {
 										"$comment": "ROADMAP:00070",
