@@ -5,12 +5,15 @@
 	"description": "RSNA ATLAS schema, 2026-12 version",
 	"$comment": "Copyright (c) 2026, Radiological Society of North America",
 	"type": "object",
+	"minProperties": 1,
 	"properties": {
 		"$schema": {
+			"description": "The JSON Schema version identifier for this document.",
 			"type": "string",
 			"const": "https://atlas.rsna.org/schemas/2026-12/model.json"
 		},
 		"Model": {
+			"description": "An AI model, described by descriptors and model properties.",
 			"$ref": "#/$defs/Model"
 		}
 	},
@@ -30,6 +33,7 @@
 				"oneOf": [
 					{
 						"type": "object",
+						"minProperties": 1,
 						"properties": {
 							"System": {
 								"description": "The code system, e.g., SNOMED CT.",
@@ -104,6 +108,7 @@
 					},
 					{
 						"type": "object",
+						"minProperties": 1,
 						"properties": {
 							"Other system": {
 								"description": "A coding system not enumerated",
@@ -161,6 +166,7 @@
 					},
 					{
 						"type": "object",
+						"minProperties": 1,
 						"properties": {
 							"URI": {
 								"description": "The unique identifire (IRI) of the code system and code.",
@@ -234,11 +240,13 @@
 			"description": "Characteristics of a project, model, or dataset.  Whenever possible, values should link to other ontologies or controlled vocabularies.",
 			"$comment": "ROADMAP:00004",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Authors": {
 					"description": "Authors",
 					"$comment": "ROADMAP:00064",
 					"type": "array",
+					"minItems": 1,
 					"items": {
 						"$ref": "#/$defs/Person"
 					}
@@ -258,7 +266,10 @@
 					"maxLength": 512
 				},
 				"Date": {
+					"description": "Dates associated with this resource, such as creation, publication, or update dates.",
+					"$comment": "ROADMAP:00065",
 					"type": "object",
+					"minProperties": 1,
 					"properties": {
 						"Created": {
 							"description": "Creation date",
@@ -296,6 +307,7 @@
 					"minProperties": 1,
 					"properties": {
 						"Text": {
+							"description": "Textual name or description of the license.",
 							"type": "string",
 							"minLength": 2,
 							"maxLength": 512,
@@ -304,6 +316,7 @@
 							]
 						},
 						"URL": {
+							"description": "URL pointing to the full text of the license.",
 							"type": "string",
 							"minLength": 2,
 							"maxLength": 512,
@@ -319,11 +332,14 @@
 					"description": "Sponsoring or supporting organizations",
 					"$comment": "ROADMAP:00072",
 					"type": "array",
+					"minItems": 1,
 					"items": {
 						"$ref": "#/$defs/Org"
 					}
 				},
 				"References": {
+					"description": "References about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
+					"$comment": "ROADMAP:00067",
 					"$ref": "#/$defs/Reference"
 				},
 				"Version": {
@@ -339,8 +355,10 @@
 		"Imaging": {
 			"description": "Imaging modalities, procedures, and other information",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Modalities": {
+					"description": "List of imaging modalities used by the model.",
 					"type": "array",
 					"minItems": 1,
 					"items": {
@@ -496,6 +514,8 @@
 					}
 				},
 				"Resolution": {
+					"description": "Describes whether the imaging data used original or down-sampled images.",
+					"$comment": "ROADMAP:00123",
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 256
@@ -669,6 +689,7 @@
 			"description": "An AI model, described by general metadata and model properties.",
 			"$comment": "ROADMAP:00002",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Name": {
 					"description": "Model name (required)",
@@ -709,6 +730,7 @@
 					"$ref": "#/$defs/Model-properties"
 				},
 				"Imaging": {
+					"description": "Imaging modalities, procedures, and other imaging-related information relevant to the model.",
 					"$ref": "#/$defs/Imaging"
 				},
 				"Model performance": {
@@ -729,6 +751,7 @@
 			"minItems": 1,
 			"items": {
 				"type": "object",
+				"minProperties": 1,
 				"properties": {
 					"Evaluation dataset": {
 						"description": "Data on which the model has been evaluated. One of more results (index text, value, confidence interval) for each dataset",
@@ -753,6 +776,7 @@
 						"additionalProperties": false
 					},
 					"Results": {
+						"description": "The metric results for this evaluation.",
 						"$ref": "#/$defs/Model-performance-results"
 					},
 					"Provenance": {
@@ -783,12 +807,13 @@
 		},
 		"Model-performance-results": {
 			"description": "Array of tuples: (index test, metric, value)",
-			"$comment": "ROADMAP:_____",
+			"$comment": "ROADMAP:03870",
 			"type": "array",
 			"minItems": 1,
 			"items": {
 				"description": "Tuple of index test, metric, value",
 				"type": "object",
+				"minProperties": 1,
 				"properties": {
 					"Index test": {
 						"description": "Describes what is being measured. For example, not simply large vessel occlusion (LVO), but M2/M3 LVO.",
@@ -797,18 +822,22 @@
 						"maxLength": 128
 					},
 					"Scalar metric": {
+						"description": "The scalar metric used to measure performance.",
 						"$ref": "#/$defs/Scalar-metric"
 					},
 					"Value": {
+						"description": "The observed value of the metric.",
 						"type": "number"
 					},
 					"Confidence interval": {
 						"description": "Confidence interval",
+						"$comment": "ROADMAP:00672",
 						"type": "object",
+						"minProperties": 1,
 						"properties": {
 							"Level": {
 								"description": "Confidence level, expressed as a decimal value",
-								"$comment": "ROADMAP:___",
+								"$comment": "ROADMAP:01500",
 								"type": "number",
 								"minimum": 0.5,
 								"exclusiveMaximum": 1,
@@ -821,11 +850,11 @@
 								"default": 0.95
 							},
 							"Lower limit": {
-								"$comment": "ROADMAP:___",
+								"$comment": "ROADMAP:03796",
 								"type": "number"
 							},
 							"Upper limit": {
-								"$comment": "ROADMAP:___",
+								"$comment": "ROADMAP:03797",
 								"type": "number"
 							}
 						},
@@ -843,6 +872,7 @@
 		"Model-properties": {
 			"$comment": "ROADMAP:03355",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Architecture": {
 					"description": "Textual description of underlying model technology, e.g., \"Convolutional Neural Network\".",
@@ -907,6 +937,7 @@
 						"Coded data": {
 							"description": "An array of coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
 							"type": "array",
+							"minItems": 1,
 							"uniqueItems": true,
 							"items": {
 								"$ref": "#/$defs/Coded-data"
@@ -959,6 +990,7 @@
 						"Coded data": {
 							"description": "An array of coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
 							"type": "array",
+							"minItems": 1,
 							"uniqueItems": true,
 							"items": {
 								"$ref": "#/$defs/Coded-data"
@@ -977,12 +1009,15 @@
 					"description": "Information used to support or document regulatory review, covering one or more jurisdiction-specific authorization pathways (e.g. FDA, CE marking under EU MDR, UKCA).",
 					"$comment": "ROADMAP:03602",
 					"type": "object",
+					"minProperties": 1,
 					"properties": {
 						"Authorizations": {
 							"description": "One record per jurisdiction/pathway. Absence of a record does not imply absence of authorization; use Status \"Not submitted\" to state this explicitly. A model may hold more than one record, e.g. an original 510(k) plus supplements, or authorizations in multiple jurisdictions.",
 							"type": "array",
+							"minItems": 1,
 							"items": {
 								"type": "object",
+								"minProperties": 1,
 								"properties": {
 									"Jurisdiction": {
 										"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
@@ -1142,6 +1177,7 @@
 										"description": "Dates associated with this authorization.",
 										"$comment": "ROADMAP:00065",
 										"type": "object",
+										"minProperties": 1,
 										"properties": {
 											"Submitted": {
 												"description": "Submission date",
@@ -1241,6 +1277,7 @@
 						"EU AI Act": {
 							"description": "Co-classification under Regulation (EU) 2024/1689. Independent of CE marking under MDR: a device may hold both.",
 							"type": "object",
+							"minProperties": 1,
 							"properties": {
 								"Risk classification": {
 									"description": "AI Act risk classification.",
@@ -1285,6 +1322,7 @@
 						"Change control": {
 							"description": "Predetermined change control, e.g. an FDA or MHRA Predetermined Change Control Plan (PCCP), or the technical solutions for continuous compliance described at EU AI Act Annex IV point 2(f). A plan may cover more than one jurisdiction.",
 							"type": "object",
+							"minProperties": 1,
 							"properties": {
 								"PCCP in place": {
 									"description": "Indicates whether a predetermined change control plan is in place for this model.",
@@ -1299,6 +1337,7 @@
 								"Jurisdictions": {
 									"description": "Jurisdictions in which this change control plan has been reviewed or accepted.",
 									"type": "array",
+									"minItems": 1,
 									"items": {
 										"type": "string",
 										"minLength": 2,
@@ -1507,9 +1546,12 @@
 				"EHR compatibility": {
 					"description": "Compatible electronic health record systems",
 					"type": "object",
+					"minProperties": 1,
 					"properties": {
 						"List": {
+							"description": "List of compatible electronic health record (EHR) systems.",
 							"type": "array",
+							"minItems": 1,
 							"uniqueItems": true,
 							"items": {
 								"type": "string",
@@ -1539,6 +1581,7 @@
 							}
 						},
 						"Other": {
+							"description": "Other compatible electronic health record (EHR) system not listed above.",
 							"type": "string",
 							"minLength": 2,
 							"maxLength": 128
@@ -1547,6 +1590,7 @@
 					"additionalProperties": false
 				},
 				"Model performance": {
+					"description": "Information about the model's performance and the metrics used to measure performance.",
 					"$ref": "#/$defs/Model-performance"
 				}
 			},
@@ -1557,6 +1601,7 @@
 			"description": "Details for each organization",
 			"$comment": "ROADMAP:00072",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Name": {
 					"description": "Name of organization",
@@ -1577,6 +1622,7 @@
 					]
 				},
 				"Email": {
+					"description": "Organization's email address",
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 128,
@@ -1595,6 +1641,7 @@
 					]
 				},
 				"URL": {
+					"description": "Organization's website URL",
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 128,
@@ -1613,6 +1660,7 @@
 			"description": "Description for individual Person",
 			"$comment": "ROADMAP:00071",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Name": {
 					"description": "The person's name",
@@ -1621,6 +1669,7 @@
 					"maxLength": 128
 				},
 				"Email": {
+					"description": "Person's email address",
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 128,
@@ -1644,6 +1693,7 @@
 					]
 				},
 				"URL": {
+					"description": "Person's website or profile URL",
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 128,
@@ -1659,8 +1709,10 @@
 			"description": "A reference about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings",
 			"$comment": "ROADMAP:00067",
 			"type": "array",
+			"minItems": 1,
 			"items": {
 				"type": "object",
+				"minProperties": 1,
 				"properties": {
 					"Authors": {
 						"description": "Author names",
@@ -1758,6 +1810,7 @@
 						]
 					},
 					"Notes": {
+						"description": "Additional notes about the reference.",
 						"type": "string",
 						"minLength": 2,
 						"maxLength": 512
