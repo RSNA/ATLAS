@@ -3,7 +3,7 @@
 	"$id": "https://atlas.rsna.org/schemas/2026-12/profiles/minimal.json",
 	"title": "ATLAS model card — minimal conformance profile",
 	"description": "The minimal tier is deliberately identical to the base ATLAS model schema: only Name and Link are required. This profile exists so that all three tiers are addressable at a stable, dated URL; it adds no constraints beyond schema-2026-12/model.json.",
-	"$comment": "Conformance profile per atlas-chai-crosswalk.md Priority 4. Profiles are computed by the registry at ingest, not declared by the card author; cards continue to declare \"$schema\": \".../model.json\".",
+	"$comment": "Profiles are computed by the registry at ingest, not declared by the card author; cards continue to declare \"$schema\": \".../model.json\".",
 	"allOf": [
 		{
 			"$ref": "https://atlas.rsna.org/schemas/2026-12/model.json"
