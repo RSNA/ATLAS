@@ -5,6 +5,7 @@
 	"description": "RSNA ATLAS dataset schema, 2026-12 version",
 	"$comment": "Copyright (c) 2026, Radiological Society of North America",
 	"type": "object",
+	"minProperties": 1,
 	"properties": {
 		"$schema": {
 			"description": "The JSON Schema version identifier for this document.",
@@ -12,6 +13,7 @@
 			"const": "https://atlas.rsna.org/schemas/2026-12/dataset.json"
 		},
 		"Dataset": {
+			"description": "Describes an AI dataset",
 			"$ref": "#/$defs/Dataset"
 		}
 	},
@@ -25,6 +27,7 @@
 			"description": "Describes an AI dataset",
 			"$comment": "ROADMAP:00003",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Name": {
 					"description": "Dataset name (required)",
@@ -83,6 +86,7 @@
 			"description": "Attributes of the dataset",
 			"$comment": "ROADMAP:03381",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Confidentiality": {
 					"description": "Describes any data that might be confidential, such as those protected by law or doctor-patient confidentiality.",
@@ -182,11 +186,13 @@
 			"description": "Characteristics of a project, model, or dataset.  Whenever possible, values should link to other ontologies or controlled vocabularies.",
 			"$comment": "ROADMAP:00004",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Authors": {
 					"description": "Authors",
 					"$comment": "ROADMAP:00064",
 					"type": "array",
+					"minItems": 1,
 					"items": {
 						"$ref": "#/$defs/Person"
 					}
@@ -207,6 +213,7 @@
 					"description": "Dates associated with this resource, such as creation, publication, or update dates.",
 					"$comment": "ROADMAP:00065",
 					"type": "object",
+					"minProperties": 1,
 					"properties": {
 						"Created": {
 							"description": "Creation date (ROADMAP:03419)",
@@ -270,6 +277,7 @@
 					"description": "Sponsoring or supporting organizations",
 					"$comment": "ROADMAP:00072",
 					"type": "array",
+					"minItems": 1,
 					"items": {
 						"$ref": "#/$defs/Org"
 					}
@@ -292,8 +300,10 @@
 		"Imaging": {
 			"description": "Imaging modalities, procedures, and other information",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Modalities": {
+					"description": "List of imaging modalities used to acquire the dataset's images.",
 					"type": "array",
 					"minItems": 1,
 					"items": {
@@ -644,6 +654,7 @@
 			"description": "Details for each organization",
 			"$comment": "ROADMAP:00072",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Name": {
 					"description": "Name of organization",
@@ -705,6 +716,7 @@
 			"minItems": 1,
 			"items": {
 				"type": "object",
+				"minProperties": 1,
 				"properties": {
 					"Partition": {
 						"description": "Partition name or type",
@@ -729,6 +741,7 @@
 					"Subsets": {
 						"description": "Specific breakdowns by demographic factors (sex, age, race), clinical criteria (diagnosis, findings), or technical factors (contrast phase, imaging protocol). Counts within subsets should sum to the Total where they represent non-overlapping groups.",
 						"type": "array",
+						"minItems": 1,
 						"items": {
 							"$ref": "#/$defs/Subset"
 						}
@@ -822,6 +835,7 @@
 			"description": "Description for individual Person",
 			"$comment": "ROADMAP:00071",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Name": {
 					"description": "The person's name",
@@ -870,8 +884,10 @@
 			"description": "A reference about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
 			"$comment": "ROADMAP:00067",
 			"type": "array",
+			"minItems": 1,
 			"items": {
 				"type": "object",
+				"minProperties": 1,
 				"properties": {
 					"Authors": {
 						"description": "Author names",
@@ -962,6 +978,7 @@
 			"description": "A Subset describes aggregate statistics: it can represent either partition-level totals or specific subset breakdowns by age, sex, race, clinical criteria, and/or other factors. All properties are optional to accommodate varying levels of detail in reported data. If more than one criterion is listed (e.g., age and sex), the information describes the presence of both criteria.",
 			"$comment": "ROADMAP:03422",
 			"type": "object",
+			"minProperties": 1,
 			"properties": {
 				"Site count": {
 					"description": "Number of sites",
