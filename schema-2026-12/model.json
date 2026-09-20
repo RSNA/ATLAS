@@ -685,8 +685,300 @@
 			},
 			"additionalProperties": false
 		},
+		"Integration": {
+			"description": "How the model is integrated into an imaging environment, expressed as interface standards.",
+			"$comment": "ROADMAP:TBD",
+			"type": "object",
+			"minProperties": 1,
+			"additionalProperties": false,
+			"properties": {
+				"Interfaces": {
+					"description": "Interface standards the model supports for input, query and transport.",
+					"$comment": "ROADMAP:TBD",
+					"type": "object",
+					"minProperties": 1,
+					"additionalProperties": false,
+					"properties": {
+						"DICOM": {
+							"description": "DICOM network services supported.",
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"type": "string",
+								"enum": [
+									"Verification (C-ECHO)",
+									"Storage SCP (C-STORE)",
+									"Storage SCU (C-STORE)",
+									"Storage Commitment",
+									"Query/Retrieve (C-FIND)",
+									"Query/Retrieve (C-MOVE)",
+									"Query/Retrieve (C-GET)",
+									"Modality Worklist",
+									"Modality Performed Procedure Step",
+									"Unified Procedure Step (UPS)",
+									"Instance Availability Notification"
+								]
+							}
+						},
+						"DICOMweb": {
+							"description": "DICOMweb RESTful services supported.",
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"type": "string",
+								"enum": [
+									"QIDO-RS",
+									"WADO-RS",
+									"WADO-URI",
+									"STOW-RS",
+									"UPS-RS"
+								]
+							}
+						},
+						"HL7 v2": {
+							"description": "HL7 version 2 message types supported.",
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"type": "string",
+								"enum": [
+									"ADT",
+									"ORM",
+									"OMI",
+									"ORU",
+									"MDM",
+									"SIU"
+								]
+							}
+						},
+						"FHIR": {
+							"description": "HL7 FHIR resources and specifications supported.",
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"type": "string",
+								"enum": [
+									"ImagingStudy",
+									"ImagingSelection",
+									"DiagnosticReport",
+									"Observation",
+									"ServiceRequest",
+									"Task",
+									"DocumentReference",
+									"Binary",
+									"Subscription",
+									"FHIRcast"
+								]
+							}
+						},
+						"IHE profiles": {
+							"description": "IHE Radiology integration profiles to which the model conforms.",
+							"type": "array",
+							"minItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"type": "string",
+								"enum": [
+									"AIR (AI Results)",
+									"AIW-I (AI Workflow for Imaging)",
+									"SWF.b (Scheduled Workflow.b)",
+									"IOCM (Imaging Object Change Management)",
+									"XDS-I.b (Cross-Enterprise Document Sharing for Imaging)",
+									"IID (Invoke Image Display)",
+									"MRRT (Management of Radiology Report Templates)",
+									"SINR (Simple Image and Numeric Report)",
+									"PDI (Portable Data for Imaging)",
+									"REM (Radiation Exposure Monitoring)",
+									"EBIW (Encounter-Based Imaging Workflow)",
+									"PIX (Patient Identifier Cross-Referencing)",
+									"PDQ (Patient Demographics Query)"
+								]
+							}
+						},
+						"Other": {
+							"description": "Interface standards or proprietary interfaces not covered by the enumerated lists.",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 512
+						}
+					}
+				},
+				"Result delivery": {
+					"description": "The channels and object types by which model results are returned to the clinical environment.",
+					"$comment": "ROADMAP:TBD",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"enum": [
+							"DICOM Structured Report (TID 1500)",
+							"DICOM Structured Report (other template)",
+							"DICOM Segmentation (SEG)",
+							"DICOM Parametric Map",
+							"DICOM Grayscale Softcopy Presentation State (GSPS)",
+							"DICOM Secondary Capture",
+							"DICOM Key Object Selection",
+							"DICOM Encapsulated PDF",
+							"DICOM RT Structure Set",
+							"HL7 v2 ORU message",
+							"FHIR DiagnosticReport",
+							"FHIR Observation",
+							"Worklist priority flag",
+							"Notification or alert",
+							"Report text insertion",
+							"Vendor API or webhook",
+							"Proprietary viewer or dashboard",
+							"Other"
+						]
+					}
+				},
+				"Invocation": {
+					"description": "How model execution is triggered.",
+					"$comment": "ROADMAP:TBD",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"enum": [
+							"Automatic on study arrival",
+							"Modality worklist triggered",
+							"UPS worklist triggered",
+							"On-demand by user",
+							"Scheduled batch",
+							"Prefetch-based",
+							"API call",
+							"Other"
+						]
+					}
+				},
+				"Conformance statements": {
+					"description": "Pointers to formal conformance documentation. Preferred over prose description of interface support.",
+					"$comment": "ROADMAP:TBD",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"required": [
+							"Type"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"Type": {
+								"type": "string",
+								"enum": [
+									"DICOM Conformance Statement",
+									"IHE Integration Statement",
+									"FHIR CapabilityStatement",
+									"HL7 v2 interface specification",
+									"Other"
+								]
+							},
+							"URI": {
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 256,
+								"format": "uri"
+							},
+							"Comment": {
+								"$comment": "ROADMAP:00070",
+								"type": "string",
+								"minLength": 2,
+								"maxLength": 512
+							}
+						}
+					}
+				},
+				"System types": {
+					"description": "Categories of clinical system with which the model exchanges data.",
+					"$comment": "ROADMAP:TBD",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"enum": [
+							"PACS",
+							"VNA",
+							"RIS",
+							"EHR",
+							"Reporting or dictation platform",
+							"AI orchestration platform",
+							"Image exchange platform",
+							"Modality",
+							"Worklist manager",
+							"Dose monitoring system",
+							"Other"
+						]
+					}
+				},
+				"Validated systems": {
+					"description": "Named products against which integration has actually been tested. Free text by design: vendor and product names change with acquisitions and cannot be maintained as an enumeration.",
+					"$comment": "ROADMAP:TBD",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"required": [
+							"Name"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"Name": {
+								"type": "string",
+								"minLength": 2,
+								"maxLength": 128,
+								"examples": [
+									"Sectra PACS",
+									"Epic Radiant",
+									"Fujifilm Synapse VNA"
+								]
+							},
+							"System type": {
+								"type": "string",
+								"enum": [
+									"PACS",
+									"VNA",
+									"RIS",
+									"EHR",
+									"Reporting or dictation platform",
+									"AI orchestration platform",
+									"Image exchange platform",
+									"Modality",
+									"Worklist manager",
+									"Dose monitoring system",
+									"Other"
+								]
+							},
+							"Version": {
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 64
+							},
+							"Comment": {
+								"$comment": "ROADMAP:00070",
+								"type": "string",
+								"minLength": 2,
+								"maxLength": 512
+							}
+						}
+					}
+				},
+				"Comments": {
+					"$comment": "ROADMAP:00070",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 2048
+				}
+			}
+		},
 		"Jurisdiction": {
-			"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
+			"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (European Union, an economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
 			"type": "string",
 			"enum": [
 				"US",
@@ -1585,51 +1877,8 @@
 					},
 					"additionalProperties": false
 				},
-				"EHR compatibility": {
-					"description": "Compatible electronic health record systems",
-					"type": "object",
-					"minProperties": 1,
-					"properties": {
-						"List": {
-							"description": "List of compatible electronic health record (EHR) systems.",
-							"type": "array",
-							"minItems": 1,
-							"uniqueItems": true,
-							"items": {
-								"type": "string",
-								"enum": [
-									"AdvancedMD",
-									"Altera Digital Health (Sunrise)",
-									"athenahealth",
-									"Cerner (Oracle Health)",
-									"CGM (CompuGroup Medical)",
-									"Credible",
-									"Dedalus",
-									"DrChrono",
-									"eClinicalWorks",
-									"EMIS",
-									"Epic",
-									"InterSystems TrakCare",
-									"MEDITECH",
-									"Netsmart",
-									"NextGen Healthcare",
-									"OpenEMR",
-									"OpenMRS",
-									"Practice Fusion",
-									"Valant",
-									"Veradigm (Allscripts)",
-									"VistA"
-								]
-							}
-						},
-						"Other": {
-							"description": "Other compatible electronic health record (EHR) system not listed above.",
-							"type": "string",
-							"minLength": 2,
-							"maxLength": 128
-						}
-					},
-					"additionalProperties": false
+				"Integration": {
+					"$ref": "#/$defs/Integration"
 				}
 			},
 			"additionalProperties": false
