@@ -685,6 +685,27 @@
 			},
 			"additionalProperties": false
 		},
+		"Jurisdiction": {
+			"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
+			"type": "string",
+			"enum": [
+				"US",
+				"EU",
+				"GB",
+				"UK-NI",
+				"CH",
+				"CA",
+				"AU",
+				"JP",
+				"CN",
+				"KR",
+				"BR",
+				"IN",
+				"IL",
+				"SG",
+				"Other"
+			]
+		},
 		"Model": {
 			"description": "An AI model, described by general metadata and model properties.",
 			"$comment": "ROADMAP:00002",
@@ -736,6 +757,24 @@
 				"Model performance": {
 					"description": "An array of tuples that specify the performance of an AI model on a particular set of data.",
 					"$ref": "#/$defs/Model-performance"
+				},
+				"Factors": {
+					"description": "Declares the axis or axes of subgroup disaggregation examined for this model, e.g. sex, race/ethnicity, age group, or site. Individual disaggregated results are recorded via each performance result's Subgroup.",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 64,
+						"examples": [
+							"Sex",
+							"Race/ethnicity",
+							"Age group",
+							"Site",
+							"Scanner manufacturer"
+						]
+					}
 				}
 			},
 			"required": [
@@ -783,9 +822,7 @@
 						"description": "Indicates whether this performance record is claimed (self-reported by the developer, e.g. from internal or external testing) or observed (derived from real-world, deployed use, e.g. registry-reported concordance).",
 						"$comment": "ROADMAP:04123",
 						"type": "string",
-						"minLength": 1,
-						"maxLength": 32,
-						"examples": [
+						"enum": [
 							"Claimed",
 							"Observed"
 						]
@@ -806,67 +843,111 @@
 			}
 		},
 		"Model-performance-results": {
-			"description": "Array of tuples: (index test, metric, value)",
+			"description": "Array of tuples: (index test, metric, value), each either a scalar-metric result (a numeric value with an optional confidence interval) or a non-scalar-metric result (a string or URI value, e.g. a markdown table or a link to a matrix or graph).",
 			"$comment": "ROADMAP:03870",
 			"type": "array",
 			"minItems": 1,
 			"items": {
-				"description": "Tuple of index test, metric, value",
+				"description": "Tuple of index test, metric, value.",
 				"type": "object",
 				"minProperties": 1,
-				"properties": {
-					"Index test": {
-						"description": "Describes what is being measured. For example, not simply large vessel occlusion (LVO), but M2/M3 LVO.",
-						"type": "string",
-						"minLength": 1,
-						"maxLength": 128
-					},
-					"Scalar metric": {
-						"description": "The scalar metric used to measure performance.",
-						"$ref": "#/$defs/Scalar-metric"
-					},
-					"Value": {
-						"description": "The observed value of the metric.",
-						"type": "number"
-					},
-					"Confidence interval": {
-						"description": "Confidence interval",
-						"$comment": "ROADMAP:00672",
+				"oneOf": [
+					{
+						"description": "A scalar-metric result.",
 						"type": "object",
 						"minProperties": 1,
 						"properties": {
-							"Level": {
-								"description": "Confidence level, expressed as a decimal value",
-								"$comment": "ROADMAP:01500",
-								"type": "number",
-								"minimum": 0.5,
-								"exclusiveMaximum": 1,
-								"examples": [
-									0.5,
-									0.9,
-									0.95,
-									0.99
-								],
-								"default": 0.95
+							"Index test": {
+								"description": "Describes what is being measured. For example, not simply large vessel occlusion (LVO), but M2/M3 LVO.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128
 							},
-							"Lower limit": {
-								"$comment": "ROADMAP:03796",
+							"Scalar metric": {
+								"description": "The scalar metric used to measure performance.",
+								"$ref": "#/$defs/Scalar-metric"
+							},
+							"Value": {
+								"description": "The observed value of the metric.",
 								"type": "number"
 							},
-							"Upper limit": {
-								"$comment": "ROADMAP:03797",
-								"type": "number"
+							"Confidence interval": {
+								"description": "Confidence interval",
+								"$comment": "ROADMAP:00672",
+								"type": "object",
+								"minProperties": 1,
+								"properties": {
+									"Level": {
+										"description": "Confidence level, expressed as a decimal value",
+										"$comment": "ROADMAP:01500",
+										"type": "number",
+										"minimum": 0.5,
+										"exclusiveMaximum": 1,
+										"examples": [
+											0.5,
+											0.9,
+											0.95,
+											0.99
+										],
+										"default": 0.95
+									},
+									"Lower limit": {
+										"$comment": "ROADMAP:03796",
+										"type": "number"
+									},
+									"Upper limit": {
+										"$comment": "ROADMAP:03797",
+										"type": "number"
+									}
+								},
+								"additionalProperties": false
+							},
+							"Subgroup": {
+								"description": "Identifies the specific subgroup for which this result was computed, when this result is disaggregated by one of the model's declared Factors.",
+								"$ref": "#/$defs/Subgroup"
 							}
 						},
+						"required": [
+							"Index test",
+							"Scalar metric",
+							"Value"
+						],
+						"additionalProperties": false
+					},
+					{
+						"description": "A non-scalar-metric result.",
+						"type": "object",
+						"minProperties": 1,
+						"properties": {
+							"Index test": {
+								"description": "Describes what is being measured. For example, not simply large vessel occlusion (LVO), but M2/M3 LVO.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128
+							},
+							"Nonscalar metric": {
+								"description": "The non-scalar (graphical or matrix) metric used to measure performance.",
+								"$ref": "#/$defs/Nonscalar-metric"
+							},
+							"Value": {
+								"description": "The non-scalar metric's value, expressed either as a string (e.g. a markdown table) or as a URI pointing to an external matrix or graph resource.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 4096
+							},
+							"Subgroup": {
+								"description": "Identifies the specific subgroup for which this result was computed, when this result is disaggregated by one of the model's declared Factors.",
+								"$ref": "#/$defs/Subgroup"
+							}
+						},
+						"required": [
+							"Index test",
+							"Nonscalar metric",
+							"Value"
+						],
 						"additionalProperties": false
 					}
-				},
-				"required": [
-					"Index test",
-					"Scalar metric",
-					"Value"
-				],
-				"additionalProperties": false
+				]
 			}
 		},
 		"Model-properties": {
@@ -976,9 +1057,7 @@
 							"description": "The general category of the value produced by the model as output.",
 							"$comment": "ROADMAP:04125",
 							"type": "string",
-							"minLength": 1,
-							"maxLength": 64,
-							"examples": [
+							"enum": [
 								"Prediction",
 								"Classification",
 								"Recommendation",
@@ -1020,34 +1099,13 @@
 								"minProperties": 1,
 								"properties": {
 									"Jurisdiction": {
-										"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
-										"type": "string",
-										"minLength": 2,
-										"maxLength": 32,
-										"examples": [
-											"US",
-											"EU",
-											"GB",
-											"UK-NI",
-											"CH",
-											"CA",
-											"AU",
-											"JP",
-											"CN",
-											"KR",
-											"BR",
-											"IN",
-											"IL",
-											"SG",
-											"Other"
-										]
+										"description": "Jurisdiction or regulatory region in which this authorization was granted or sought.",
+										"$ref": "#/$defs/Jurisdiction"
 									},
 									"Authority": {
 										"description": "Regulatory authority or conformity-assessment body responsible for the authorization.",
 										"type": "string",
-										"minLength": 2,
-										"maxLength": 128,
-										"examples": [
+										"enum": [
 											"FDA",
 											"Notified Body",
 											"MHRA",
@@ -1075,9 +1133,7 @@
 									"Pathway": {
 										"description": "Regulatory pathway or authorization route.",
 										"type": "string",
-										"minLength": 2,
-										"maxLength": 128,
-										"examples": [
+										"enum": [
 											"510(k)",
 											"De Novo",
 											"PMA",
@@ -1097,9 +1153,7 @@
 										"description": "Status of this authorization. \"Not submitted\" and \"Research use only\" are positive assertions and should be used in preference to omitting the record. \"Not available\" mirrors the ONC convention at 45 CFR 170.315(b)(11)(v)(A)(2).",
 										"$comment": "ROADMAP:03603",
 										"type": "string",
-										"minLength": 2,
-										"maxLength": 64,
-										"examples": [
+										"enum": [
 											"Authorized",
 											"Submitted / under review",
 											"Not submitted",
@@ -1282,9 +1336,7 @@
 								"Risk classification": {
 									"description": "AI Act risk classification.",
 									"type": "string",
-									"minLength": 2,
-									"maxLength": 64,
-									"examples": [
+									"enum": [
 										"High-risk (Article 6)",
 										"Limited risk",
 										"Minimal risk",
@@ -1302,9 +1354,7 @@
 								"Technical documentation": {
 									"description": "Status of the Annex IV technical documentation.",
 									"type": "string",
-									"minLength": 2,
-									"maxLength": 64,
-									"examples": [
+									"enum": [
 										"Annex IV complete",
 										"Annex IV in preparation",
 										"Not applicable"
@@ -1339,14 +1389,7 @@
 									"type": "array",
 									"minItems": 1,
 									"items": {
-										"type": "string",
-										"minLength": 2,
-										"maxLength": 32,
-										"examples": [
-											"US",
-											"EU",
-											"GB"
-										]
+										"$ref": "#/$defs/Jurisdiction"
 									}
 								}
 							},
@@ -1400,9 +1443,7 @@
 					"description": "The form(s) in which the model is placed on the market or put into service.",
 					"$comment": "ROADMAP:04117",
 					"type": "string",
-					"minLength": 1,
-					"maxLength": 128,
-					"examples": [
+					"enum": [
 						"Software embedded in hardware",
 						"Software download",
 						"API",
@@ -1588,10 +1629,6 @@
 						}
 					},
 					"additionalProperties": false
-				},
-				"Model performance": {
-					"description": "Information about the model's performance and the metrics used to measure performance.",
-					"$ref": "#/$defs/Model-performance"
 				}
 			},
 			"additionalProperties": false
@@ -2077,6 +2114,41 @@
 				"weighted Cohen's kappa",
 				"Youden index"
 			]
+		},
+		"Subgroup": {
+			"description": "Identifies a specific subgroup, for use when a performance result is disaggregated by one of the model's declared Factors.",
+			"type": "object",
+			"minProperties": 2,
+			"properties": {
+				"Variable": {
+					"description": "The factor or axis of disaggregation.",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 64,
+					"examples": [
+						"Sex",
+						"Race/ethnicity",
+						"Age group",
+						"Site"
+					]
+				},
+				"Value": {
+					"description": "The specific subgroup value within that variable.",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 64,
+					"examples": [
+						"Female",
+						"Black",
+						"65+"
+					]
+				}
+			},
+			"required": [
+				"Variable",
+				"Value"
+			],
+			"additionalProperties": false
 		},
 		"Use": {
 			"description": "Model use(s)",
