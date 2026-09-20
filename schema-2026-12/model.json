@@ -851,6 +851,7 @@
 				"description": "Tuple of index test, metric, value.",
 				"type": "object",
 				"minProperties": 1,
+				"additionalProperties": false,
 				"oneOf": [
 					{
 						"description": "A scalar-metric result.",
