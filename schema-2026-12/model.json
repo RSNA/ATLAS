@@ -687,20 +687,21 @@
 		},
 		"Integration": {
 			"description": "How the model is integrated into an imaging environment, expressed as interface standards.",
-			"$comment": "ROADMAP:TBD",
+			"$comment": "ROADMAP:04135",
 			"type": "object",
 			"minProperties": 1,
 			"additionalProperties": false,
 			"properties": {
 				"Interfaces": {
 					"description": "Interface standards the model supports for input, query and transport.",
-					"$comment": "ROADMAP:TBD",
+					"$comment": "ROADMAP:04136",
 					"type": "object",
 					"minProperties": 1,
 					"additionalProperties": false,
 					"properties": {
 						"DICOM": {
 							"description": "DICOM network services supported.",
+							"$comment": "ROADMAP:04137",
 							"type": "array",
 							"minItems": 1,
 							"uniqueItems": true,
@@ -723,6 +724,7 @@
 						},
 						"DICOMweb": {
 							"description": "DICOMweb RESTful services supported.",
+							"$comment": "ROADMAP:04149",
 							"type": "array",
 							"minItems": 1,
 							"uniqueItems": true,
@@ -739,6 +741,7 @@
 						},
 						"HL7 v2": {
 							"description": "HL7 version 2 message types supported.",
+							"$comment": "ROADMAP:04155",
 							"type": "array",
 							"minItems": 1,
 							"uniqueItems": true,
@@ -756,6 +759,7 @@
 						},
 						"FHIR": {
 							"description": "HL7 FHIR resources and specifications supported.",
+							"$comment": "ROADMAP:04162",
 							"type": "array",
 							"minItems": 1,
 							"uniqueItems": true,
@@ -777,6 +781,7 @@
 						},
 						"IHE profiles": {
 							"description": "IHE Radiology integration profiles to which the model conforms.",
+							"$comment": "ROADMAP:04173",
 							"type": "array",
 							"minItems": 1,
 							"uniqueItems": true,
@@ -809,7 +814,7 @@
 				},
 				"Result delivery": {
 					"description": "The channels and object types by which model results are returned to the clinical environment.",
-					"$comment": "ROADMAP:TBD",
+					"$comment": "ROADMAP:04187",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -839,7 +844,7 @@
 				},
 				"Invocation": {
 					"description": "How model execution is triggered.",
-					"$comment": "ROADMAP:TBD",
+					"$comment": "ROADMAP:04202",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -859,7 +864,7 @@
 				},
 				"Conformance statements": {
 					"description": "Pointers to formal conformance documentation. Preferred over prose description of interface support.",
-					"$comment": "ROADMAP:TBD",
+					"$comment": "ROADMAP:04210",
 					"type": "array",
 					"minItems": 1,
 					"items": {
@@ -870,6 +875,7 @@
 						"additionalProperties": false,
 						"properties": {
 							"Type": {
+								"$comment": "ROADMAP:04211",
 								"type": "string",
 								"enum": [
 									"DICOM Conformance Statement",
@@ -896,7 +902,7 @@
 				},
 				"System types": {
 					"description": "Categories of clinical system with which the model exchanges data.",
-					"$comment": "ROADMAP:TBD",
+					"$comment": "ROADMAP:04216",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -919,7 +925,7 @@
 				},
 				"Validated systems": {
 					"description": "Named products against which integration has actually been tested. Free text by design: vendor and product names change with acquisitions and cannot be maintained as an enumeration.",
-					"$comment": "ROADMAP:TBD",
+					"$comment": "ROADMAP:04227",
 					"type": "array",
 					"minItems": 1,
 					"items": {
@@ -940,6 +946,7 @@
 								]
 							},
 							"System type": {
+								"$comment": "ROADMAP:04216",
 								"type": "string",
 								"enum": [
 									"PACS",
