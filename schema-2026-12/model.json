@@ -30,40 +30,108 @@
 			"items": {
 				"type": "object",
 				"additionalProperties": false,
-				"oneOf": [
+				"allOf": [
 					{
 						"type": "object",
-						"minProperties": 1,
-						"properties": {
-							"System": {
-								"description": "The code system, e.g., SNOMED CT.",
-								"type": "string",
-								"enum": [
-									"DO",
-									"Gamuts",
-									"HPO",
-									"ICD-10",
-									"ICD-11",
-									"LOINC",
-									"NDC",
-									"NLM CDE",
-									"RadElement",
-									"RadLex",
-									"RxNorm",
-									"SNOMED CT"
-								]
+						"additionalProperties": false,
+						"oneOf": [
+							{
+								"type": "object",
+								"properties": {
+									"System": {
+										"description": "The code system, e.g., SNOMED CT.",
+										"type": "string",
+										"enum": [
+											"DO",
+											"Gamuts",
+											"HPO",
+											"ICD-10",
+											"ICD-11",
+											"LOINC",
+											"NDC",
+											"NLM CDE",
+											"RadElement",
+											"RadLex",
+											"RxNorm",
+											"SNOMED CT"
+										]
+									},
+									"Code": {
+										"description": "The code ID.",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 16,
+										"examples": [
+											"RID123",
+											"RDE1063",
+											"12345-6"
+										]
+									}
+								},
+								"required": [
+									"System",
+									"Code"
+								],
+								"additionalProperties": false
 							},
-							"Code": {
-								"description": "The code ID.",
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 16,
+							{
+								"type": "object",
+								"properties": {
+									"Other system": {
+										"description": "A coding system not enumerated",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 64,
+										"examples": [
+											"MyCodes"
+										]
+									},
+									"Code": {
+										"description": "The code ID.",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 16,
+										"examples": [
+											"ABC123"
+										]
+									}
+								},
+								"required": [
+									"Other system",
+									"Code"
+								],
+								"additionalProperties": false,
 								"examples": [
-									"RID123",
-									"RDE1063",
-									"12345-6"
+									{
+										"Other system": "MyCodes",
+										"Code": "ABC123"
+									}
 								]
 							},
+							{
+								"type": "object",
+								"properties": {
+									"URI": {
+										"description": "The unique identifire (IRI) of the code system and code.",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 256,
+										"format": "uri",
+										"examples": [
+											"https://radlex.org/RID/RID50685"
+										]
+									}
+								},
+								"required": [
+									"URI"
+								],
+								"additionalProperties": false
+							}
+						]
+					},
+					{
+						"type": "object",
+						"properties": {
 							"Label": {
 								"description": "The text label that describes the code",
 								"type": "string",
@@ -86,131 +154,32 @@
 								]
 							}
 						},
-						"required": [
-							"System",
-							"Code"
-						],
-						"additionalProperties": false,
-						"examples": [
-							{
-								"System": "RadLex",
-								"Code": "RID50685",
-								"Label": "adrenal nodule",
-								"Value": 1.2
-							},
-							{
-								"System": "NLM CDE",
-								"Code": "yMHA1Nh14p9",
-								"Label": "Echocardiogram degree of aortic regurgitation status",
-								"Value": "Mild"
-							}
-						]
+						"additionalProperties": false
+					}
+				],
+				"examples": [
+					{
+						"System": "RadLex",
+						"Code": "RID50685",
+						"Label": "adrenal nodule",
+						"Value": 1.2
 					},
 					{
-						"type": "object",
-						"minProperties": 1,
-						"properties": {
-							"Other system": {
-								"description": "A coding system not enumerated",
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 64,
-								"examples": [
-									"MyCodes"
-								]
-							},
-							"Code": {
-								"description": "The code ID.",
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 16,
-								"examples": [
-									"ABC123"
-								]
-							},
-							"Label": {
-								"description": "The text label that describes the code",
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 128,
-								"examples": [
-									"diameter (cm)"
-								]
-							},
-							"Value": {
-								"description": "The value of the coded entity (string or number)",
-								"type": [
-									"string",
-									"number"
-								],
-								"minLength": 1,
-								"maxLength": 128,
-								"examples": [
-									3.4
-								]
-							}
-						},
-						"required": [
-							"Other system",
-							"Code"
-						],
-						"additionalProperties": false,
-						"examples": [
-							{
-								"System": "MyCodes",
-								"Code": "ABC123",
-								"Label": "An ID from an unenumerated coding scheme",
-								"Value": 1.2
-							}
-						]
+						"System": "NLM CDE",
+						"Code": "yMHA1Nh14p9",
+						"Label": "Echocardiogram degree of aortic regurgitation status",
+						"Value": "Mild"
 					},
 					{
-						"type": "object",
-						"minProperties": 1,
-						"properties": {
-							"URI": {
-								"description": "The unique identifire (IRI) of the code system and code.",
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 256,
-								"format": "uri",
-								"examples": [
-									"https://radlex.org/RID/RID50685"
-								]
-							},
-							"Label": {
-								"description": "The text label that describes the code",
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 128,
-								"examples": [
-									"diameter (cm)"
-								]
-							},
-							"Value": {
-								"description": "The value of the coded entity",
-								"type": [
-									"string",
-									"number"
-								],
-								"minLength": 1,
-								"maxLength": 128,
-								"examples": [
-									3.4
-								]
-							}
-						},
-						"required": [
-							"URI"
-						],
-						"additionalProperties": false,
-						"examples": [
-							{
-								"IRI": "https://radelement.org/home/elements/element/RDE43",
-								"Label": "Adrenal nodule / Unenhanced attenuation",
-								"Value": "14 HU"
-							}
-						]
+						"Other system": "MyCodes",
+						"Code": "ABC123",
+						"Label": "An ID from an unenumerated coding scheme",
+						"Value": 1.2
+					},
+					{
+						"URI": "https://radelement.org/home/elements/element/RDE43",
+						"Label": "Adrenal nodule / Unenhanced attenuation",
+						"Value": "14 HU"
 					}
 				]
 			}
@@ -690,14 +659,12 @@
 			"$comment": "ROADMAP:04135",
 			"type": "object",
 			"minProperties": 1,
-			"additionalProperties": false,
 			"properties": {
 				"Interfaces": {
 					"description": "Interface standards the model supports for input, query and transport.",
 					"$comment": "ROADMAP:04136",
 					"type": "object",
 					"minProperties": 1,
-					"additionalProperties": false,
 					"properties": {
 						"DICOM": {
 							"description": "DICOM network services supported.",
@@ -810,7 +777,8 @@
 							"minLength": 1,
 							"maxLength": 512
 						}
-					}
+					},
+					"additionalProperties": false
 				},
 				"Result delivery": {
 					"description": "The channels and object types by which model results are returned to the clinical environment.",
@@ -869,10 +837,6 @@
 					"minItems": 1,
 					"items": {
 						"type": "object",
-						"required": [
-							"Type"
-						],
-						"additionalProperties": false,
 						"properties": {
 							"Type": {
 								"$comment": "ROADMAP:04211",
@@ -897,7 +861,11 @@
 								"minLength": 2,
 								"maxLength": 512
 							}
-						}
+						},
+						"required": [
+							"Type"
+						],
+						"additionalProperties": false
 					}
 				},
 				"System types": {
@@ -930,10 +898,6 @@
 					"minItems": 1,
 					"items": {
 						"type": "object",
-						"required": [
-							"Name"
-						],
-						"additionalProperties": false,
 						"properties": {
 							"Name": {
 								"type": "string",
@@ -973,7 +937,11 @@
 								"minLength": 2,
 								"maxLength": 512
 							}
-						}
+						},
+						"required": [
+							"Name"
+						],
+						"additionalProperties": false
 					}
 				},
 				"Comments": {
@@ -982,7 +950,8 @@
 					"minLength": 2,
 					"maxLength": 2048
 				}
-			}
+			},
+			"additionalProperties": false
 		},
 		"Jurisdiction": {
 			"description": "Jurisdiction or regulatory region. Generally ISO 3166-1 alpha-2, except EU (European Union, an economic area) and UK-NI (Northern Ireland, which follows EU MDR under the Windsor Framework rather than UKCA).",
