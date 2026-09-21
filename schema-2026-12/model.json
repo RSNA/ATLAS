@@ -1043,6 +1043,58 @@
 							"Scanner manufacturer"
 						]
 					}
+				},
+				"Datasets": {
+					"description": "Datasets associated with the model's development, disaggregated by role (e.g. training, validation, test).",
+					"$comment": "ROADMAP:04234",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"minProperties": 1,
+						"properties": {
+							"Dataset": {
+								"description": "Pointer to or description of the dataset.",
+								"type": "object",
+								"minProperties": 1,
+								"maxProperties": 2,
+								"properties": {
+									"URI": {
+										"description": "Pointer to the dataset, e.g. a dataset card conforming to the ATLAS dataset schema (preferred)",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 256,
+										"format": "uri"
+									},
+									"Description": {
+										"description": "Textual description of the dataset",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 512
+									}
+								},
+								"additionalProperties": false
+							},
+							"Role": {
+								"description": "The dataset's role in the model's development.",
+								"$comment": "ROADMAP:03763",
+								"type": "string",
+								"enum": [
+									"Training",
+									"Optimization",
+									"Testing",
+									"External testing",
+									"Pretraining",
+									"Fine-tuning"
+								]
+							}
+						},
+						"required": [
+							"Dataset",
+							"Role"
+						],
+						"additionalProperties": false
+					}
 				}
 			},
 			"required": [
@@ -1230,6 +1282,104 @@
 					"type": "string",
 					"minLength": 2,
 					"maxLength": 512
+				},
+				"Model class": {
+					"description": "The general architectural or algorithmic category of the model, as a coarse, queryable category distinct from the free-text Architecture description.",
+					"$comment": "ROADMAP:04230",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 64,
+					"examples": [
+						"Convolutional neural network",
+						"Vision transformer",
+						"Large language model",
+						"Diffusion model",
+						"Foundation model",
+						"Traditional machine learning",
+						"Ensemble",
+						"Hybrid"
+					]
+				},
+				"Foundation model": {
+					"description": "The pretrained foundation model this model is built upon, fine-tuned from, or otherwise directly incorporates, if any.",
+					"$comment": "ROADMAP:04231",
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Name": {
+							"description": "Name of the foundation model.",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128,
+							"examples": [
+								"Llama 3",
+								"SAM",
+								"CLIP",
+								"Med-Gemini"
+							]
+						},
+						"Version": {
+							"description": "Version of the foundation model.",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						},
+						"Provider": {
+							"description": "Organization that developed or distributes the foundation model.",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128,
+							"examples": [
+								"Meta",
+								"Google",
+								"OpenAI",
+								"Microsoft"
+							]
+						}
+					},
+					"required": [
+						"Name"
+					],
+					"additionalProperties": false
+				},
+				"Third-party components": {
+					"description": "Third-party or pre-trained components incorporated into the model, other than a foundation model captured separately, such as pretrained encoders or vendor SDKs material to the model's behavior.",
+					"$comment": "ROADMAP:04232",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"minProperties": 1,
+						"properties": {
+							"Name": {
+								"description": "Name of the third-party component.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128,
+								"examples": [
+									"ResNet-50",
+									"nnU-Net",
+									"TotalSegmentator"
+								]
+							},
+							"Version": {
+								"description": "Version of the third-party component.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 64
+							},
+							"Provider": {
+								"description": "Organization or project that developed or distributes the component.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128
+							}
+						},
+						"required": [
+							"Name"
+						],
+						"additionalProperties": false
+					}
 				},
 				"Availability": {
 					"description": "Defines where and/or how the model is available; can include a URL.",
@@ -1746,6 +1896,49 @@
 					"type": "string",
 					"minLength": 1,
 					"maxLength": 512
+				},
+				"Maintenance": {
+					"description": "Describes how the model's real-world performance and fairness are monitored, and the process by which the model is updated in response.",
+					"$comment": "ROADMAP:04233",
+					"type": "object",
+					"minProperties": 1,
+					"additionalProperties": false,
+					"properties": {
+						"Monitoring program": {
+							"description": "Name of the real-world performance monitoring program or registry the model is enrolled in, if any, e.g. the ACR Assess-AI registry.",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128,
+							"examples": [
+								"ACR Assess-AI",
+								"Internal QA program"
+							]
+						},
+						"Validity monitoring": {
+							"description": "Describes how the model's real-world performance is monitored for validity (e.g. drift, degradation) after deployment.",
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512
+						},
+						"Fairness monitoring": {
+							"description": "Describes how the model's real-world performance is monitored for fairness across subgroups after deployment.",
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512
+						},
+						"Update process": {
+							"description": "Describes the process by which the model is updated in response to monitoring findings, such as retraining triggers or a predetermined change control plan.",
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512
+						},
+						"Comment": {
+							"$comment": "ROADMAP:00070",
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512
+						}
+					}
 				},
 				"Bias mitigation approach": {
 					"description": "Describes the approach taken during model development to identify, manage, reduce, or eliminate bias, and to help ensure the model's output is fair across relevant subgroups.",
