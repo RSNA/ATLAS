@@ -109,13 +109,11 @@
 							"Role": {
 								"description": "This dataset's role in the model's development.",
 								"type": "string",
-								"minLength": 1,
-								"maxLength": 64,
-								"examples": [
+								"enum": [
 									"Training",
-									"Validation",
-									"Test",
-									"External validation",
+									"Optimization",
+									"Testing",
+									"External testing",
 									"Pretraining",
 									"Fine-tuning"
 								]
