@@ -1071,12 +1071,14 @@
 								"$comment": "ROADMAP:03763",
 								"type": "string",
 								"enum": [
-									"Training",
-									"Optimization",
-									"Testing",
-									"External testing",
 									"Pretraining",
-									"Fine-tuning"
+									"Training",
+									"Fine-tuning",
+									"Optimization",
+									"Validation",
+									"Testing",
+									"Internal testing",
+									"External testing"
 								]
 							}
 						},
