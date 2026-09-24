@@ -29,141 +29,7 @@
 			"uniqueItems": true,
 			"items": {
 				"type": "object",
-				"additionalProperties": false,
-				"allOf": [
-					{
-						"type": "object",
-						"additionalProperties": false,
-						"oneOf": [
-							{
-								"type": "object",
-								"properties": {
-									"System": {
-										"description": "The code system, e.g., SNOMED CT.",
-										"type": "string",
-										"enum": [
-											"DO",
-											"Gamuts",
-											"HPO",
-											"ICD-10",
-											"ICD-11",
-											"LOINC",
-											"NDC",
-											"NLM CDE",
-											"RadElement",
-											"RadLex",
-											"RxNorm",
-											"SNOMED CT"
-										]
-									},
-									"Code": {
-										"description": "The code ID.",
-										"type": "string",
-										"minLength": 1,
-										"maxLength": 16,
-										"examples": [
-											"RID123",
-											"RDE1063",
-											"12345-6"
-										]
-									}
-								},
-								"required": [
-									"System",
-									"Code"
-								],
-								"additionalProperties": false
-							},
-							{
-								"type": "object",
-								"properties": {
-									"Other system": {
-										"description": "A coding system not enumerated",
-										"type": "string",
-										"minLength": 1,
-										"maxLength": 64,
-										"examples": [
-											"MyCodes"
-										]
-									},
-									"Code": {
-										"description": "The code ID.",
-										"type": "string",
-										"minLength": 1,
-										"maxLength": 16,
-										"examples": [
-											"ABC123"
-										]
-									}
-								},
-								"required": [
-									"Other system",
-									"Code"
-								],
-								"additionalProperties": false,
-								"examples": [
-									{
-										"Other system": "MyCodes",
-										"Code": "ABC123"
-									}
-								]
-							},
-							{
-								"type": "object",
-								"properties": {
-									"URI": {
-										"description": "The unique identifire (IRI) of the code system and code.",
-										"type": "string",
-										"minLength": 1,
-										"maxLength": 256,
-										"format": "uri",
-										"examples": [
-											"https://radlex.org/RID/RID50685"
-										]
-									}
-								},
-								"required": [
-									"URI"
-								],
-								"additionalProperties": false
-							}
-						]
-					},
-					{
-						"type": "object",
-						"properties": {
-							"Label": {
-								"description": "The text label that describes the code",
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 128,
-								"examples": [
-									"diameter (cm)"
-								]
-							},
-							"Value": {
-								"description": "The value of the coded entity",
-								"type": [
-									"string",
-									"number"
-								],
-								"minLength": 1,
-								"maxLength": 128,
-								"examples": [
-									3.4
-								]
-							}
-						},
-						"additionalProperties": false
-					}
-				],
 				"examples": [
-					{
-						"System": "RadLex",
-						"Code": "RID50685",
-						"Label": "adrenal nodule",
-						"Value": 1.2
-					},
 					{
 						"System": "NLM CDE",
 						"Code": "yMHA1Nh14p9",
@@ -173,13 +39,137 @@
 					{
 						"Other system": "MyCodes",
 						"Code": "ABC123",
-						"Label": "An ID from an unenumerated coding scheme",
-						"Value": 1.2
+						"Label": "An ID from an unenumerated coding scheme"
 					},
 					{
 						"URI": "https://radelement.org/home/elements/element/RDE43",
 						"Label": "Adrenal nodule / Unenhanced attenuation",
 						"Value": "14 HU"
+					}
+				],
+				"oneOf": [
+					{
+						"properties": {
+							"System": {
+								"description": "The code system, e.g., SNOMED CT.",
+								"type": "string",
+								"enum": [
+									"CPT",
+									"DO",
+									"FMA",
+									"Gamuts",
+									"HPO",
+									"ICD-10",
+									"ICD-11",
+									"ICD-O-3",
+									"LOINC",
+									"NCIt",
+									"NDC",
+									"NLM CDE",
+									"RadElement",
+									"RadLex",
+									"RxNorm",
+									"SNOMED CT",
+									"UBERON"
+								]
+							},
+							"Code": {
+								"description": "The code ID.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 16
+							},
+							"Label": {
+								"description": "The text label that describes the code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128
+							},
+							"Value": {
+								"description": "The value of the coded entity",
+								"type": [
+									"string",
+									"number"
+								],
+								"minLength": 1,
+								"maxLength": 128
+							}
+						},
+						"required": [
+							"System",
+							"Code"
+						],
+						"additionalProperties": false
+					},
+					{
+						"properties": {
+							"Other system": {
+								"description": "A coding system not enumerated",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 64
+							},
+							"Code": {
+								"description": "The code ID.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 16
+							},
+							"Label": {
+								"description": "The text label that describes the code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128
+							},
+							"Value": {
+								"description": "The value of the coded entity",
+								"type": [
+									"string",
+									"number"
+								],
+								"minLength": 1,
+								"maxLength": 128
+							}
+						},
+						"required": [
+							"Other system",
+							"Code"
+						],
+						"additionalProperties": false
+					},
+					{
+						"type": "object",
+						"properties": {
+							"URI": {
+								"description": "The unique identifire (IRI) of the code system and code.",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 256,
+								"format": "uri",
+								"examples": [
+									"https://radlex.org/RID/RID50685"
+								]
+							},
+							"Label": {
+								"description": "The text label that describes the code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 128
+							},
+							"Value": {
+								"description": "The value of the coded entity",
+								"type": [
+									"string",
+									"number"
+								],
+								"minLength": 1,
+								"maxLength": 128
+							}
+						},
+						"required": [
+							"URI"
+						],
+						"additionalProperties": false
 					}
 				]
 			}
@@ -757,6 +747,7 @@
 								"enum": [
 									"AIR (AI Results)",
 									"AIW-I (AI Workflow for Imaging)",
+									"IRA (Integrated Reporting Applications)",
 									"SWF.b (Scheduled Workflow.b)",
 									"IOCM (Imaging Object Change Management)",
 									"XDS-I.b (Cross-Enterprise Document Sharing for Imaging)",
@@ -1114,6 +1105,7 @@
 				"properties": {
 					"Evaluation dataset": {
 						"description": "Data on which the model has been evaluated. One of more results (index text, value, confidence interval) for each dataset",
+						"$comment": "ROADMAP:03832",
 						"type": "object",
 						"minProperties": 1,
 						"maxProperties": 2,
@@ -1122,7 +1114,7 @@
 								"description": "Pointer to evaluation dataset (preferred)",
 								"type": "string",
 								"minLength": 1,
-								"maxLength": 128,
+								"maxLength": 256,
 								"format": "uri"
 							},
 							"Description": {
@@ -1169,9 +1161,6 @@
 			"minItems": 1,
 			"items": {
 				"description": "Tuple of index test, metric, value.",
-				"type": "object",
-				"minProperties": 1,
-				"additionalProperties": false,
 				"oneOf": [
 					{
 						"description": "A scalar-metric result.",
@@ -1756,7 +1745,7 @@
 									"description": "AI Act risk classification.",
 									"type": "string",
 									"enum": [
-										"High-risk (Article 6)",
+										"High risk (Article 6)",
 										"Limited risk",
 										"Minimal risk",
 										"General-purpose AI model",
@@ -1814,8 +1803,8 @@
 							},
 							"additionalProperties": false
 						},
-						"Harmonised standards applied": {
-							"description": "Lists the harmonised standards, common specifications, or other technical standards applied in developing and evaluating the model, or the solutions adopted to meet the applicable requirements in their absence.",
+						"Harmonized standards applied": {
+							"description": "Lists the harmonized standards, common specifications, or other technical standards applied in developing and evaluating the model, or the solutions adopted to meet the applicable requirements in their absence.",
 							"$comment": "ROADMAP:04116",
 							"type": "string",
 							"minLength": 1,
@@ -1902,7 +1891,6 @@
 					"$comment": "ROADMAP:04233",
 					"type": "object",
 					"minProperties": 1,
-					"additionalProperties": false,
 					"properties": {
 						"Monitoring program": {
 							"description": "Name of the real-world performance monitoring program or registry the model is enrolled in, if any, e.g. the ACR Assess-AI registry.",
@@ -1938,7 +1926,8 @@
 							"minLength": 2,
 							"maxLength": 512
 						}
-					}
+					},
+					"additionalProperties": false
 				},
 				"Bias mitigation approach": {
 					"description": "Describes the approach taken during model development to identify, manage, reduce, or eliminate bias, and to help ensure the model's output is fair across relevant subgroups.",
@@ -2241,8 +2230,8 @@
 						]
 					},
 					"PMCID": {
-						"description": "PubMed Central ID",
-						"$comment": "ROADMAP:04013, https://pmc.ncbi.nlm.nih.gov/articles/$/",
+						"description": "PubMed Central ID, either as a bare identifier (PMC8017407) or as a PMC article URL",
+						"$comment": "ROADMAP:04013",
 						"oneOf": [
 							{
 								"type": "string",
@@ -2257,10 +2246,10 @@
 								"type": "string",
 								"minLength": 1,
 								"maxLength": 128,
-								"pattern": "PMC[0-9]+",
+								"pattern": "https://pmc.ncbi.nlm.nih.gov/articles/PMC[0-9]+/?",
 								"format": "uri",
 								"examples": [
-									"PMC8017407"
+									"https://pmc.ncbi.nlm.nih.gov/articles/PMC8017407"
 								]
 							}
 						]
