@@ -50,6 +50,7 @@
 				],
 				"oneOf": [
 					{
+						"type": "object",
 						"properties": {
 							"System": {
 								"description": "The code system, e.g., SNOMED CT.",
@@ -103,6 +104,7 @@
 						"additionalProperties": false
 					},
 					{
+						"type": "object",
 						"properties": {
 							"Other system": {
 								"description": "A coding system not enumerated",
@@ -263,8 +265,8 @@
 				},
 				"License": {
 					"description": "License or rights to access this resource",
-					"type": "object",
 					"$comment": "ROADMAP:00068",
+					"type": "object",
 					"minProperties": 1,
 					"properties": {
 						"Text": {
@@ -420,7 +422,7 @@
 								"type": "string",
 								"minLength": 5,
 								"maxLength": 10,
-								"pattern": "RPID[0-9]+",
+								"pattern": "^RPID[0-9]+$",
 								"examples": [
 									"RPID145"
 								]
@@ -1153,7 +1155,6 @@
 					},
 					"Test type": {
 						"type": "string",
-						
 						"enum": [
 							"Internal",
 							"External",
@@ -1162,9 +1163,9 @@
 						]
 					},
 					"Testing agent": {
-						"type": "string",
 						"description": "Optional: Party that conducted external testing",
 						"$comment": "ROADMAP:01122",
+						"type": "string",
 						"minLength": 1,
 						"maxLength": 256
 					}
@@ -2143,7 +2144,7 @@
 					"type": "string",
 					"minLength": 1,
 					"maxLength": 40,
-					"pattern": "https://orcid.org/.+",
+					"pattern": "^(https?://orcid\\.org/)?\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dXx]$",
 					"format": "uri",
 					"examples": [
 						"https://orcid.org/0000-0000-0000-0000"
