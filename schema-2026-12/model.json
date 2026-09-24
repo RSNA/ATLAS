@@ -24,6 +24,7 @@
 	"additionalProperties": false,
 	"$defs": {
 		"Coded-data": {
+			"description": "An array of coded data attribute-value items, each using an enumerated code system, a specified 'Other system', or a direct URI to the system and code ID.",
 			"type": "array",
 			"minItems": 1,
 			"uniqueItems": true,
@@ -31,7 +32,7 @@
 				"type": "object",
 				"examples": [
 					{
-						"System": "NLM CDE",
+						"System": "NIH CDE",
 						"Code": "yMHA1Nh14p9",
 						"Label": "Echocardiogram degree of aortic regurgitation status",
 						"Value": "Mild"
@@ -65,7 +66,7 @@
 									"LOINC",
 									"NCIt",
 									"NDC",
-									"NLM CDE",
+									"NIH CDE",
 									"RadElement",
 									"RadLex",
 									"RxNorm",
@@ -141,7 +142,7 @@
 						"type": "object",
 						"properties": {
 							"URI": {
-								"description": "The unique identifire (IRI) of the code system and code.",
+								"description": "The unique identifier (URI) of the code system and code.",
 								"type": "string",
 								"minLength": 1,
 								"maxLength": 256,
@@ -262,6 +263,7 @@
 				},
 				"License": {
 					"description": "License or rights to access this resource",
+					"type": "object",
 					"$comment": "ROADMAP:00068",
 					"minProperties": 1,
 					"properties": {
@@ -271,11 +273,12 @@
 							"minLength": 2,
 							"maxLength": 512,
 							"examples": [
-								"Non-commercial use"
+								"Non-commercial use",
+								"CC 4.0 BY-NC-ND"
 							]
 						},
-						"URL": {
-							"description": "URL pointing to the full text of the license.",
+						"URI": {
+							"description": "URI pointing to the full text of the license.",
 							"type": "string",
 							"minLength": 2,
 							"maxLength": 512,
@@ -1150,16 +1153,20 @@
 					},
 					"Test type": {
 						"type": "string",
+						
 						"enum": [
-							"Internal", 
+							"Internal",
 							"External",
 							"Local",
 							"Prospective"
 						]
 					},
-					"Tested by": {
+					"Testing agent": {
 						"type": "string",
-						"description": "Optional: Party that conducted external testing"
+						"description": "Optional: Party that conducted external testing",
+						"$comment": "ROADMAP:01122",
+						"minLength": 1,
+						"maxLength": 256
 					}
 				},
 				"required": [
@@ -1439,13 +1446,8 @@
 							"maxLength": 512
 						},
 						"Coded data": {
-							"description": "An array of coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
-							"type": "array",
-							"minItems": 1,
-							"uniqueItems": true,
-							"items": {
-								"$ref": "#/$defs/Coded-data"
-							}
+							"description": "Coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
+							"$ref": "#/$defs/Coded-data"
 						}
 					},
 					"additionalProperties": false
@@ -1490,13 +1492,8 @@
 							]
 						},
 						"Coded data": {
-							"description": "An array of coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
-							"type": "array",
-							"minItems": 1,
-							"uniqueItems": true,
-							"items": {
-								"$ref": "#/$defs/Coded-data"
-							}
+							"description": "Coded data elements using RadLex, RadElement, SNOMED CT, LOINC, etc.",
+							"$ref": "#/$defs/Coded-data"
 						}
 					},
 					"additionalProperties": false
@@ -2245,28 +2242,14 @@
 						]
 					},
 					"PMCID": {
-						"description": "PubMed Central ID, either as a bare identifier (PMC8017407) or as a PMC article URL",
+						"description": "PubMed Central ID (e.g., PMC8017407)",
 						"$comment": "ROADMAP:04013",
-						"oneOf": [
-							{
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 32,
-								"pattern": "PMC[0-9]+",
-								"examples": [
-									"PMC8017407"
-								]
-							},
-							{
-								"type": "string",
-								"minLength": 1,
-								"maxLength": 128,
-								"pattern": "https://pmc.ncbi.nlm.nih.gov/articles/PMC[0-9]+/?",
-								"format": "uri",
-								"examples": [
-									"https://pmc.ncbi.nlm.nih.gov/articles/PMC8017407"
-								]
-							}
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 32,
+						"pattern": "^PMC[0-9]+$",
+						"examples": [
+							"PMC8017407"
 						]
 					},
 					"Notes": {
