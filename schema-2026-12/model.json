@@ -1147,6 +1147,19 @@
 						"type": "string",
 						"minLength": 1,
 						"maxLength": 512
+					},
+					"Test type": {
+						"type": "string",
+						"enum": [
+							"Internal", 
+							"External",
+							"Local",
+							"Prospective"
+						]
+					},
+					"Tested by": {
+						"type": "string",
+						"description": "Optional: Party that conducted external testing"
 					}
 				},
 				"required": [
@@ -1387,7 +1400,7 @@
 					"maxLength": 512
 				},
 				"Clinical workflow phase": {
-					"description": "Clinical workflow phase (e.g., patient pre-registration, digitization of forms or clinical  scales, patients’ triage, telehealth & virtual rounds, clinical decision support systems, workflow optimization, evidence-based methods to optimize medical interventions, feedback from users).",
+					"description": "Clinical workflow phase (e.g., patient pre-registration, digitization of forms or clinical  scales, patients' triage, telehealth & virtual rounds, clinical decision support systems, workflow optimization, evidence-based methods to optimize medical interventions, feedback from users).",
 					"$comment": "ROADMAP:03613",
 					"type": "string",
 					"minLength": 2,
@@ -2339,7 +2352,7 @@
 				"cross-entropy",
 				"cumulative gain",
 				"cumulative hazard",
-				"Damerau–Levenshtein distance",
+				"Damerau-Levenshtein distance",
 				"Davies-Bouldin index",
 				"demographic parity",
 				"density-based clustering validation",
@@ -2380,14 +2393,14 @@
 				"Fowlkes-Mallows index",
 				"fraction of cases with user adjustment",
 				"free-response receiver operating characteristic score",
-				"Fréchet inception distance",
+				"Frechet inception distance",
 				"gain-to-pain ratio",
 				"global consistency error",
 				"GREEN",
 				"group fairness",
 				"Gunning Fog index",
 				"Hamming distance",
-				"Harrell’s C-index",
+				"Harrell's C-index",
 				"Hausdorff distance",
 				"hazard ratio",
 				"Hopkins statistic",
