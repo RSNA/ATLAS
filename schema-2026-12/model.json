@@ -1322,6 +1322,7 @@
 			}
 		},
 		"Model-properties": {
+			"description": "Characteristics of the model",
 			"$comment": "ROADMAP:03355",
 			"type": "object",
 			"minProperties": 1,
@@ -2092,6 +2093,26 @@
 			},
 			"additionalProperties": false
 		},
+		"Nonscalar-metric": {
+			"description": "Enumerated list of graphical and matrix metrics",
+			"$comment": "ROADMAP:03778",
+			"type": "string",
+			"enum": [
+				"AFROC curve",
+				"binary confusion matrix",
+				"Bland-Altman analysis",
+				"calibration curve",
+				"confusion matrix",
+				"FROC curve",
+				"Fry graph",
+				"localization ROC curve",
+				"multi-class confusion matrix",
+				"parametric hazard model",
+				"precision-recall curve",
+				"ROC curve",
+				"time-dependent ROC curve"
+			]
+		},
 		"Org": {
 			"title": "Organization description",
 			"description": "Details for each organization",
@@ -2151,6 +2172,78 @@
 				"Name"
 			],
 			"additionalProperties": false
+		},
+		"Outcome-counts": {
+			"description": "List of outcome counts, which populate the cells and marginal totals of a binary confusion matrix",
+			"$comment": "ROADMAP:04090",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Total": {
+					"description": "Total outcome count (n)",
+					"$comment": "ROADMAP:04099",
+					"type": "integer",
+					"minimum": 0
+				},
+				"N": {
+					"description": "Condition negative count (N)",
+					"$comment": "ROADMAP:04096",
+					"type": "integer",
+					"minimum": 0
+				},
+				"P": {
+					"description": "Condition positive count (P)",
+					"$comment": "ROADMAP:04095",
+					"type": "integer",
+					"minimum": 0
+				},
+				"FN": {
+					"description": "False negative count (FN)",
+					"$comment": "ROADMAP:04094",
+					"type": "integer",
+					"minimum": 0
+				},
+				"FP": {
+					"description": "False positive count (FP)",
+					"$comment": "ROADMAP:04092",
+					"type": "integer",
+					"minimum": 0
+				},
+				"PN": {
+					"description": "Prediction negative count (PN)",
+					"$comment": "ROADMAP:04098",
+					"type": "integer",
+					"minimum": 0
+				},
+				"PP": {
+					"description": "Prediction positive count (PP)",
+					"$comment": "ROADMAP:04097",
+					"type": "integer",
+					"minimum": 0
+				},
+				"TN": {
+					"description": "True negative count (TN)",
+					"$comment": "ROADMAP:04093",
+					"type": "integer",
+					"minimum": 0
+				},
+				"TP": {
+					"description": "True positive count (TP)",
+					"$comment": "ROADMAP:04091",
+					"type": "integer",
+					"minimum": 0
+				}
+			},
+			"additionalProperties": false,
+			"examples": [
+				{
+					"Total": 150,
+					"P": 101,
+					"N": 49,
+					"TP": 90,
+					"FP": 11
+				}
+			]
 		},
 		"Person": {
 			"description": "Description for individual Person",
@@ -2304,26 +2397,6 @@
 				"additionalProperties": false
 			}
 		},
-		"Nonscalar-metric": {
-			"description": "Enumerated list of graphical and matrix metrics.",
-			"$comment": "ROADMAP:03778",
-			"type": "string",
-			"enum": [
-				"AFROC curve",
-				"binary confusion matrix",
-				"Bland-Altman analysis",
-				"calibration curve",
-				"confusion matrix",
-				"FROC curve",
-				"Fry graph",
-				"localization ROC curve",
-				"multi-class confusion matrix",
-				"parametric hazard model",
-				"precision-recall curve",
-				"ROC curve",
-				"time-dependent ROC curve"
-			]
-		},
 		"Scalar-metric": {
 			"description": "Enumerated list of scalar metrics. The list includes sensitivity, specificity, precision, and recall as frequently-used terms; they all are alternate terms (e.g., for true positive rate).",
 			"$comment": "ROADMAP:03302",
@@ -2341,6 +2414,8 @@
 				"AUC of each class vs. each of the other k-1 classes",
 				"AUC of each class vs. the rest combined",
 				"automated readability index",
+				"average cohort clustering objective cost",
+				"average distance from the center",
 				"average Hausdorff distance",
 				"average precision",
 				"average symmetric surface distance",
@@ -2365,8 +2440,6 @@
 				"competition performance metric",
 				"concordance correlation coefficient",
 				"concordance index",
-				"condition negative count",
-				"condition positive count",
 				"conditional entropy",
 				"contrast-to-noise ratio",
 				"counterfactual fairness",
@@ -2394,17 +2467,17 @@
 				"entropy",
 				"equality of opportunity",
 				"equalized odds",
+				"error type ratio",
 				"expected calibration error with kernel density estimate",
 				"expected calibration error",
 				"expected cost",
+				"expected value",
 				"F(beta) score",
 				"F1 score",
 				"F2 score",
 				"false discovery rate",
-				"false negative count",
 				"false negative rate",
 				"false omission rate",
-				"false positive count",
 				"false positive rate",
 				"false positives per image",
 				"false referral rate",
@@ -2414,8 +2487,8 @@
 				"FORCAST readability estimate",
 				"Fowlkes-Mallows index",
 				"fraction of cases with user adjustment",
-				"free-response receiver operating characteristic score",
 				"Frechet inception distance",
+				"free-response receiver operating characteristic score",
 				"gain-to-pain ratio",
 				"global consistency error",
 				"GREEN",
@@ -2438,6 +2511,7 @@
 				"Jaro distance",
 				"Kendall's tau coefficient",
 				"kernel calibration error",
+				"Kolmogorov-Smirnov distance",
 				"Kullback-Leibler divergence",
 				"lenient accuracy",
 				"Levenshtein distance",
@@ -2445,6 +2519,7 @@
 				"location recall precision error",
 				"log-risk score",
 				"longest common subsequence",
+				"loss",
 				"macro average mean probability rate",
 				"macro-F1",
 				"macro-precision",
@@ -2477,6 +2552,7 @@
 				"negative likelihood ratio",
 				"negative log likelihood",
 				"negative percent agreement",
+				"negative prediction rate",
 				"negative predictive value",
 				"net benefit",
 				"normalized compression distance",
@@ -2489,6 +2565,7 @@
 				"observed-to-expected ratio",
 				"Obuchowski index",
 				"P4 metric",
+				"pairwise difference",
 				"panoptic quality",
 				"partial area under the receiver operating characteristic curve",
 				"peak signal-to-noise ratio",
@@ -2499,11 +2576,11 @@
 				"point inside mask/box/approximation",
 				"positive likelihood ratio",
 				"positive percent agreement",
+				"positive prediction rate",
 				"positive predictive value",
 				"precision",
-				"prediction negative count",
-				"prediction positive count",
 				"prediction probability",
+				"prevalence",
 				"R-squared",
 				"RadCliQ",
 				"RadGraph-F1",
@@ -2545,10 +2622,7 @@
 				"top-10 accuracy",
 				"top-5 accuracy",
 				"top-n accuracy",
-				"total outcome count",
-				"true negative count",
 				"true negative rate",
-				"true positive count",
 				"true positive rate",
 				"uncertainty associated with user interaction",
 				"Uno's C-index",
@@ -2667,68 +2741,6 @@
 				"Researcher",
 				"Subspecialist diagnostic radiologist"
 			]
-		},
-		"Outcome-counts": {
-			"description": "List of outcome counts, which populate the cells and marginal totals of a binary confusion matrix",
-			"$comment": "ROADMAP:04090",
-			"type": "object",
-			"properties": {
-				"Total": {
-					"description": "Total outcome count (n)",
-					"$comment": "ROADMAP:04099",
-					"type": "integer",
-					"minimum": 0
-				},
-				"N": {
-					"description": "Condition negative count (N)",
-					"$comment": "ROADMAP:04096",
-					"type": "integer",
-					"minimum": 0
-				},
-				"P": {
-					"description": "Condition positive count (P)",
-					"$comment": "ROADMAP:04095",
-					"type": "integer",
-					"minimum": 0
-				},
-				"FN": {
-					"description": "False negative count (FN)",
-					"$comment": "ROADMAP:04094",
-					"type": "integer",
-					"minimum": 0
-				},
-				"FP": {
-					"description": "False positive count (FP)",
-					"$comment": "ROADMAP:04092",
-					"type": "integer",
-					"minimum": 0
-				},
-				"PN": {
-					"description": "Prediction negative count (PN)",
-					"$comment": "ROADMAP:04098",
-					"type": "integer",
-					"minimum": 0
-				},
-				"PP": {
-					"description": "Prediction positive count (PP)",
-					"$comment": "ROADMAP:04097",
-					"type": "integer",
-					"minimum": 0
-				},
-				"TN": {
-					"description": "True negative count (TN)",
-					"$comment": "ROADMAP:04093",
-					"type": "integer",
-					"minimum": 0
-				},
-				"TP": {
-					"description": "True positive count (TP)",
-					"$comment": "ROADMAP:04091",
-					"type": "integer",
-					"minimum": 0
-				}
-			},
-			"additionalProperties": false
 		}
 	}
 }
