@@ -619,8 +619,9 @@
 					}
 				},
 				"SNOMED": {
-					"description": "Array of SNOMED CT concept identifiers (SCTIDs). Integer values are allowed up to 11 digits, which addresses concepts from the International Release. National or local extensions require string values to avoid possibly imprecise interpretation of large integer values.",
+					"description": "Array of SNOMED CT concept identifiers (SCTIDs). Integer values are allowed up to 11 digits, which addresses concepts from the International Release. National or local extensions require string values to avoid possibly imprecise interpretation of large integer values. IMPORTANT: The string values are the canonical format; the integer format will be dropped in the next version.",
 					"$comment": "ROADMAP:03625, https://lookup.snomedtools.org/$",
+			
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -633,7 +634,8 @@
 						"anyOf": [
 							{
 								"type": "string",
-								"pattern": "^[1-9][0-9]{5,17}$"
+								"pattern": "^[1-9][0-9]{5,17}$",
+								"minLength": 6
 							},
 							{
 								"type": "integer",
