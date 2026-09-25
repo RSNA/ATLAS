@@ -485,10 +485,10 @@
 					"maxLength": 256
 				},
 				"Comments": {
-					"description": "Use this field to specify a file format of type 'Other'.",
+					"description": "Text comments about imaging data. Use this field to specify a file format of type 'Other'.",
 					"type": "string",
 					"minLength": 2,
-					"maxLength": 256
+					"maxLength": 512
 				},
 				"Acquisition": {
 					"description": "Describes the imaging acquisition equipment and parameters used to obtain the images, such as scanner manufacturer, model, field strength, detector configuration, slice thickness, or reconstruction kernel.",
@@ -1091,9 +1091,14 @@
 									"Fine-tuning",
 									"Optimization",
 									"Validation",
+									"Tuning",
 									"Testing",
 									"Internal testing",
-									"External testing"
+									"External testing",
+									"Hold-out",
+									"Development",
+									"Test",
+									"Other"
 								]
 							}
 						},

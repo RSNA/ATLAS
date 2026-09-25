@@ -495,10 +495,17 @@
 					"items": {
 						"type": "string",
 						"enum": [
+							"BIDS",
 							"DICOM",
 							"JPEG",
+							"MINC",
+							"MPEG",
+							"NDPI",
 							"NiFTI",
+							"NRRD",
 							"PNG",
+							"SVS",
+							"WSI",
 							"Other"
 						]
 					}
@@ -528,6 +535,7 @@
 					]
 				},
 				"Comments": {
+					"description": "Text comments about imaging data. Use this field to specify a file format of type 'Other'",
 					"$comment": "ROADMAP:00070",
 					"type": "string",
 					"minLength": 1,
@@ -774,12 +782,15 @@
 						"description": "Partition name or type",
 						"type": "string",
 						"enum": [
+							"Pretraining",
 							"Training",
+							"Fine-tuning",
 							"Optimization",
 							"Validation",
+							"Tuning",
+							"Testing",
 							"Internal testing",
 							"External testing",
-							"Tuning",
 							"Hold-out",
 							"Development",
 							"Test",
