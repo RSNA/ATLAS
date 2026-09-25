@@ -220,7 +220,7 @@
 				"2025-01-01",
 				2025
 			],
-			"anyOf": [
+			"oneOf": [
 				{
 					"type": "string",
 					"minLength": 1,
@@ -230,7 +230,7 @@
 				{
 					"type": "integer",
 					"minimum": 1900,
-					"maximum": 2200
+					"maximum": 2100
 				}
 			]
 		},
@@ -250,15 +250,17 @@
 					}
 				},
 				"Comments": {
+					"description": "Textual comments about the model, dataset, or project.",
 					"$comment": "ROADMAP:00070",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"Contact": {
+					"description": "Physical address or email address of a contact.",
 					"$comment": "ROADMAP:00069",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"Date": {
@@ -288,13 +290,13 @@
 				"Ethical review": {
 					"$comment": "ROADMAP:03418",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"Funding": {
 					"$comment": "ROADMAP:03385",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"License": {
@@ -306,16 +308,17 @@
 						"Text": {
 							"description": "Textual name or description of the license.",
 							"type": "string",
-							"minLength": 1,
+							"minLength": 2,
 							"maxLength": 512,
 							"examples": [
-								"Non-commercial use"
+								"Non-commercial use",
+								"CC 4.0 BY-NC-ND"
 							]
 						},
 						"URL": {
 							"description": "URL pointing to the full text of the license.",
 							"type": "string",
-							"minLength": 1,
+							"minLength": 2,
 							"maxLength": 512,
 							"format": "uri",
 							"examples": [
@@ -343,7 +346,7 @@
 					"description": "Version designation of this resource",
 					"$comment": "ROADMAP:00066",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 128
 				}
 			},
@@ -358,6 +361,7 @@
 					"description": "List of imaging modalities used to acquire the dataset's images.",
 					"type": "array",
 					"minItems": 1,
+					"uniqueItems": true,
 					"items": {
 						"description": "List of imaging modalities; requires value(s) from RadLex (RID10311)",
 						"$comment": "ROADMAP:00120, RadLex:RID10311",
@@ -455,7 +459,7 @@
 								"type": "string",
 								"minLength": 5,
 								"maxLength": 10,
-								"pattern": "RPID[0-9]+",
+								"pattern": "^RPID[0-9]+$",
 								"examples": [
 									"RPID145"
 								]
@@ -492,13 +496,21 @@
 					"$comment": "ROADMAP:00059",
 					"type": "array",
 					"minItems": 1,
+					"uniqueItems": true,
 					"items": {
 						"type": "string",
 						"enum": [
+							"BIDS",
 							"DICOM",
 							"JPEG",
+							"MINC",
+							"MPEG",
+							"NDPI",
 							"NiFTI",
+							"NRRD",
 							"PNG",
+							"SVS",
+							"WSI",
 							"Other"
 						]
 					}
@@ -507,7 +519,7 @@
 					"description": "Describes whether the dataset used original or down-sampled images.",
 					"$comment": "ROADMAP:00123",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"Pre-processing": {
@@ -530,7 +542,7 @@
 				"Comments": {
 					"$comment": "ROADMAP:00070",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"Acquisition": {
@@ -663,7 +675,7 @@
 						"type": "string",
 						"minLength": 4,
 						"maxLength": 12,
-						"pattern": "RID[0-9]+",
+						"pattern": "^RID[0-9]+$",
 						"examples": [
 							"RID58",
 							"RID1169"
@@ -671,18 +683,28 @@
 					}
 				},
 				"SNOMED": {
-					"description": "Array of SNOMED CT codes",
-					"$comment": "ROADMAP:03625",
+					"description": "Array of SNOMED CT concept identifiers (SCTIDs). Integer values are allowed up to 11 digits, which addresses concepts from the International Release. National or local extensions require string values to avoid possibly imprecise interpretation of large integer values. IMPORTANT: The string values are the canonical format; the integer format will be dropped in the next version.",
+					"$comment": "ROADMAP:03625, https://lookup.snomedtools.org/$",
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
 					"items": {
-						"$comment": "https://lookup.snomedtools.org/$",
-						"type": "integer",
-						"maxLength": 12,
 						"examples": [
 							10200004,
-							441802002
+							"441802002",
+							"999000011000000103"
+						],
+						"anyOf": [
+							{
+								"type": "string",
+								"pattern": "^[1-9][0-9]{5,17}$",
+								"minLength": 6
+							},
+							{
+								"type": "integer",
+								"minimum": 100000,
+								"maximum": 99999999999
+							}
 						]
 					}
 				},
@@ -711,7 +733,7 @@
 				"Name": {
 					"description": "Name of organization",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 128,
 					"examples": [
 						"RSNA"
@@ -720,7 +742,7 @@
 				"Contact name": {
 					"description": "Name or role of organizational contact",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512,
 					"examples": [
 						"Informatics Department"
@@ -729,7 +751,7 @@
 				"Email": {
 					"description": "Organization's email address",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 128,
 					"format": "email",
 					"examples": [
@@ -739,7 +761,7 @@
 				"Address": {
 					"description": "Organizations's physical (real-world) address",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512,
 					"examples": [
 						"820 Jorie Blvd, Oak Brook, IL 60523-2251, USA"
@@ -748,7 +770,7 @@
 				"URL": {
 					"description": "Organization's website URL",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 128,
 					"format": "uri",
 					"examples": [
@@ -802,7 +824,7 @@
 						"description": "Additional notes about this partition, such as sampling methodology, special characteristics, or clarifications",
 						"$comment": "ROADMAP:00070",
 						"type": "string",
-						"minLength": 1,
+						"minLength": 2,
 						"maxLength": 512,
 						"examples": [
 							"Stratified by sex and view position",
@@ -864,7 +886,7 @@
 						]
 					},
 					{
-						"Partition": "Testing",
+						"Partition": "Test",
 						"Total": {
 							"Patient count": 200,
 							"Image count": 200
@@ -892,20 +914,20 @@
 				"Name": {
 					"description": "The person's name",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 128
 				},
 				"Email": {
 					"description": "Person's email address",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 128,
 					"format": "email"
 				},
 				"Address": {
 					"description": "Person's physical (real-world) address",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"ORCID": {
@@ -913,7 +935,7 @@
 					"type": "string",
 					"minLength": 1,
 					"maxLength": 40,
-					"pattern": "https://orcid.org/.+",
+					"pattern": "^https?://orcid\\.org/\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dXx]$",
 					"format": "uri",
 					"examples": [
 						"https://orcid.org/0000-0000-0000-0000"
@@ -922,7 +944,7 @@
 				"URL": {
 					"description": "Person's website or profile URL",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 128,
 					"format": "uri"
 				}
@@ -944,7 +966,7 @@
 					"Authors": {
 						"description": "Author names",
 						"type": "string",
-						"minLength": 1,
+						"minLength": 2,
 						"maxLength": 512,
 						"examples": [
 							"Rudie JD, et al."
@@ -953,7 +975,7 @@
 					"Title": {
 						"description": "Reference title",
 						"type": "string",
-						"minLength": 1,
+						"minLength": 2,
 						"maxLength": 512,
 						"examples": [
 							"The RSNA Abdominal Traumatic Injury CT (RATIC) Dataset"
@@ -962,7 +984,7 @@
 					"Source": {
 						"description": "Name of journal, book, or other source; or full citation (see example)",
 						"type": "string",
-						"minLength": 1,
+						"minLength": 2,
 						"maxLength": 512,
 						"examples": [
 							"Radiology: Artificial Intelligence",
@@ -973,21 +995,29 @@
 						"description": "Year or date of publication",
 						"$ref": "#/$defs/Date"
 					},
+					"Clinical trial": {
+						"description": "A clinical trial identifier or URL, such as issued by ClinicalTrials.gov",
+						"$comment": "ROADMAP:03623",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 128
+					},
 					"DOI": {
 						"description": "Digital Object Identifer (DOI)",
 						"$comment": "ROADMAP:04003, https://doi.org/$",
 						"type": "string",
-						"minLength": 1,
+						"minLength": 8,
 						"maxLength": 128,
-						"pattern": "[0-9]+\\.[0-9]+/.+",
+						"pattern": "^10\\.[0-9]{4,9}(\\.[0-9]+)?/\\S+$",
 						"examples": [
 							"10.1148/ryai.240101"
 						]
 					},
 					"URL": {
 						"description": "Pointer to online reference",
+						"$comment": "ROADMAP:04014",
 						"type": "string",
-						"minLength": 1,
+						"minLength": 2,
 						"maxLength": 128,
 						"format": "uri",
 						"examples": [
@@ -998,6 +1028,8 @@
 						"description": "PubMed ID",
 						"$comment": "ROADMAP:04004, https://pubmed.ncbi.nlm.nih.gov/$/",
 						"type": "integer",
+						"minimum": 1,
+						"maximum": 9999999999,
 						"examples": [
 							39441109
 						]
@@ -1008,7 +1040,7 @@
 						"type": "string",
 						"minLength": 1,
 						"maxLength": 32,
-						"pattern": "PMC[0-9]+",
+						"pattern": "^PMC[0-9]+$",
 						"examples": [
 							"PMC8017407"
 						]
@@ -1016,7 +1048,7 @@
 					"Notes": {
 						"description": "Additional notes about the reference.",
 						"type": "string",
-						"minLength": 1,
+						"minLength": 2,
 						"maxLength": 512
 					}
 				},
@@ -1078,8 +1110,7 @@
 							{
 								"description": "Value",
 								"type": "integer",
-								"minimum": 0,
-								"maximum": 240
+								"minimum": 0
 							}
 						],
 						"items": {
@@ -1091,6 +1122,59 @@
 								"years"
 							]
 						},
+						"allOf": [
+							{
+								"if": {
+									"prefixItems": [
+										true,
+										{
+											"const": "days"
+										}
+									]
+								},
+								"then": {
+									"prefixItems": [
+										{
+											"maximum": 47450
+										}
+									]
+								}
+							},
+							{
+								"if": {
+									"prefixItems": [
+										true,
+										{
+											"const": "months"
+										}
+									]
+								},
+								"then": {
+									"prefixItems": [
+										{
+											"maximum": 1560
+										}
+									]
+								}
+							},
+							{
+								"if": {
+									"prefixItems": [
+										true,
+										{
+											"const": "years"
+										}
+									]
+								},
+								"then": {
+									"prefixItems": [
+										{
+											"maximum": 130
+										}
+									]
+								}
+							}
+						],
 						"examples": [
 							[
 								10,
@@ -1169,8 +1253,9 @@
 				},
 				"Comments": {
 					"description": "Additional notes or clarifications about this data subset",
+					"$comment": "ROADMAP:00070",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512,
 					"examples": [
 						"Median age 127 months",
