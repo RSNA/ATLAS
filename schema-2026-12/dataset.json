@@ -459,7 +459,7 @@
 								"type": "string",
 								"minLength": 5,
 								"maxLength": 10,
-								"pattern": "RPID[0-9]+",
+								"pattern": "^RPID[0-9]+$",
 								"examples": [
 									"RPID145"
 								]
@@ -519,7 +519,7 @@
 					"description": "Describes whether the dataset used original or down-sampled images.",
 					"$comment": "ROADMAP:00123",
 					"type": "string",
-					"minLength": 1,
+					"minLength": 2,
 					"maxLength": 512
 				},
 				"Pre-processing": {
@@ -886,7 +886,7 @@
 						]
 					},
 					{
-						"Partition": "Testing",
+						"Partition": "Test",
 						"Total": {
 							"Patient count": 200,
 							"Image count": 200
