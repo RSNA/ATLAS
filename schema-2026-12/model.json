@@ -2379,6 +2379,7 @@
 						"description": "PubMed ID",
 						"$comment": "ROADMAP:04004, https://pubmed.ncbi.nlm.nih.gov/$/",
 						"type": "integer",
+						"minimum": 1,
 						"maximum": 9999999999,
 						"examples": [
 							39441109
