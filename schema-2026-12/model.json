@@ -621,7 +621,6 @@
 				"SNOMED": {
 					"description": "Array of SNOMED CT concept identifiers (SCTIDs). Integer values are allowed up to 11 digits, which addresses concepts from the International Release. National or local extensions require string values to avoid possibly imprecise interpretation of large integer values. IMPORTANT: The string values are the canonical format; the integer format will be dropped in the next version.",
 					"$comment": "ROADMAP:03625, https://lookup.snomedtools.org/$",
-			
 					"type": "array",
 					"minItems": 1,
 					"uniqueItems": true,
@@ -1904,13 +1903,18 @@
 				"Distribution form": {
 					"description": "The form(s) in which the model is placed on the market or put into service.",
 					"$comment": "ROADMAP:04117",
-					"type": "string",
-					"enum": [
-						"Software embedded in hardware",
-						"Software download",
-						"API",
-						"Cloud service"
-					]
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"enum": [
+							"Software embedded in hardware",
+							"Software download",
+							"API",
+							"Cloud service"
+						]
+					}
 				},
 				"User interface": {
 					"description": "A basic description of the user interface provided to the deployer for interacting with the model's outputs.",
