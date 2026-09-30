@@ -633,8 +633,8 @@
 						"anyOf": [
 							{
 								"type": "string",
-								"pattern": "^[1-9][0-9]{5,17}$",
-								"minLength": 6
+								"minLength": 6,
+								"pattern": "^[1-9][0-9]{5,17}$"
 							},
 							{
 								"type": "integer",
@@ -2559,7 +2559,6 @@
 				"multi-modal concordance",
 				"multiclass Brier score",
 				"mutual information",
-				"NDGC@k",
 				"negative discordance rate",
 				"negative likelihood ratio",
 				"negative log likelihood",
@@ -2569,6 +2568,7 @@
 				"net benefit",
 				"normalized compression distance",
 				"normalized discounted cumulative gain",
+				"normalized discounted cumulative gain at k",
 				"normalized information distance",
 				"normalized mutual information",
 				"normalized surface distance",
