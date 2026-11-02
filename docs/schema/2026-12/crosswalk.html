@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS Crosswalk: CHAI, Hugging Face, ACR</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<main class="changelog">
+	<div class="breadcrumb"><a href="../../">ATLAS schemas</a> / <a href="./">2026-12</a> / crosswalk</div>
+	<h1>ATLAS Crosswalk: CHAI, Hugging Face, and ACR AI Documentation Standards</h1>
+	<p class="subtitle">This document maps the ATLAS 2026-12 schemas (<code>model.json</code>,
+		<code>dataset.json</code>) against four other AI model/dataset documentation efforts: the
+		Coalition for Health AI (CHAI)'s <strong>Applied Model Card</strong>, <strong>Hugging
+		Face</strong>'s Model Card and Dataset Card metadata, the <strong>American College of
+		Radiology (ACR)</strong>'s Assess-AI registry and AI Central directory, and the foundational
+		<strong>Google Model Cards</strong> framework (Mitchell et al., 2019) that both ATLAS's and
+		CHAI's field vocabularies descend from.</p>
+
+	<h2>Methodology and source confidence</h2>
+	<p>Findings below come from three dedicated research passes (one per standard) plus the
+		author's own work on ATLAS. Network access in this environment blocked several primary
+		domains (<code>arxiv.org</code>, <code>research.google</code>,
+		<code>chai.org</code>/<code>mc.chai.org</code>/<code>registry.chai.org</code>,
+		<code>acr.org</code> and its subdomains), so confidence varies by standard — stated
+		explicitly so this document doesn't imply more certainty than the sources support:</p>
+	<table>
+		<tr><th>Standard</th><th>Primary source actually read</th><th>Confidence</th></tr>
+		<tr>
+			<td><strong>CHAI Applied Model Card</strong></td>
+			<td>The published XML Schema (<code>.xsd</code>, v0.1 and v0.2) and a real example
+				instance, via CHAI's GitHub mirror (<code>coalition-for-health-ai/mc-schema</code>)</td>
+			<td>High on field <em>names</em> and structure; the one-line descriptions below are
+				inferred from element names and the one example read, since CHAI's own
+				<code>DOCUMENTATION.md</code> has no per-field prose</td>
+		</tr>
+		<tr>
+			<td><strong>Hugging Face</strong></td>
+			<td><code>modelcard.md</code>, <code>datasetcard.md</code>, and the Hub's model-card/
+				dataset-card/eval-results guides, direct from the <code>huggingface/hub-docs</code>
+				source repo</td>
+			<td>High — this is the Hub's own documented contract, confirmed field-by-field</td>
+		</tr>
+		<tr>
+			<td><strong>ACR (Assess-AI / AI Central)</strong></td>
+			<td>Secondary: ACR's own web pages and press releases, via search-result snippets (the
+				actual Data Dictionary and Ingest Specification PDFs are gated/not directly
+				fetchable here)</td>
+			<td><strong>Category-level only.</strong> Program purpose and broad data categories are
+				confirmed from ACR's own statements; exact field-level names are not confirmed —
+				flagged per item below</td>
+		</tr>
+		<tr>
+			<td><strong>Google Model Cards</strong></td>
+			<td>Secondary sources corroborating the paper's structure (the original paper,
+				<code>arXiv:1810.03993</code>, was not directly fetchable in this environment)</td>
+			<td>Section list is consistent across multiple independent secondary sources and
+				matches the well-established secondary literature, but is not a direct quote from
+				the paper</td>
+		</tr>
+	</table>
+	<p>Where a cell below says "not found" or "no analog," that means the researcher didn't find it
+		in the available material — not that it's proven absent from the standard.</p>
+
+	<h2>What each standard actually is</h2>
+	<p>These four are not all the same <em>kind</em> of artifact, which matters for reading the
+		tables below:</p>
+	<ul>
+		<li><strong>ATLAS</strong> (<code>model.json</code>/<code>dataset.json</code>) — a formal
+			<strong>JSON Schema</strong>, authored per model/dataset, with three conformance
+			profiles (minimal, procurement-ready, regulatory-ready).</li>
+		<li><strong>CHAI Applied Model Card</strong> — a formal <strong>XML Schema</strong>,
+			authored per deployed health-AI application (explicitly scoped to "the application in
+			a health use case," not a bare model; CHAI recommends a revised card when the
+			underlying system changes, e.g. swapping foundation models). Still self-labeled "draft"
+			as of the version read. Source:
+			<a href="https://github.com/coalition-for-health-ai/mc-schema">coalition-for-health-ai/mc-schema</a>.</li>
+		<li><strong>Hugging Face Model/Dataset Cards</strong> — YAML frontmatter in a repo's
+			<code>README.md</code>, validated server-side at push time against a documented (but
+			not formally schema'd) contract, plus a Mitchell-et-al.-based prose template for
+			everything the YAML doesn't cover. Source:
+			<a href="https://github.com/huggingface/hub-docs">huggingface/hub-docs</a>.</li>
+		<li><strong>ACR Assess-AI</strong> — a <strong>live, post-deployment performance-monitoring
+			registry</strong> (part of ACR's National Radiology Data Registry), not a
+			pre-deployment authoring format. It ingests case-level data via
+			HL7v2/FHIR/DICOM/DICOMweb/CSV and reports aggregated performance back to sites.
+			<strong>ACR AI Central</strong> — a <strong>curated directory</strong> of FDA-cleared
+			imaging AI products (read-only; ACR populates it from FDA filings plus voluntary
+			vendor disclosure), not an authoring schema either. Neither publishes a public
+			machine-readable schema.</li>
+		<li><strong>Google Model Cards</strong> — the original prose template (2019) that the
+			"Model Details / Intended Use / Factors / Metrics / Evaluation Data / Training Data /
+			Quantitative Analyses / Ethical Considerations / Caveats and Recommendations" section
+			structure traces back to. No machine-readable schema at all — it predates that concern.</li>
+	</ul>
+
+	<h2>Crosswalk by theme</h2>
+
+	<h3>Identity &amp; provenance</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>Developer/author, contact</td><td><code>General metadata.Authors[]</code>, <code>.Organizations[]</code>, <code>.Contact</code></td><td><code>BasicInfo.ModelName/ModelDeveloper/DeveloperContact</code></td><td>No YAML field — prose "Model Details" only</td><td>AI Central: Manufacturer, Product name (from FDA filings)</td><td>"Model Details" section (prose)</td></tr>
+		<tr><td>Version, release date</td><td><code>General metadata.Version</code>, <code>.Date.{Created,Published,Updated}</code></td><td><code>ReleaseInfo.ReleaseVersion/ReleaseDate/ReleaseStage/GlobalAvailability</code></td><td>No dedicated field (repo commit history serves this role)</td><td>—</td><td>"Model Details" section (prose)</td></tr>
+		<tr><td>Lineage (built on another model)</td><td><code>Model-properties.Foundation model</code>, <code>.Third-party components</code></td><td><code>AISystemFacts.FoundationModels</code>, <code>TransparencyInformation.ThirdPartyInformation</code></td><td><code>base_model</code> (Hub model ID), <code>base_model_relation</code> (enum: adapter/merge/quantized/finetune), <code>new_version</code></td><td>—</td><td>—</td></tr>
+	</table>
+	<p>Note: Hugging Face's <code>base_model_relation</code> enum is more granular than ATLAS's or
+		CHAI's free-text lineage fields — it explicitly distinguishes adapter/merge/quantization/
+		fine-tune relationships, which ATLAS's <code>Foundation model</code> field doesn't
+		currently differentiate.</p>
+
+	<h3>Licensing</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>License</td><td><code>General metadata.License.{Text,URL}</code></td><td>Not found as a dedicated field</td><td><code>license</code> (SPDX-like controlled list, or literal <code>other</code>), <code>license_name</code>/<code>license_link</code> when <code>other</code></td><td>n/a</td><td>Mentioned under "Model Details" (prose)</td></tr>
+	</table>
+	<p>ATLAS's free-text <code>License.Text</code> plus <code>License.URL</code> is less rigorous
+		than Hugging Face's controlled-vocabulary <code>license</code> field with an explicit
+		escape hatch — worth considering if ATLAS ever wants license values to be
+		machine-comparable across cards.</p>
+
+	<h3>Intended use, users, out-of-scope</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>Intended use/workflow</td><td><code>Model-properties.Indications for use</code>, <code>.Use.Intended[]</code></td><td><code>UsesAndDirections.IntendedUseAndWorkflow/HowToUse</code></td><td>Prose only (<code>direct_use</code>)</td><td>AI Central: "Indications for Use" (from FDA 510(k) summary)</td><td>"Intended Use" section (prose)</td></tr>
+		<tr><td>Intended/out-of-scope users</td><td><code>Model-properties.User.{Intended,Out-of-scope,Excluded}</code></td><td><code>UsesAndDirections.PrimaryIntendedUsers</code></td><td>Prose only</td><td>AI Central: intended user (radiologist/other)</td><td>"Intended Use" section (prose)</td></tr>
+		<tr><td>Out-of-scope / cautioned use</td><td><code>Model-properties.Use.{Out-of-scope,Excluded}</code></td><td><code>UsesAndDirections.CautionedOutOfScopeSettings</code></td><td>Prose only (<code>out_of_scope_use</code>)</td><td>—</td><td>"Intended Use" section (prose)</td></tr>
+		<tr><td><strong>Targeted patient population</strong></td><td><strong>No dedicated field</strong> (only prose within <code>Indications for use</code>/<code>Limitations</code>)</td><td><code>UsesAndDirections.TargetedPatientPopulation</code></td><td>—</td><td>AI Central: patient age range (from FDA filing)</td><td>—</td></tr>
+	</table>
+	<p>The targeted-patient-population gap was already identified independently during this
+		project's own conformance-profile work (<code>procurement-ready.json</code>'s
+		<code>$comment</code> lists it as DEFERRED pending a dedicated field). This crosswalk
+		confirms it with two independent external precedents — CHAI has a dedicated field for it,
+		and it's one of ACR AI Central's core listing categories — which raises the case for
+		prioritizing it.</p>
+
+	<h3>Input, output, architecture</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>Model type/architecture</td><td><code>Model-properties.Architecture</code>, <code>.Model class</code></td><td><code>AISystemFacts.ModelType</code></td><td>No structured field (prose)</td><td>—</td><td>—</td></tr>
+		<tr><td>Input description</td><td><code>Model-properties.Input.Description</code></td><td><code>AISystemFacts.InputDataSource</code>, <code>.OutputAndInputDataTypes</code></td><td>No structured field</td><td>—</td><td>—</td></tr>
+		<tr><td>Output description/type</td><td><code>Model-properties.Output.{Description,Type,Coded data}</code></td><td><code>AISystemFacts.OutcomesAndOutputs</code></td><td>No structured field</td><td>—</td><td>—</td></tr>
+	</table>
+
+	<h3>Training &amp; evaluation data characterization</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>Link to the data used</td><td><code>Model.Datasets[]</code> (<code>Role</code>-tagged pointers to a separate dataset card)</td><td>Single free-text-like field: <code>AISystemFacts.DevelopmentDataCharacterization</code></td><td>Prose <code>training_data</code> field, "recommended to link a Dataset Card"</td><td>Assess-AI tracks case-level data for live monitoring, not pre-deployment characterization</td><td>"Training Data" / "Evaluation Data" sections (prose)</td></tr>
+		<tr><td>Structured dataset shape/size</td><td><code>Dataset.Partitions[]</code> → <code>Subset.{Patient count, Exam count, Image count, Series count, Site count}</code></td><td>—</td><td><code>dataset_info.{features, splits[name,num_examples,num_bytes], download_size}</code> — auto-generatable via the <code>datasets</code> library</td><td>—</td><td>—</td></tr>
+		<tr><td>Demographic/clinical breakdown</td><td><code>Subset.{Demographic, Sex, Age range, Criterion}</code></td><td>—</td><td>No structured demographic field</td><td>Assess-AI: patient demographics (exact fields not confirmed — gated)</td><td>"Quantitative Analyses &gt; Intersectional results" (prose)</td></tr>
+		<tr><td>Dataset properties (bias, sampling, confidentiality)</td><td><code>Dataset-properties.{Motivation, Sampling, Missing information, Relationships between instances, Partitioning scheme, Noise, External data, Confidentiality, Re-identification, Sensitive data}</code></td><td><code>AISystemFacts.BiasMitigationApproaches</code> (model-level, not dataset-level)</td><td>—</td><td>—</td><td>—</td></tr>
+	</table>
+	<p>Hugging Face's recommendation to link a separate Dataset Card from a Model Card is the same
+		two-document split ATLAS already uses (<code>model.json</code> + <code>dataset.json</code>,
+		joined by <code>Model.Datasets[]</code>/<code>Dataset.Models[]</code>) — independent
+		convergence on the same pattern. Where Hugging Face is more structured than ATLAS is the
+		<em>shape</em> of the data (<code>dataset_info</code>'s features/splits/byte counts, which
+		ATLAS has no equivalent for); where ATLAS is far more structured is the <em>clinical</em>
+		characterization (demographics, age range, site count, confidentiality/re-identification
+		risk), which Hugging Face's schema doesn't address at all.</p>
+
+	<h3>Performance, validation, and metrics reporting</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>Structure</td><td><code>Model.Model performance[]</code> — one entry per evaluation, each with a <code>Results[]</code> array of scalar / outcome-count / non-scalar tuples</td><td><code>KeyMetrics</code> — <strong>three parallel named blocks</strong>: <code>UsefulnessUsabilityEfficacy</code>, <code>FairnessEquity</code>, <code>SafetyReliability</code>, each with <code>{MetricGoal, Results/MetricResult(Label+ValueJson), Interpretation, TestType, TestingDataDescription, ValidationProcessAndJustification}</code></td><td><code>model-index.results[]</code> — <code>{task, dataset, metrics[type,value,name,args,verifyToken], source}</code> (flat, Papers-with-Code-derived); newer work-in-progress <code>eval_results</code> system layered on top</td><td>Assess-AI: live concordance between AI output and the radiology report, aggregated and reported back to sites</td><td>"Metrics" + "Quantitative Analyses" sections (prose, incl. "Unitary results" and "Intersectional results")</td></tr>
+		<tr><td>Internal vs. external testing</td><td><code>Test type</code> enum (Internal/External/Local/Prospective)</td><td><code>TestType</code> field (free text per the KeyMetrics block)</td><td>Not distinguished</td><td>—</td><td>Not distinguished</td></tr>
+		<tr><td>Claimed vs. independently verified</td><td><code>Provenance</code> enum (Claimed/Observed — self-declared)</td><td>Not found</td><td><code>verifyToken</code> — proof an evaluation was independently run on Hugging Face's own infrastructure</td><td>—</td><td>—</td></tr>
+		<tr><td>Metric "pillar" (what the metric is <em>for</em>)</td><td><strong>Not tagged</strong></td><td>Explicit: every metric lives inside one of the three named pillar blocks</td><td>Not tagged</td><td>—</td><td>Not tagged</td></tr>
+	</table>
+	<p>Two concrete, specific comparison points worth flagging:</p>
+	<ul>
+		<li><strong>CHAI's three-pillar structure has no ATLAS analog.</strong> ATLAS's
+			<code>Factors</code>/<code>Subgroup</code> mechanism covers fairness disaggregation for
+			any individual result, but nothing in ATLAS declares "this metric is a
+			safety/reliability metric" vs. "this metric is a usefulness/efficacy metric" the way
+			CHAI's schema does by construction (three separate blocks).</li>
+		<li><strong>Hugging Face's <code>verifyToken</code> is a sharper provenance mechanism than
+			ATLAS's <code>Provenance</code> enum.</strong> ATLAS currently only records a
+			self-declared Claimed/Observed distinction; Hugging Face's token is cryptographic
+			proof tied to its own evaluation infrastructure.</li>
+	</ul>
+
+	<h3>Fairness, bias, subgroup analysis</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>Declared disaggregation axes</td><td><code>Model.Factors[]</code></td><td>Implicit in <code>KeyMetrics.FairnessEquity</code> block</td><td>Not found</td><td>—</td><td>"Factors" section (prose)</td></tr>
+		<tr><td>Per-result subgroup tagging</td><td><code>Model-performance-results.items.*.Subgroup{Variable,Value}</code></td><td><code>KeyMetrics.FairnessEquity.Results</code> (whole block is fairness-only rather than taggable per-result)</td><td>Not found</td><td>—</td><td>"Quantitative Analyses &gt; Intersectional results" (prose)</td></tr>
+		<tr><td>Bias mitigation approach</td><td><code>Model-properties.Bias mitigation approach</code></td><td><code>AISystemFacts.BiasMitigationApproaches</code>, <code>Warnings.KnownBiasesOrEthicalConsiderations</code></td><td>Prose only (<code>bias_risks_limitations</code>)</td><td>—</td><td>"Ethical Considerations" (prose)</td></tr>
+	</table>
+	<p>ATLAS's design — any individual <code>Results[]</code> entry can carry a
+		<code>Subgroup</code>, regardless of which metric it is — is more flexible than CHAI's
+		approach of segregating fairness metrics into their own block, since it lets the
+		<em>same</em> metric be reported both overall and per-subgroup within one
+		<code>Model performance</code> entry.</p>
+
+	<h3>Regulatory status and clearance</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th><th>Google Model Cards</th></tr>
+		<tr><td>Authorization records</td><td><code>Regulatory information.Authorizations[]</code> — repeatable, per-jurisdiction</td><td><code>ReleaseInfo.RegulatoryApproval</code> — a <strong>single, unstructured field</strong></td><td>None</td><td>AI Central: FDA product code, clearance pathway, predicate device (read-only directory data)</td><td>None</td></tr>
+		<tr><td>Clinical risk level</td><td><code>Model-properties.Clinical risk level</code></td><td><code>Warnings.ClinicalRiskLevel</code></td><td>None</td><td>—</td><td>None</td></tr>
+		<tr><td>EU AI Act co-classification</td><td><code>Regulatory information.EU AI Act.{Risk classification, Technical documentation}</code></td><td>Not found</td><td>None</td><td>—</td><td>None</td></tr>
+		<tr><td>Predetermined change control</td><td><code>Regulatory information.Change control</code></td><td>Not found</td><td>None</td><td>—</td><td>None</td></tr>
+	</table>
+	<p>This is the sharpest contrast in the whole crosswalk: <strong>ATLAS's
+		<code>Authorizations[]</code> array is considerably more structured than CHAI's single
+		free-text <code>RegulatoryApproval</code> field</strong>, supporting multiple
+		jurisdictions/pathways per model with jurisdiction-specific validation. Neither Hugging
+		Face nor Google Model Cards address regulatory status at all.</p>
+
+	<h3>Security, maintenance, and post-deployment monitoring</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th></tr>
+		<tr><td>Cybersecurity measures</td><td><code>Model-properties.Cybersecurity measures</code> (free text)</td><td><code>AISystemFacts.Security</code> (optional; example cites ISO 27001/SOC2)</td><td>None found</td><td>—</td></tr>
+		<tr><td>Ongoing maintenance/monitoring</td><td><code>Model-properties.Maintenance.{Monitoring program, Validity monitoring, Fairness monitoring, Update process, Comment}</code></td><td><code>AISystemFacts.OngoingMaintenance</code> — single field</td><td><code>new_version</code> pointer only</td><td><strong>Assess-AI itself is a monitoring program</strong> — external to any card, a live registry a card's <code>Monitoring program</code> field could <em>name</em></td></tr>
+	</table>
+	<p>Worth noting: <code>Monitoring program</code>'s own example values in <code>model.json</code>
+		already include "ACR Assess-AI" — so the relationship between ATLAS and ACR here isn't
+		competitive, it's compositional: an ATLAS card can (and the schema already anticipates
+		that it would) name Assess-AI as the external program it's enrolled in.</p>
+
+	<h3>Integration / technical interoperability</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>ACR</th></tr>
+		<tr><td>Clinical-systems integration</td><td><code>Model-properties.Integration</code> — DICOM, DICOMweb, HL7 v2, FHIR, IHE Radiology profiles, result-delivery channels, invocation triggers, conformance statements, validated systems</td><td><code>ReleaseInfo.EHRCompatibility</code> (v0.2 only; a simple list)</td><td>None (ML-tooling integration via <code>library_name</code>/<code>pipeline_tag</code> — a different kind of "integration")</td><td>Assess-AI's <em>ingest</em> spec defines HL7v2/FHIR/DICOM/DICOMweb/CSV — the registry's own ingestion interface, not a property of the model being documented</td></tr>
+	</table>
+	<p>ATLAS's <code>Integration</code> section is, by a wide margin, the most detailed treatment
+		of clinical-systems interoperability of any standard reviewed here.</p>
+
+	<h3>Governance, transparency, stakeholders</h3>
+	<table>
+		<tr><th>Concept</th><th>ATLAS</th><th>CHAI</th><th>Hugging Face</th><th>Google Model Cards</th></tr>
+		<tr><td>Funding source</td><td><code>General metadata.Funding</code></td><td><code>TransparencyInformation.FundingSource</code></td><td>None</td><td>None</td></tr>
+		<tr><td>Third-party components</td><td><code>Model-properties.Third-party components</code></td><td><code>TransparencyInformation.ThirdPartyInformation</code></td><td>None</td><td>None</td></tr>
+		<tr><td><strong>Stakeholders consulted</strong></td><td><strong>No analog</strong></td><td><code>TransparencyInformation.StakeholdersConsulted</code></td><td>None</td><td>None</td></tr>
+		<tr><td>Ethical review</td><td><code>General metadata.Ethical review</code></td><td>Not found as a distinct field</td><td>None</td><td>"Ethical Considerations" (prose)</td></tr>
+	</table>
+
+	<h2>Machine-readability and validation</h2>
+	<table>
+		<tr><th>Standard</th><th>Format</th><th>Formal schema?</th><th>Validation</th></tr>
+		<tr><td><strong>ATLAS</strong></td><td>JSON (Draft 2020-12 JSON Schema)</td><td>Yes — public <code>.json</code> schema files, plus 3 conformance-profile overlays</td><td>Fully machine-validatable; this project runs <code>jsonschema</code> checks and a representative pass/fail instance suite</td></tr>
+		<tr><td><strong>CHAI</strong></td><td>XML</td><td>Yes — public <code>.xsd</code> files (v0.1, v0.2), still labeled "draft"</td><td>Machine-validatable against the XSD; supports an optional XML digital-signature block</td></tr>
+		<tr><td><strong>Hugging Face</strong></td><td>YAML (README frontmatter)</td><td>No public schema file — documented-but-informal Markdown specs</td><td>Validated server-side at <code>git push</code>, but the validator itself is closed-source</td></tr>
+		<tr><td><strong>ACR</strong></td><td>Prose / PDF / web tables</td><td>No public machine-readable schema found</td><td>Not applicable — documentation portals and a registry ingest spec, not authoring schemas</td></tr>
+		<tr><td><strong>Google Model Cards</strong></td><td>Prose (free-form, following a template)</td><td>None</td><td>None — predates the concept</td></tr>
+	</table>
+	<p>ATLAS is the only standard reviewed here with both a fully formal JSON Schema <em>and</em>
+		tiered conformance profiles with automated pass/fail semantics.</p>
+
+	<h2>Where ATLAS already leads</h2>
+	<ul>
+		<li><strong>Regulatory authorization structure</strong> — a repeatable, per-jurisdiction
+			<code>Authorizations[]</code> array with pathway-specific identifier validation, versus
+			CHAI's single free-text field or ACR's read-only directory entries.</li>
+		<li><strong>Integration / interoperability detail</strong> — DICOM/DICOMweb/HL7v2/FHIR/IHE
+			coverage with no analog of comparable depth in any standard reviewed.</li>
+		<li><strong>Dataset-role vocabulary</strong> — a 13-value, ROADMAP-backed enum shared
+			identically across <code>Model.Datasets[].Role</code>, <code>Dataset.Models[].Role</code>,
+			and <code>Dataset.Partitions[].Partition</code>; none of the other standards have a
+			comparably granular, controlled vocabulary for this.</li>
+		<li><strong>Reciprocal model↔dataset linkage</strong> — both <code>Role</code>-tagged. CHAI
+			has no separate dataset document to link to at all; Hugging Face's <code>datasets:</code>
+			field is an untyped flat list of repo IDs with no role tagging.</li>
+		<li><strong>Conformance tiers</strong> — the only standard here with formal, machine-checkable
+			tiers (minimal / procurement-ready / regulatory-ready).</li>
+		<li><strong>Clinical dataset characterization</strong> — <code>Subset</code>'s demographic/
+			age-range/site-count breakdown has no analog in Hugging Face's <code>dataset_info</code>
+			or in CHAI (a single free-text characterization field).</li>
+	</ul>
+
+	<h2>Candidate improvements (for consideration, not applied here)</h2>
+	<p>These are observations from the crosswalk, not changes made to the schema — several overlap
+		with gaps this project's own conformance-profile work had already flagged independently.</p>
+	<ol>
+		<li><strong>Targeted patient population.</strong> Already tracked as DEFERRED in
+			<code>procurement-ready.json</code>. Now confirmed against two independent external
+			precedents (CHAI's dedicated field, ACR AI Central's listing category).</li>
+		<li><strong>Stakeholders consulted.</strong> CHAI has a dedicated field for who was
+			consulted during development; ATLAS has no analog.</li>
+		<li><strong>Metric "pillar" tagging.</strong> CHAI requires every metric to live under
+			Usefulness/Fairness/Safety. ATLAS could add an optional enum to
+			<code>Model-performance-results</code> if that framing would be useful — a judgment
+			call, since ATLAS's current design is more flexible in a different way.</li>
+		<li><strong>Independent-verification provenance.</strong> Hugging Face's
+			<code>verifyToken</code> cryptographically proves an evaluation ran on independent
+			infrastructure. ATLAS's <code>Provenance</code> enum is self-declared only.</li>
+		<li><strong>License as controlled vocabulary.</strong> Hugging Face validates
+			<code>license</code> against a known identifier list with an <code>other</code> escape
+			hatch; ATLAS's <code>License.Text</code> is free text.</li>
+		<li><strong>Human-oversight measures</strong> — already tracked as DEFERRED in
+			<code>regulatory-ready.json</code>. This crosswalk found <strong>no external
+			precedent</strong> for a dedicated structured field in CHAI, Hugging Face, or ACR
+			either — none of the four standards reviewed has operationalized this HTI-1/EU AI Act
+			Annex IV requirement as a discrete field yet.</li>
+		<li><strong>Base-model relation granularity.</strong> Hugging Face's
+			<code>base_model_relation</code> enum (adapter/merge/quantized/finetune) is more
+			specific than ATLAS's free-text <code>Foundation model</code> field.</li>
+	</ol>
+
+	<h2>Sources</h2>
+	<p><strong>CHAI:</strong> <a href="https://github.com/coalition-for-health-ai/mc-schema">coalition-for-health-ai/mc-schema</a>
+		(README, <code>DOCUMENTATION.md</code>, <code>v0.1/schema.xsd</code>,
+		<code>v0.2/schema.xsd</code>, <code>v0.2/examples/Aidoc_ICH-02-RT.xml</code>).</p>
+	<p><strong>Hugging Face:</strong> <a href="https://github.com/huggingface/hub-docs">huggingface/hub-docs</a>
+		— <code>modelcard.md</code>, <code>datasetcard.md</code>, <code>docs/hub/model-cards.md</code>,
+		<code>docs/hub/model-card-annotated.md</code>, <code>docs/hub/datasets-cards.md</code>,
+		<code>docs/hub/eval-results.md</code>, <code>docs/hub/model-cards-co2.md</code>; and
+		<a href="https://github.com/huggingface/huggingface.js">huggingface/huggingface.js</a>
+		(<code>packages/tasks/src/pipelines.ts</code>).</p>
+	<p><strong>ACR:</strong> ACR's own press releases and web pages describing Assess-AI and AI
+		Central (via search snippets — gated primary documents such as the Assess-AI Data
+		Dictionary and Ingest Specification PDF were not directly read in this research pass):
+		<a href="https://acr.org/News-and-Publications/American-College-of-Radiology-Launches-Landmark-Artificial-Intelligence-Quality-Registry">Assess-AI launch announcement</a>,
+		<a href="https://nrdrsupport.acr.org/support/solutions/articles/11000129783-assess-ai-data-dictionary">Assess-AI Data Dictionary (reference)</a>,
+		<a href="https://www.acr.org/Data-Science-and-Informatics/AI-in-Your-Practice/Performance-Monitoring/What-Data-is-Used">What Data Is Used</a>,
+		<a href="https://itnonline.com/article/american-college-radiology-acr-data-science-institute-dsi-introduces-new-aicentralorg">AI Central relaunch, category taxonomy</a>.</p>
+	<p><strong>Google Model Cards:</strong> "Model Cards for Model Reporting," Mitchell et al.,
+		2019 (<code>arXiv:1810.03993</code> — not directly fetchable in this environment; section
+		structure corroborated across multiple independent secondary sources, not quoted from the
+		paper itself).</p>
+
+	<footer>
+		Source: <a href="https://github.com/RSNA/atlas/blob/main/schema-2026-12/CROSSWALK.md">schema-2026-12/CROSSWALK.md</a>
+	</footer>
+</main>
+</body>
+</html>

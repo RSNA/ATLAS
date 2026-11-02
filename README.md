@@ -16,7 +16,8 @@ Browse all schema versions, with their conformance profiles and changelogs, at
 
 The current version is [2026-12](https://rsna.github.io/atlas/schema/2026-12/)
 ([model](schema-2026-12/model.json), [dataset](schema-2026-12/dataset.json),
-[conformance profiles](schema-2026-12/profiles/), [changelog](schema-2026-12/CHANGELOG.md)).
+[conformance profiles](schema-2026-12/profiles/), [changelog](schema-2026-12/CHANGELOG.md),
+[crosswalk against CHAI/Hugging Face/ACR](schema-2026-12/CROSSWALK.md)).
 
 The prior version, 2025-11, is kept for reference and for cards that still declare it
 ([model](model.json), [dataset](dataset.json)).
