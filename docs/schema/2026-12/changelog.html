@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS Schema Changelog: 2025-11 → 2026-12</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<main class="changelog">
+	<div class="breadcrumb"><a href="../../">ATLAS schemas</a> / <a href="./">2026-12</a> / changelog</div>
+	<h1>ATLAS JSON Schema Changelog: 2025-11 → 2026-12</h1>
+	<p class="subtitle">What changed between the 2025-11 schemas (<a href="../2025-11/model.json">model.json</a>,
+		<a href="../2025-11/dataset.json">dataset.json</a>) and the 2026-12 schemas in this folder
+		(<a href="model.json">model.json</a>, <a href="dataset.json">dataset.json</a>). This is a
+		substantial revision: it adds several new sections, redesigns model performance reporting from
+		the ground up, introduces three conformance profiles, and tightens validation rigor throughout.
+		It remains aligned with the <a href="https://github.com/RSNA/ROADMAP">RSNA/ROADMAP</a> ontology
+		— every field that corresponds to a ROADMAP concept carries a <code>$comment:
+		"ROADMAP:NNNNN"</code> pointer to it, and this version was checked against ROADMAP's current
+		content (<code>owl:versionInfo "2026-11"</code>) as part of its release.</p>
+
+	<h2>New model schema sections</h2>
+	<table>
+		<tr><th>Added</th><th>Description</th></tr>
+		<tr><td><code>Model.Datasets</code></td><td>Reciprocal links from a model to the datasets used in its development, disaggregated by <code>Role</code> (pretraining, training, fine-tuning, optimization, validation, tuning, testing, internal/external testing, hold-out, development, test). Mirrors <code>Dataset.Models</code> on the dataset side.</td></tr>
+		<tr><td><code>Model.Factors</code></td><td>Card-level declaration of which axes of subgroup disaggregation (e.g. age, sex, site) the model's performance results are examined across.</td></tr>
+		<tr><td><code>Model-properties.Integration</code></td><td>How the model is integrated into an imaging environment: <code>Interfaces</code> (DICOM network services, DICOMweb REST services, HL7 v2 message types, FHIR resources, IHE Radiology profiles), <code>Result delivery</code> channels, <code>Invocation</code> triggers, <code>Conformance statements</code>, <code>System types</code>, and <code>Validated systems</code>.</td></tr>
+		<tr><td><code>Model-properties.Model class</code></td><td>Coarse, queryable architectural/algorithmic category (e.g. CNN, transformer, foundation model, ensemble).</td></tr>
+		<tr><td><code>Model-properties.Foundation model</code></td><td>The pretrained foundation model this model is built upon or fine-tuned from, if any.</td></tr>
+		<tr><td><code>Model-properties.Third-party components</code></td><td>Third-party or pre-trained components incorporated into the model, other than a declared foundation model.</td></tr>
+		<tr><td><code>Model-properties.Maintenance</code></td><td>How the model's real-world performance and fairness are monitored post-deployment, and the process by which it is updated in response (monitoring program, validity/fairness monitoring, update process).</td></tr>
+		<tr><td><code>Model-properties.Bias mitigation approach</code></td><td>How bias was identified, managed, or reduced during development.</td></tr>
+		<tr><td><code>Model-properties.Clinical risk level</code></td><td>A declared level of clinical risk associated with use of the model.</td></tr>
+		<tr><td><code>Model-properties.Cybersecurity measures</code></td><td>Security posture (e.g. access controls).</td></tr>
+		<tr><td><code>Model-properties.Distribution form</code></td><td>The form(s) in which the model is placed on the market or put into service.</td></tr>
+		<tr><td><code>Model-properties.Computational resources</code></td><td>Processor/memory/runtime requirements.</td></tr>
+		<tr><td><code>Model-properties.User interface</code></td><td>Basic description of the deployer-facing UI.</td></tr>
+		<tr><td><code>Model-properties.Acceptance test procedure</code></td><td>Recommended local verification procedure for a receiving site.</td></tr>
+		<tr><td><code>Model-properties.Operating range</code></td><td>Declared expected-performance range or minimum-performance floor.</td></tr>
+		<tr><td><code>Model-properties.Suspend-use conditions</code></td><td>Conditions under which use of the model should be suspended.</td></tr>
+	</table>
+	<p><code>Model-properties.EHR compatibility</code> (a flat enumerated list of EHR vendor names) was
+		removed; the much more rigorous <code>Integration</code> section above is the closest conceptual
+		successor for describing a model's interoperability characteristics, though it is
+		standards-based (DICOM/HL7/FHIR/IHE) rather than vendor-named.</p>
+
+	<h2>New dataset schema sections</h2>
+	<table>
+		<tr><th>Added</th><th>Description</th></tr>
+		<tr><td><code>Dataset.Models</code></td><td>Reciprocal links from a dataset to the models known to use it, disaggregated by <code>Role</code> — the mirror image of <code>Model.Datasets</code> above.</td></tr>
+	</table>
+
+	<h2>Model performance: redesigned from the ground up</h2>
+	<p>The 2025-11 schema's <code>Model.Model performance</code> was a thin <code>$ref</code> to a
+		<code>Metrics</code> object: a flat array of metric <em>names</em> (scalar, matrix, or
+		graphical, all in one enumerated list) plus a single free-text field for reporting their
+		values. 2026-12 replaces this with a structured, repeatable <code>Model-performance</code>
+		array, one entry per evaluation:</p>
+	<ul>
+		<li><strong><code>Evaluation dataset</code></strong>, <strong><code>Provenance</code></strong>
+			(claimed vs. observed), <strong><code>Test type</code></strong> (internal, external, local,
+			prospective), <strong><code>Testing agent</code></strong>, and
+			<strong><code>Metric justification</code></strong> describe the evaluation itself.</li>
+		<li><strong><code>Results</code></strong> is an array of index-test/metric/value tuples, each
+			one of:
+			<ul>
+				<li>a <strong>scalar-metric</strong> result (<code>Scalar-metric</code> enum of 232
+					terms, a numeric <code>Value</code>, and an optional <code>Confidence interval</code>),</li>
+				<li>an <strong>outcome-count</strong> result (<code>Outcome-counts</code>:
+					TP/FP/TN/FN/P/N/PP/PN/Total), or</li>
+				<li>a <strong>non-scalar-metric</strong> result (<code>Nonscalar-metric</code> enum —
+					confusion matrices, ROC/FROC/AFROC curves, calibration curves, Bland-Altman analysis,
+					etc. — with a string <code>Value</code>, e.g. a markdown table or a link to an external
+					graph).</li>
+				<li>Each result can carry a <strong><code>Subgroup</code></strong>
+					(<code>{Variable, Value}</code>), tying it back to one of the model's declared
+					<code>Factors</code>.</li>
+			</ul>
+		</li>
+	</ul>
+	<p>This closes a real gap in the old design: metric <em>names</em> and their <em>values</em> were
+		previously disconnected (one array of enumerated names, one free-text field for all values
+		combined), making it impossible to machine-read "this model's AUC was 0.91." The new structure
+		also distinguishes claimed from independently observed performance, and internal from
+		external/prospective testing — needed for any procurement or regulatory use of the card.</p>
+
+	<h2>Vocabulary unification: dataset Role / Partition</h2>
+	<p>2025-11 had no notion of a model-dataset relationship vocabulary. 2026-12 introduces one and
+		then unifies it everywhere it appears: <code>Model.Datasets[].Role</code>,
+		<code>Dataset.Models[].Role</code>, and <code>Dataset.Partitions[].Partition</code> all now
+		share the identical 13-value enum (Pretraining, Training, Fine-tuning, Optimization,
+		Validation, Tuning, Testing, Internal testing, External testing, Hold-out, Development, Test,
+		Other), all pointing to the same ROADMAP class (<code>ROADMAP:03763</code>, "dataset role").
+		Several other fields were converted from free-text "examples only" guidance to true enums
+		against a ROADMAP-backed controlled vocabulary during this cycle as well, including
+		authorization <code>Authority</code>/<code>Pathway</code>/<code>Status</code>, EU AI Act
+		<code>Risk classification</code>/<code>Technical documentation</code>, <code>Output</code>
+		<code>Type</code>, performance <code>Provenance</code>, and <code>Distribution form</code>.</p>
+
+	<h2>New: conformance profiles</h2>
+	<p>2025-11 shipped a single schema with no notion of tiers. 2026-12 adds three conformance profiles
+		under <a href="profiles/">profiles/</a>, each a thin <code>allOf</code> overlay over the base
+		model schema that narrows <code>required</code>/cardinality without adding new properties:</p>
+	<ul>
+		<li><strong><a href="profiles/minimal.json">minimal.json</a></strong> — identical to the base
+			schema; only <code>Name</code> and <code>Link</code> are required. Exists so all three
+			tiers are addressable at a stable, dated URL.</li>
+		<li><strong><a href="profiles/procurement-ready.json">procurement-ready.json</a></strong> —
+			what a buyer needs to evaluate fit: identity/provenance, imaging modality, intended
+			use/users, input/output/architecture/limitations/availability/instructions, a declared
+			clinical risk level, at least one performance record with a declared <code>Test
+			type</code>, at least one <code>Datasets</code> entry, and at least one
+			regulatory-authorization record (an explicit "Not submitted" is an acceptable answer for a
+			research model).</li>
+		<li><strong><a href="profiles/regulatory-ready.json">regulatory-ready.json</a></strong> —
+			cumulative on procurement-ready; additionally requires a declared bias-mitigation approach,
+			cybersecurity measures, predetermined change control, and a <code>Maintenance</code>
+			object, and requires that the <code>Datasets</code>/<code>Model performance</code> arrays
+			actually demonstrate what they claim: at least one <code>Datasets</code> entry with
+			<code>Role: "Training"</code> and at least one performance record with
+			<code>Test type: "External"</code>.</li>
+	</ul>
+
+	<h2>Validation rigor</h2>
+	<p>A systematic review added floors that the 2025-11 schema lacked throughout:</p>
+	<ul>
+		<li><strong><code>minLength</code> ≥ 1 on every non-enumerated string field</strong>, so an
+			empty string can no longer vacuously satisfy a <code>required</code> check.</li>
+		<li><strong><code>minItems</code>/<code>minProperties</code></strong> on every array and
+			object that lacked them, for the same reason.</li>
+		<li><strong>Fixed bugs found during the review:</strong>
+			<ul>
+				<li><code>Indexing.SNOMED</code> applied <code>maxLength</code> to an
+					<code>integer</code>-typed field — silently ignored by every validator, leaving
+					codes effectively unbounded. Replaced with a string/integer <code>anyOf</code> where
+					the string form (canonical going forward) is length- and pattern-constrained.</li>
+				<li><code>Subset.Age range</code> applied one flat numeric ceiling regardless of unit,
+					so <code>[240, "years"]</code> validated despite being physically nonsensical.
+					Replaced with per-unit <code>if</code>/<code>then</code> bounds (days, months,
+					years).</li>
+				<li>An <code>additionalProperties: false</code> sitting alongside a
+					<code>oneOf</code>/<code>anyOf</code> with no sibling <code>properties</code> key
+					rejects <em>every</em> property regardless of which branch would otherwise match —
+					found and fixed in two places (<code>Model-performance-results</code>,
+					<code>Coded-data</code>).</li>
+				<li>A schema's own embedded <code>examples</code> value failed its own validation
+					(<code>Partitions</code>' example used a <code>Partition</code> value not present in
+					the then-current enum).</li>
+			</ul>
+		</li>
+		<li><strong>Every embedded <code>examples</code> array in both files is now validated against
+			its own local schema</strong> as a standing check (79 nodes across both files as of this
+			writing).</li>
+		<li><code>Date</code> tightened from <code>anyOf</code> to <code>oneOf</code> (a value cannot
+			simultaneously be both a date-string and an integer year) and its integer-year range
+			narrowed from unbounded to 1900–2100. <code>Org</code>/<code>Person</code> name fields
+			raised their floor from no minimum to <code>minLength: 2</code>. <code>Person.ORCID</code>,
+			<code>Indexing.RadLex</code>, and <code>Imaging.Procedures.RadLex</code> patterns were
+			anchored (<code>^...$</code>) where they previously were not, closing a hole where a
+			partially-matching string would pass.</li>
+	</ul>
+
+	<h2>ROADMAP alignment</h2>
+	<p>Both schemas were cross-checked against RSNA/ROADMAP's current content as part of this release
+		(<code>owl:versionInfo "2026-11"</code>, highest assigned entity ID <code>04234</code>).
+		Result: zero dangling <code>ROADMAP:NNNNN</code> references in either file, and two concrete
+		drifts found and fixed — see the
+		<a href="https://github.com/RSNA/ATLAS/commits/main/schema-2026-12">repository's commit
+		history</a> for the "Resync schemas against current RSNA/ROADMAP ontology content" commit for
+		details (a missing pair of scalar metrics, and a vocabulary asymmetry between
+		<code>Dataset.Models[].Role</code> and its reciprocal field). Two smaller items were identified
+		as ROADMAP-side follow-ups rather than schema changes: the Role/Partition vocabulary's
+		"Hold-out" and "Development" values have no corresponding ROADMAP class, and ROADMAP's
+		<code>Output.Type</code> individuals lack the short <code>altLabel</code>s their sibling
+		enumerations have.</p>
+
+	<footer>
+		Source: <a href="https://github.com/RSNA/ATLAS/blob/main/schema-2026-12/CHANGELOG.md">schema-2026-12/CHANGELOG.md</a>
+	</footer>
+</main>
+</body>
+</html>
