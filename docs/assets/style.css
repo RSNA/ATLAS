@@ -1,0 +1,149 @@
+:root {
+	--bg: #ffffff;
+	--fg: #1b1f23;
+	--muted: #57606a;
+	--border: #d8dee4;
+	--accent: #0a5a9c;
+	--accent-bg: #eef5fb;
+	--code-bg: #f4f6f8;
+	--max-width: 46rem;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #0d1117;
+		--fg: #e6edf3;
+		--muted: #9198a1;
+		--border: #30363d;
+		--accent: #6cb6ff;
+		--accent-bg: #0f1c2b;
+		--code-bg: #161b22;
+	}
+}
+
+* { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	padding: 2.5rem 1rem 4rem;
+	background: var(--bg);
+	color: var(--fg);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	line-height: 1.55;
+}
+
+main {
+	max-width: var(--max-width);
+	margin: 0 auto;
+}
+
+h1 {
+	font-size: 1.6rem;
+	margin: 0 0 0.3rem;
+}
+
+h2 {
+	font-size: 1.15rem;
+	margin: 2rem 0 0.6rem;
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 0.3rem;
+}
+
+.subtitle {
+	color: var(--muted);
+	margin: 0 0 2rem;
+}
+
+.breadcrumb {
+	font-size: 0.9rem;
+	margin-bottom: 1.5rem;
+}
+
+.breadcrumb a { color: var(--muted); }
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+
+a:hover { text-decoration: underline; }
+
+code, .path {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 0.92em;
+	background: var(--code-bg);
+	border-radius: 4px;
+	padding: 0.1em 0.4em;
+}
+
+ul.file-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+ul.file-list li {
+	border-bottom: 1px solid var(--border);
+	padding: 0.85rem 1rem;
+}
+
+ul.file-list li:last-child { border-bottom: none; }
+
+ul.file-list a {
+	font-weight: 600;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+ul.file-list .desc {
+	display: block;
+	color: var(--muted);
+	font-size: 0.9rem;
+	margin-top: 0.2rem;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.badge {
+	display: inline-block;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--accent);
+	background: var(--accent-bg);
+	border-radius: 999px;
+	padding: 0.15rem 0.6rem;
+	margin-left: 0.5rem;
+	vertical-align: middle;
+}
+
+footer {
+	margin-top: 3rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--border);
+	color: var(--muted);
+	font-size: 0.85rem;
+}
+
+.changelog :is(h2, h3) {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.changelog table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1rem 0;
+	font-size: 0.92rem;
+}
+
+.changelog th, .changelog td {
+	border: 1px solid var(--border);
+	padding: 0.5rem 0.6rem;
+	text-align: left;
+	vertical-align: top;
+}
+
+.changelog th {
+	background: var(--code-bg);
+}

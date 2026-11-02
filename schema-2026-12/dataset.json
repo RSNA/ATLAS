@@ -111,12 +111,19 @@
 								"$comment": "ROADMAP:03763",
 								"type": "string",
 								"enum": [
-									"Training",
-									"Optimization",
-									"Testing",
-									"External testing",
 									"Pretraining",
-									"Fine-tuning"
+									"Training",
+									"Fine-tuning",
+									"Optimization",
+									"Validation",
+									"Tuning",
+									"Testing",
+									"Internal testing",
+									"External testing",
+									"Hold-out",
+									"Development",
+									"Test",
+									"Other"
 								]
 							}
 						},
@@ -795,6 +802,7 @@
 				"properties": {
 					"Partition": {
 						"description": "Partition name or type",
+						"$comment": "ROADMAP:03763",
 						"type": "string",
 						"enum": [
 							"Pretraining",

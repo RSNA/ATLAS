@@ -1,0 +1,47 @@
+name: Sync schema docs
+
+# Mirrors the source-of-truth schema files into docs/schema/<version>/ so that
+# GitHub Pages (served from docs/) always reflects the current content of
+# model.json, dataset.json, and schema-2026-12/**. The docs/ copies are the
+# published artifact; this workflow is what keeps them from going stale.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'model.json'
+      - 'dataset.json'
+      - 'schema-2026-12/**'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mirror schema files into docs/
+        run: |
+          set -euo pipefail
+          mkdir -p docs/schema/2025-11 docs/schema/2026-12/profiles
+          cp model.json docs/schema/2025-11/model.json
+          cp dataset.json docs/schema/2025-11/dataset.json
+          cp schema-2026-12/model.json docs/schema/2026-12/model.json
+          cp schema-2026-12/dataset.json docs/schema/2026-12/dataset.json
+          cp schema-2026-12/profiles/minimal.json docs/schema/2026-12/profiles/minimal.json
+          cp schema-2026-12/profiles/procurement-ready.json docs/schema/2026-12/profiles/procurement-ready.json
+          cp schema-2026-12/profiles/regulatory-ready.json docs/schema/2026-12/profiles/regulatory-ready.json
+
+      - name: Commit changes if any
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/schema
+          if git diff --cached --quiet; then
+            echo "docs/schema is already in sync"
+          else
+            git commit -m "Sync schema docs from source files [skip ci]"
+            git push
+          fi

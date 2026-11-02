@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS 2026-12 Conformance Profiles</title>
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<main>
+	<div class="breadcrumb"><a href="../../../">ATLAS schemas</a> / <a href="../">2026-12</a> / profiles</div>
+	<h1>ATLAS 2026-12 Conformance Profiles</h1>
+	<p class="subtitle">Each profile overlays <a href="../model.json">model.json</a> via
+		<code>allOf</code>, narrowing <code>required</code>/cardinality without adding new properties.
+		A card conforming to a profile still declares
+		<code>"$schema": "https://atlas.rsna.org/schemas/2026-12/model.json"</code>.</p>
+	<ul class="file-list">
+		<li>
+			<a href="minimal.json">minimal.json</a>
+			<span class="desc">Identical to the base schema — only Name and Link are required.</span>
+		</li>
+		<li>
+			<a href="procurement-ready.json">procurement-ready.json</a>
+			<span class="desc">What a buyer needs to evaluate fit.</span>
+		</li>
+		<li>
+			<a href="regulatory-ready.json">regulatory-ready.json</a>
+			<span class="desc">Cumulative on procurement-ready; adds regulatory-facing requirements.</span>
+		</li>
+	</ul>
+	<footer>
+		See the <a href="../changelog.html">changelog</a> for what each profile requires and why.
+	</footer>
+</main>
+</body>
+</html>

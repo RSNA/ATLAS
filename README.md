@@ -11,10 +11,15 @@ ROADMAP includes synonyms, abbreviations, and defintions of the terms.
 
 ## JSON Schema
 
-The following documents define the content of ATLAS cards for AI models and datasets (version 2025-11):
+Browse all schema versions, with their conformance profiles and changelogs, at
+**[rsna.github.io/atlas/schema](https://rsna.github.io/atlas/schema/)**.
 
-* [Models](model.json)
-* [Datasets](dataset.json)
+The current version is [2026-12](https://rsna.github.io/atlas/schema/2026-12/)
+([model](schema-2026-12/model.json), [dataset](schema-2026-12/dataset.json),
+[conformance profiles](schema-2026-12/profiles/), [changelog](schema-2026-12/CHANGELOG.md)).
+
+The prior version, 2025-11, is kept for reference and for cards that still declare it
+([model](model.json), [dataset](dataset.json)).
 
 For more information, contact RSNA's Informatics Department at: 
 informatics {AT} rsna {DOT} org.
@@ -22,7 +27,3 @@ informatics {AT} rsna {DOT} org.
 The Radiological Society of North America (RSNA) is a non-profit organization of more than 54,00 members
 that represents professionals
 spanning the full breadth of radiologic subspecialties in more than 160 countries around the world.
-
-## Under development
-
-The [2026-12](schema-2026-12) version of the schema documents.

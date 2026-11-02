@@ -1,0 +1,1325 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://atlas.rsna.org/schemas/2026-12/dataset.json",
+	"title": "ATLAS dataset schema",
+	"description": "RSNA ATLAS dataset schema, 2026-12 version",
+	"$comment": "Copyright (c) 2026, Radiological Society of North America",
+	"type": "object",
+	"minProperties": 1,
+	"properties": {
+		"$schema": {
+			"description": "The JSON Schema version identifier for this document.",
+			"type": "string",
+			"const": "https://atlas.rsna.org/schemas/2026-12/dataset.json"
+		},
+		"Dataset": {
+			"description": "Describes an AI dataset",
+			"$ref": "#/$defs/Dataset"
+		}
+	},
+	"required": [
+		"$schema",
+		"Dataset"
+	],
+	"additionalProperties": false,
+	"$defs": {
+		"Dataset": {
+			"description": "Describes an AI dataset",
+			"$comment": "ROADMAP:00003",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Name": {
+					"description": "Dataset name (required)",
+					"$comment": "ROADMAP:03597",
+					"type": "string",
+					"minLength": 4,
+					"maxLength": 256,
+					"examples": [
+						"Radiological Society of North America Abdominal Traumatic Injury CT (RATIC) Dataset"
+					]
+				},
+				"Summary": {
+					"description": "Textual summary of the dataset",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 2500
+				},
+				"Link": {
+					"description": "URL pointer to source (required)",
+					"type": "string",
+					"minLength": 4,
+					"maxLength": 256,
+					"format": "uri",
+					"examples": [
+						"https://doi.org/10.1148/dataset.ratic.2024"
+					]
+				},
+				"Indexing": {
+					"description": "Indexing information, such as content codes, RadLex + SNOMED codes, and keywords.",
+					"$ref": "#/$defs/Indexing"
+				},
+				"General metadata": {
+					"description": "Details of the dataset",
+					"$ref": "#/$defs/General-metadata"
+				},
+				"Dataset properties": {
+					"description": "Properties specific to datasets",
+					"$ref": "#/$defs/Dataset-properties"
+				},
+				"Imaging": {
+					"description": "Information about the imaging data",
+					"$ref": "#/$defs/Imaging"
+				},
+				"Partitions": {
+					"description": "Dataset partitions (training, validation, testing, etc.) with aggregate statistics and optional demographic/clinical breakdowns",
+					"$ref": "#/$defs/Partitions"
+				},
+				"Models": {
+					"description": "Models known to use this dataset, disaggregated by role (e.g. training, validation, test).",
+					"$comment": "ROADMAP:04234",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"minProperties": 1,
+						"properties": {
+							"Model": {
+								"description": "Pointer to or description of the model.",
+								"type": "object",
+								"minProperties": 1,
+								"maxProperties": 2,
+								"properties": {
+									"URI": {
+										"description": "Pointer to the model, e.g. a model card conforming to the ATLAS model schema (preferred)",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 256,
+										"format": "uri"
+									},
+									"Description": {
+										"description": "Textual description of the model",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 512
+									}
+								},
+								"additionalProperties": false
+							},
+							"Role": {
+								"description": "This dataset's role in the model's development.",
+								"$comment": "ROADMAP:03763",
+								"type": "string",
+								"enum": [
+									"Pretraining",
+									"Training",
+									"Fine-tuning",
+									"Optimization",
+									"Validation",
+									"Tuning",
+									"Testing",
+									"Internal testing",
+									"External testing",
+									"Hold-out",
+									"Development",
+									"Test",
+									"Other"
+								]
+							}
+						},
+						"required": [
+							"Model",
+							"Role"
+						],
+						"additionalProperties": false
+					}
+				}
+			},
+			"required": [
+				"Name",
+				"Link"
+			],
+			"additionalProperties": false
+		},
+		"Dataset-properties": {
+			"description": "Attributes of the dataset",
+			"$comment": "ROADMAP:03381",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Confidentiality": {
+					"description": "Describes any data that might be confidential, such as those protected by law or doctor-patient confidentiality.",
+					"$comment": "ROADMAP:03413",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"External data": {
+					"description": "External resources such as web sites, social-media posts or other datasets. Include information about their permanence, archival versions, and any restrictions on their use (e.g., data-use agreements, licenses, fees),",
+					"$comment": "ROADMAP:03412",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Missing information": {
+					"description": "Describes what information, if any, is missing from the dataset and why.",
+					"$comment": "ROADMAP:03408",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Motivation": {
+					"description": "Describes the specific purpose for which the dataset was created. May include information about funding sources.",
+					"$comment": "ROADMAP:03383",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Noise": {
+					"description": "Describes any errors, sources of noise, or redundancies in the dataset.",
+					"$comment": "ROADMAP:03411",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Partitioning scheme": {
+					"description": "Describes how a dataset was partitioned for training, optimization (\"validation\") and testing.",
+					"$comment": "ROADMAP:03410",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Re-identification": {
+					"description": "Describes if and how it is possible to identify individual persons, either directly or indirectly, from the dataset.",
+					"$comment": "ROADMAP:03415",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Relationships between instances": {
+					"description": "Describes if and how any relationships between individual data items are made explicit.",
+					"$comment": "ROADMAP:03409",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Sampling": {
+					"description": "Describes how the data that form the dataset were selected.",
+					"$comment": "ROADMAP:03396",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				},
+				"Sensitive data": {
+					"description": "Describes any data that might be considered sensitive.",
+					"$comment": "ROADMAP:03416",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 1000
+				}
+			},
+			"additionalProperties": false
+		},
+		"Date": {
+			"description": "Date (Year or ISO-format date)",
+			"$comment": "ROADMAP:00065",
+			"examples": [
+				"2025-01-01",
+				2025
+			],
+			"oneOf": [
+				{
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 10,
+					"format": "date"
+				},
+				{
+					"type": "integer",
+					"minimum": 1900,
+					"maximum": 2100
+				}
+			]
+		},
+		"General-metadata": {
+			"description": "Characteristics of a project, model, or dataset.  Whenever possible, values should link to other ontologies or controlled vocabularies.",
+			"$comment": "ROADMAP:00004",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Authors": {
+					"description": "Authors",
+					"$comment": "ROADMAP:00064",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"$ref": "#/$defs/Person"
+					}
+				},
+				"Comments": {
+					"description": "Textual comments about the model, dataset, or project.",
+					"$comment": "ROADMAP:00070",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
+				},
+				"Contact": {
+					"description": "Physical address or email address of a contact.",
+					"$comment": "ROADMAP:00069",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
+				},
+				"Date": {
+					"description": "Dates associated with this resource, such as creation, publication, or update dates.",
+					"$comment": "ROADMAP:00065",
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Created": {
+							"description": "Creation date (ROADMAP:03419)",
+							"$comment": "ROADMAP:03419",
+							"$ref": "#/$defs/Date"
+						},
+						"Published": {
+							"description": "Publication date (ROADMAP:03420)",
+							"$comment": "ROADMAP:03420",
+							"$ref": "#/$defs/Date"
+						},
+						"Updated": {
+							"description": "Date of last update (ROADMAP:03421)",
+							"$comment": "ROADMAP:03421",
+							"$ref": "#/$defs/Date"
+						}
+					},
+					"additionalProperties": false
+				},
+				"Ethical review": {
+					"$comment": "ROADMAP:03418",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
+				},
+				"Funding": {
+					"$comment": "ROADMAP:03385",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
+				},
+				"License": {
+					"description": "License or rights to access this resource",
+					"$comment": "ROADMAP:00068",
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Text": {
+							"description": "Textual name or description of the license.",
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512,
+							"examples": [
+								"Non-commercial use",
+								"CC 4.0 BY-NC-ND"
+							]
+						},
+						"URL": {
+							"description": "URL pointing to the full text of the license.",
+							"type": "string",
+							"minLength": 2,
+							"maxLength": 512,
+							"format": "uri",
+							"examples": [
+								"https://creativecommons.org/licenses/by-nc-nd/4.0/"
+							]
+						}
+					},
+					"additionalProperties": false
+				},
+				"Organizations": {
+					"description": "Sponsoring or supporting organizations",
+					"$comment": "ROADMAP:00072",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"$ref": "#/$defs/Org"
+					}
+				},
+				"References": {
+					"description": "References about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
+					"$comment": "ROADMAP:00067",
+					"$ref": "#/$defs/Reference"
+				},
+				"Version": {
+					"description": "Version designation of this resource",
+					"$comment": "ROADMAP:00066",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128
+				}
+			},
+			"additionalProperties": false
+		},
+		"Imaging": {
+			"description": "Imaging modalities, procedures, and other information",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Modalities": {
+					"description": "List of imaging modalities used to acquire the dataset's images.",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"description": "List of imaging modalities; requires value(s) from RadLex (RID10311)",
+						"$comment": "ROADMAP:00120, RadLex:RID10311",
+						"type": "string",
+						"enum": [
+							"3-Dimensional ultrasound (RID10920)",
+							"4-Dimensional CT (RID38755)",
+							"4-Dimensional ultrasound (RID10926)",
+							"A-mode ultrasound (RID10903)",
+							"B-mode ultrasound (RID10904)",
+							"Bremsstrahlung imaging (RID10336)",
+							"C-mode ultrasound (RID10907)",
+							"Color doppler mode (RID10909)",
+							"Combined modalities (RID49580)",
+							"Computed radiography (RID10349)",
+							"Computed tomography (RID10321)",
+							"Conventional tomography (RID10358)",
+							"Diffusion tensor imaging (RID38778)",
+							"Digital radiography (RID10351)",
+							"Doppler mode (RID10908)",
+							"Dual energy xray absorptiometry (RID10363)",
+							"Dual-energy CT (RID38660)",
+							"Dual-energy subtraction radiography (RID10356)",
+							"Duplex ultrasound (RID10922)",
+							"Dynamic contrast-enhanced magnetic resonance imaging (RID49531)",
+							"Elastography (RID10932)",
+							"Extended field-of-view ultrasound (RID10924)",
+							"Fluoroscopy (RID10361)",
+							"Functional magnetic resonance imaging (RID10317)",
+							"Harmonic ultrasound (RID10913)",
+							"High intensity pulse (RID10919)",
+							"High-energy scan (RID12412)",
+							"Low intensity pulse (RID10918)",
+							"Low-energy scan (RID12411)",
+							"MR fluoroscopy (RID11071)",
+							"Magnetic resonance angiography (RID10319)",
+							"Magnetic resonance imaging (RID10312)",
+							"Magnetic resonance spectroscopy (RID10315)",
+							"Mammography (RID10357)",
+							"Molecular imaging (RID12508)",
+							"Nuclear medicine imaging (RID10330)",
+							"Other modality (dicom) (RID49585)",
+							"PET-CT (RID10341)",
+							"PET-MR (RID10342)",
+							"Panographic radiograph (RID10360)",
+							"Phase-cancellation harmonic ultrasound (RID10914)",
+							"Planar nuclear medicine imaging (RID10333)",
+							"Positron emission tomography (RID10337)",
+							"Power doppler mode (RID10910)",
+							"Projection radiography (RID10345)",
+							"Quantitative computed tomography (RID10323)",
+							"Radiofluoroscopy (RID45709)",
+							"SPECT-CT (RID49583)",
+							"Scintigraphy (RID34428)",
+							"Screen-film radiography (RID10353)",
+							"Single photon emission computed tomography (RID10334)",
+							"Single photon imaging (RID10332)",
+							"Spectral doppler mode (RID10911)",
+							"Spectroscopy (RID10377)",
+							"Stereoscopy (RID50131)",
+							"Stereotactic radiography (RID50260)",
+							"Stimulated acoustic emission (RID10916)",
+							"Strain imaging (RID10933)",
+							"Tomography (RID28840)",
+							"Tomosynthesis (RID10359)",
+							"Triplex ultrasound (RID10923)",
+							"US-RF (RID49581)",
+							"Ultrasound (RID10326)",
+							"Volume imaging (RID10930)",
+							"XR-RF (RID49582)"
+						]
+					}
+				},
+				"Procedures": {
+					"description": "Imaging procedures: each item should include procedure name, RadLex Playbook ID, and/or LOINC code",
+					"$comment": "Imaging procedure (ROADMAP:00121)",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"minProperties": 1,
+						"maxProperties": 3,
+						"properties": {
+							"Name": {
+								"description": "Procedure name",
+								"type": "string",
+								"minLength": 2,
+								"maxLength": 256,
+								"examples": [
+									"CT Abdomen and Pelvis W contrast IV"
+								]
+							},
+							"RadLex": {
+								"description": "RadLex Playbook (RPID) code",
+								"type": "string",
+								"minLength": 5,
+								"maxLength": 10,
+								"pattern": "^RPID[0-9]+$",
+								"examples": [
+									"RPID145"
+								]
+							},
+							"LOINC": {
+								"description": "LOINC/RSNA Radiology Playbook code",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 12,
+								"examples": [
+									"36813-4"
+								]
+							}
+						},
+						"additionalProperties": false,
+						"examples": [
+							{
+								"Name": "CT Chest without IV contrast"
+							},
+							{
+								"Name": "XR Hand - left PA",
+								"LOINC": "36623-7"
+							},
+							{
+								"Name": "CT Abdomen and Pelvis W contrast IV",
+								"LOINC": "36813-4",
+								"RadLex": "RPID145"
+							}
+						]
+					}
+				},
+				"File format": {
+					"description": "Image file format",
+					"$comment": "ROADMAP:00059",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"enum": [
+							"BIDS",
+							"DICOM",
+							"JPEG",
+							"MINC",
+							"MPEG",
+							"NDPI",
+							"NiFTI",
+							"NRRD",
+							"PNG",
+							"SVS",
+							"WSI",
+							"Other"
+						]
+					}
+				},
+				"Resolution": {
+					"description": "Describes whether the dataset used original or down-sampled images.",
+					"$comment": "ROADMAP:00123",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
+				},
+				"Pre-processing": {
+					"description": "Describes the type(s) of pre-processing applied to the dataset's images.",
+					"$comment": "ROADMAP:00126",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512
+				},
+				"Burned-in PHI": {
+					"description": "Indicates whether the images contain burned-in Protected Health Information (PHI).",
+					"$comment": "ROADMAP:00129",
+					"type": "string",
+					"enum": [
+						"Yes",
+						"No",
+						"Unknown"
+					]
+				},
+				"Comments": {
+					"description": "Text comments about imaging data. Use this field to specify a file format of type 'Other'",
+					"$comment": "ROADMAP:00070",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
+				},
+				"Acquisition": {
+					"description": "Describes the imaging acquisition equipment and parameters used to obtain the dataset's images, such as scanner manufacturer, model, field strength, detector configuration, slice thickness, or reconstruction kernel.",
+					"$comment": "ROADMAP:04128",
+					"type": "object",
+					"minProperties": 1,
+					"properties": {
+						"Manufacturer": {
+							"description": "The manufacturer of the imaging equipment used to acquire the images.",
+							"$comment": "ROADMAP:04129",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128,
+							"examples": [
+								"GE HealthCare",
+								"Siemens Healthineers",
+								"Philips",
+								"Canon Medical"
+							]
+						},
+						"Model": {
+							"description": "The specific model of the imaging equipment used to acquire the images.",
+							"$comment": "ROADMAP:04130",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						},
+						"Field strength": {
+							"description": "The static magnetic field strength of the MRI scanner used to acquire the images, typically expressed in tesla (T).",
+							"$comment": "ROADMAP:04131",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 32,
+							"examples": [
+								"1.5T",
+								"3T"
+							]
+						},
+						"Detector configuration": {
+							"description": "The detector configuration of the imaging equipment used to acquire the images, such as the number of detector rows for CT.",
+							"$comment": "ROADMAP:04132",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						},
+						"Slice thickness": {
+							"description": "The thickness of the reconstructed image slices.",
+							"$comment": "ROADMAP:04133",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 32,
+							"examples": [
+								"0.25 cm"
+							]
+						},
+						"Reconstruction kernel": {
+							"description": "The reconstruction kernel or algorithm applied to raw acquisition data to produce the reconstructed images.",
+							"$comment": "ROADMAP:04134",
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 128
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"Indexing": {
+			"description": "Indexing codes: Content codes, RadLex, SNOMED, and keywords",
+			"$comment": "ROADMAP:00074",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Content": {
+					"description": "RSNA 2-letter content codes, e.g., CT",
+					"$comment": "ROADMAP:00073",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"enum": [
+							"BR",
+							"BQ",
+							"CA",
+							"CH",
+							"CT",
+							"ED",
+							"ER",
+							"GI",
+							"GU",
+							"HN",
+							"HP",
+							"IN",
+							"IR",
+							"LM",
+							"MI",
+							"MK",
+							"MR",
+							"NM",
+							"NR",
+							"OB",
+							"OI",
+							"OT",
+							"PD",
+							"PH",
+							"PR",
+							"SQ",
+							"RO",
+							"RS",
+							"US",
+							"VA"
+						],
+						"examples": [
+							"CT",
+							"GI"
+						]
+					}
+				},
+				"RadLex": {
+					"description": "Array of RadLex codes (e.g., RID58)",
+					"$comment": "ROADMAP:00117",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"$comment": "https://radlex.org/RID/$",
+						"type": "string",
+						"minLength": 4,
+						"maxLength": 12,
+						"pattern": "^RID[0-9]+$",
+						"examples": [
+							"RID58",
+							"RID1169"
+						]
+					}
+				},
+				"SNOMED": {
+					"description": "Array of SNOMED CT concept identifiers (SCTIDs). Integer values are allowed up to 11 digits, which addresses concepts from the International Release. National or local extensions require string values to avoid possibly imprecise interpretation of large integer values. IMPORTANT: The string values are the canonical format; the integer format will be dropped in the next version.",
+					"$comment": "ROADMAP:03625, https://lookup.snomedtools.org/$",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"examples": [
+							10200004,
+							"441802002",
+							"999000011000000103"
+						],
+						"anyOf": [
+							{
+								"type": "string",
+								"pattern": "^[1-9][0-9]{5,17}$",
+								"minLength": 6
+							},
+							{
+								"type": "integer",
+								"minimum": 100000,
+								"maximum": 99999999999
+							}
+						]
+					}
+				},
+				"Keywords": {
+					"description": "Array of keywords to index the resource",
+					"$comment": "ROADMAP:03721",
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 64
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"Org": {
+			"title": "Organization description",
+			"description": "Details for each organization",
+			"$comment": "ROADMAP:00072",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Name": {
+					"description": "Name of organization",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
+					"examples": [
+						"RSNA"
+					]
+				},
+				"Contact name": {
+					"description": "Name or role of organizational contact",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512,
+					"examples": [
+						"Informatics Department"
+					]
+				},
+				"Email": {
+					"description": "Organization's email address",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
+					"format": "email",
+					"examples": [
+						"informatics@rsna.org"
+					]
+				},
+				"Address": {
+					"description": "Organizations's physical (real-world) address",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512,
+					"examples": [
+						"820 Jorie Blvd, Oak Brook, IL 60523-2251, USA"
+					]
+				},
+				"URL": {
+					"description": "Organization's website URL",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
+					"format": "uri",
+					"examples": [
+						"https://rsna.org"
+					]
+				}
+			},
+			"required": [
+				"Name"
+			],
+			"additionalProperties": false
+		},
+		"Partitions": {
+			"description": "Dataset partitions (training, validation, testing, etc.) with aggregate statistics and optional demographic/clinical breakdowns",
+			"$comment": "Flat structure for extraction-friendly representation while maintaining clear relationships",
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"minProperties": 1,
+				"properties": {
+					"Partition": {
+						"description": "Partition name or type",
+						"$comment": "ROADMAP:03763",
+						"type": "string",
+						"enum": [
+							"Pretraining",
+							"Training",
+							"Fine-tuning",
+							"Optimization",
+							"Validation",
+							"Tuning",
+							"Testing",
+							"Internal testing",
+							"External testing",
+							"Hold-out",
+							"Development",
+							"Test",
+							"Other"
+						]
+					},
+					"Total": {
+						"description": "Aggregate statistics for the entire partition. Subset counts should sum to these totals where applicable.",
+						"$ref": "#/$defs/Subset"
+					},
+					"Subsets": {
+						"description": "Specific breakdowns by demographic factors (sex, age, race), clinical criteria (diagnosis, findings), or technical factors (contrast phase, imaging protocol). Counts within subsets should sum to the Total where they represent non-overlapping groups.",
+						"type": "array",
+						"minItems": 1,
+						"items": {
+							"$ref": "#/$defs/Subset"
+						}
+					},
+					"Comments": {
+						"description": "Additional notes about this partition, such as sampling methodology, special characteristics, or clarifications",
+						"$comment": "ROADMAP:00070",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 512,
+						"examples": [
+							"Stratified by sex and view position",
+							"No overlapping patient identifiers with other partitions",
+							"Randomly sampled from 2015-2020 data"
+						]
+					}
+				},
+				"required": [
+					"Partition"
+				],
+				"additionalProperties": false
+			},
+			"examples": [
+				[
+					{
+						"Partition": "Training",
+						"Total": {
+							"Patient count": 12611,
+							"Image count": 12611,
+							"Age range": [
+								[
+									1,
+									"months"
+								],
+								[
+									240,
+									"months"
+								]
+							],
+							"Comments": "Mean age 127 months"
+						},
+						"Subsets": [
+							{
+								"Sex": "Female",
+								"Patient count": 5801
+							},
+							{
+								"Sex": "Male",
+								"Patient count": 6810
+							}
+						]
+					},
+					{
+						"Partition": "Validation",
+						"Total": {
+							"Patient count": 1425,
+							"Image count": 1425
+						},
+						"Subsets": [
+							{
+								"Sex": "Female",
+								"Patient count": 655
+							},
+							{
+								"Sex": "Male",
+								"Patient count": 770
+							}
+						]
+					},
+					{
+						"Partition": "Test",
+						"Total": {
+							"Patient count": 200,
+							"Image count": 200
+						},
+						"Subsets": [
+							{
+								"Sex": "Female",
+								"Patient count": 100
+							},
+							{
+								"Sex": "Male",
+								"Patient count": 100
+							}
+						]
+					}
+				]
+			]
+		},
+		"Person": {
+			"description": "Description for individual Person",
+			"$comment": "ROADMAP:00071",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Name": {
+					"description": "The person's name",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128
+				},
+				"Email": {
+					"description": "Person's email address",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
+					"format": "email"
+				},
+				"Address": {
+					"description": "Person's physical (real-world) address",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512
+				},
+				"ORCID": {
+					"description": "Unique ORCID (Open Researcher and Contributor ID) identifier",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 40,
+					"pattern": "^https?://orcid\\.org/\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dXx]$",
+					"format": "uri",
+					"examples": [
+						"https://orcid.org/0000-0000-0000-0000"
+					]
+				},
+				"URL": {
+					"description": "Person's website or profile URL",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 128,
+					"format": "uri"
+				}
+			},
+			"required": [
+				"Name"
+			],
+			"additionalProperties": false
+		},
+		"Reference": {
+			"description": "A reference about the resource, such as a clinical trial identifier or a pointer to a peer-reviewed publication or conference proceedings.",
+			"$comment": "ROADMAP:00067",
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"minProperties": 1,
+				"properties": {
+					"Authors": {
+						"description": "Author names",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 512,
+						"examples": [
+							"Rudie JD, et al."
+						]
+					},
+					"Title": {
+						"description": "Reference title",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 512,
+						"examples": [
+							"The RSNA Abdominal Traumatic Injury CT (RATIC) Dataset"
+						]
+					},
+					"Source": {
+						"description": "Name of journal, book, or other source; or full citation (see example)",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 512,
+						"examples": [
+							"Radiology: Artificial Intelligence",
+							"Radiol Artif Intell 2024; 6:e240101"
+						]
+					},
+					"Date": {
+						"description": "Year or date of publication",
+						"$ref": "#/$defs/Date"
+					},
+					"Clinical trial": {
+						"description": "A clinical trial identifier or URL, such as issued by ClinicalTrials.gov",
+						"$comment": "ROADMAP:03623",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 128
+					},
+					"DOI": {
+						"description": "Digital Object Identifer (DOI)",
+						"$comment": "ROADMAP:04003, https://doi.org/$",
+						"type": "string",
+						"minLength": 8,
+						"maxLength": 128,
+						"pattern": "^10\\.[0-9]{4,9}(\\.[0-9]+)?/\\S+$",
+						"examples": [
+							"10.1148/ryai.240101"
+						]
+					},
+					"URL": {
+						"description": "Pointer to online reference",
+						"$comment": "ROADMAP:04014",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 128,
+						"format": "uri",
+						"examples": [
+							"https://doi.org/10.1148/ryai.240101"
+						]
+					},
+					"PMID": {
+						"description": "PubMed ID",
+						"$comment": "ROADMAP:04004, https://pubmed.ncbi.nlm.nih.gov/$/",
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 9999999999,
+						"examples": [
+							39441109
+						]
+					},
+					"PMCID": {
+						"description": "PubMed Central ID",
+						"$comment": "ROADMAP:04013, https://pmc.ncbi.nlm.nih.gov/articles/$/",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 32,
+						"pattern": "^PMC[0-9]+$",
+						"examples": [
+							"PMC8017407"
+						]
+					},
+					"Notes": {
+						"description": "Additional notes about the reference.",
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 512
+					}
+				},
+				"required": [
+					"Title"
+				],
+				"additionalProperties": false
+			}
+		},
+		"Subset": {
+			"description": "A Subset describes aggregate statistics: it can represent either partition-level totals or specific subset breakdowns by age, sex, race, clinical criteria, and/or other factors. All properties are optional to accommodate varying levels of detail in reported data. If more than one criterion is listed (e.g., age and sex), the information describes the presence of both criteria.",
+			"$comment": "ROADMAP:03422",
+			"type": "object",
+			"minProperties": 1,
+			"properties": {
+				"Site count": {
+					"description": "Number of sites",
+					"$comment": "ROADMAP:03358",
+					"type": "integer",
+					"minimum": 0
+				},
+				"Patient count": {
+					"description": "Number of distinct patients",
+					"$comment": "ROADMAP:00056",
+					"type": "integer",
+					"minimum": 0
+				},
+				"Exam count": {
+					"description": "Number of exams",
+					"$comment": "ROADMAP:00057",
+					"type": "integer",
+					"minimum": 0
+				},
+				"Series count": {
+					"description": "Number of imaging series",
+					"$comment": "ROADMAP:00632",
+					"type": "integer",
+					"minimum": 0
+				},
+				"Image count": {
+					"description": "Number of images",
+					"$comment": "ROADMAP:00058",
+					"type": "integer",
+					"minimum": 0
+				},
+				"Age range": {
+					"title": "Age range",
+					"description": "Age range, specified as a 2-element array: [Lower bound, Upper bound]",
+					"$comment": "ROADMAP:03462",
+					"type": "array",
+					"minItems": 2,
+					"maxItems": 2,
+					"items": {
+						"description": "Lower or upper bound",
+						"type": "array",
+						"minItems": 2,
+						"maxItems": 2,
+						"prefixItems": [
+							{
+								"description": "Value",
+								"type": "integer",
+								"minimum": 0
+							}
+						],
+						"items": {
+							"description": "Units",
+							"type": "string",
+							"enum": [
+								"days",
+								"months",
+								"years"
+							]
+						},
+						"allOf": [
+							{
+								"if": {
+									"prefixItems": [
+										true,
+										{
+											"const": "days"
+										}
+									]
+								},
+								"then": {
+									"prefixItems": [
+										{
+											"maximum": 47450
+										}
+									]
+								}
+							},
+							{
+								"if": {
+									"prefixItems": [
+										true,
+										{
+											"const": "months"
+										}
+									]
+								},
+								"then": {
+									"prefixItems": [
+										{
+											"maximum": 1560
+										}
+									]
+								}
+							},
+							{
+								"if": {
+									"prefixItems": [
+										true,
+										{
+											"const": "years"
+										}
+									]
+								},
+								"then": {
+									"prefixItems": [
+										{
+											"maximum": 130
+										}
+									]
+								}
+							}
+						],
+						"examples": [
+							[
+								10,
+								"days"
+							],
+							[
+								3,
+								"months"
+							],
+							[
+								18,
+								"years"
+							]
+						]
+					},
+					"examples": [
+						[
+							[
+								2,
+								"years"
+							],
+							[
+								17,
+								"years"
+							]
+						],
+						[
+							[
+								65,
+								"years"
+							],
+							[
+								100,
+								"years"
+							]
+						]
+					]
+				},
+				"Sex": {
+					"description": "Biological sex",
+					"type": "string",
+					"enum": [
+						"Female",
+						"Male",
+						"Unknown",
+						"Not specified"
+					]
+				},
+				"Demographic": {
+					"description": "Race / ethnicity (U.S. reporting categories)",
+					"$comment": "ROADMAP:03441",
+					"type": "string",
+					"enum": [
+						"American Indian or Alaska Native",
+						"Asian",
+						"Black or African American",
+						"Hispanic or Latino",
+						"Middle Eastern or North African",
+						"Native Hawaiian or Pacific Islander",
+						"White"
+					]
+				},
+				"Criterion": {
+					"description": "Other subset criterion, such as reference-standard value, imaging finding, diagnosis, or other clinical/technical factor",
+					"$comment": "ROADMAP:03477",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 512,
+					"examples": [
+						"Malpositioned tube",
+						"No hemorrhage",
+						"Positive for pneumonia",
+						"Native contrast phase",
+						"Portal venous phase"
+					]
+				},
+				"Comments": {
+					"description": "Additional notes or clarifications about this data subset",
+					"$comment": "ROADMAP:00070",
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 512,
+					"examples": [
+						"Median age 127 months",
+						"Mean age (± SD): 66.3 ± 14.9 years",
+						"Includes only cases with confirmed diagnosis"
+					]
+				}
+			},
+			"additionalProperties": false,
+			"examples": [
+				{
+					"Patient count": 12611,
+					"Image count": 12611,
+					"Age range": [
+						[
+							1,
+							"months"
+						],
+						[
+							240,
+							"months"
+						]
+					],
+					"Comments": "Mean age 127 months"
+				},
+				{
+					"Sex": "Female",
+					"Patient count": 5801
+				},
+				{
+					"Sex": "Male",
+					"Demographic": "Asian",
+					"Age range": [
+						[
+							50,
+							"years"
+						],
+						[
+							59,
+							"years"
+						]
+					],
+					"Patient count": 42,
+					"Exam count": 50,
+					"Image count": 572
+				},
+				{
+					"Criterion": "Malpositioned tube",
+					"Patient count": 150,
+					"Comments": "Based on radiologist consensus"
+				}
+			]
+		}
+	}
+}
